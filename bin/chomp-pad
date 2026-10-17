@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# chomp-pad: Interactive Terminal Dropdown with Chomp ASCII Banner & Shell
+# ==============================================================================
+set -e
+
+# Run Chomp ASCII banner
+if [ -x "$HOME/.local/bin/chomp-fetch" ]; then
+    "$HOME/.local/bin/chomp-fetch"
+elif [ -x "$HOME/Projects/slime/bin/chomp-fetch" ]; then
+    "$HOME/Projects/slime/bin/chomp-fetch"
+fi
+
+# Keep interactive shell alive
+exec "${SHELL:-/bin/zsh}" -i

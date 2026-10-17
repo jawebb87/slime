@@ -79,6 +79,7 @@ backup_live_to_repo() {
     [ -f "$HOME/Pictures/wallpaper/space.jpg" ] && cp -p "$HOME/Pictures/wallpaper/space.jpg" "$SCRIPT_DIR/wallpaper/"
     [ -f "$HOME/Pictures/wallpaper/shred.jpg" ] && cp -p "$HOME/Pictures/wallpaper/shred.jpg" "$SCRIPT_DIR/wallpaper/"
     [ -f "$HOME/Pictures/wallpaper/larry.jpg" ] && cp -p "$HOME/Pictures/wallpaper/larry.jpg" "$SCRIPT_DIR/wallpaper/"
+    [ -f "$HOME/Pictures/wallpaper/chomp.jpg" ] && cp -p "$HOME/Pictures/wallpaper/chomp.jpg" "$SCRIPT_DIR/wallpaper/"
     
     color green "✔ All configs refreshed into ~/Projects/slime."
     echo ""
@@ -145,6 +146,7 @@ restore_repo_to_live() {
     [ -f "$SCRIPT_DIR/wallpaper/space.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/space.jpg" "$HOME/Pictures/wallpaper/"
     [ -f "$SCRIPT_DIR/wallpaper/shred.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/shred.jpg" "$HOME/Pictures/wallpaper/"
     [ -f "$SCRIPT_DIR/wallpaper/larry.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/larry.jpg" "$HOME/Pictures/wallpaper/"
+    [ -f "$SCRIPT_DIR/wallpaper/chomp.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/chomp.jpg" "$HOME/Pictures/wallpaper/"
     
     color green "✔ Restore complete! Live configs updated."
     color dim "Previous configs saved in: $backup_dir"

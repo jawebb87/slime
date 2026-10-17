@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Standalone: "Chomp the Haxor" / CHOMP_0x
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'chomp'
+
+format = """
+[\\[SYS_BREACH//CHOMP_0x\\]](bold fg:toxic_green) \
+[❯](bold fg:toxic_green) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🦫](bold fg:toxic_green)\
+$line_break\
+$character"""
+
+[palettes.chomp]
+chassis_dark = "#111415"
+swamp_teal   = "#0d2822"
+alert_amber  = "#ffb000"
+recess_teal  = "#080a0a"
+toxic_green  = "#39ff14"
+mint_green   = "#6ee7b7"
+laser_cyan   = "#00ffcc"
+slate_gray   = "#6f8a7e"
+laser_white  = "#f0fbf5"
+
+[username]
+show_always = true
+style_user = "bold fg:laser_white"
+style_root = "bold fg:alert_amber"
+format = '[$user]($style)[:](bold fg:toxic_green)'
+
+[directory]
+style = "bold fg:toxic_green"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:mint_green"
+format = ' [\(git:](fg:slate_gray)[$branch]($style)[\)](fg:slate_gray)'
+
+[git_status]
+style = "bold fg:alert_amber"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "fg:laser_cyan"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:alert_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:laser_cyan"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:toxic_green"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:laser_cyan"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2_000
+style = "fg:alert_amber"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+style = "bold fg:alert_amber"
+format = ' [\[EXIT:$status\]]($style)'
+
+[character]
+success_symbol = "[❯❯](bold fg:toxic_green) "
+error_symbol = "[❯❯](bold fg:alert_amber) "

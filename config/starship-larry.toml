@@ -1,10 +1,10 @@
-# Starship Prompt Configuration - Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT
+# Starship Prompt Configuration - Standalone: "Chomp the Haxor" / CHOMP_0x
 "$schema" = 'https://starship.rs/config-schema.json'
 
-palette = 'larry'
+palette = 'chomp'
 
 format = """
-[\\[SYS_BREACH//LARRY_0x\\]](bold fg:toxic_green) \
+[\\[SYS_BREACH//CHOMP_0x\\]](bold fg:toxic_green) \
 [❯](bold fg:toxic_green) \
 $username\
 $directory\
@@ -21,19 +21,20 @@ $status\
 $line_break\
 $character"""
 
-[palettes.larry]
-chassis_dark = "#151718"
-swamp_teal   = "#0d2e27"
+[palettes.chomp]
+chassis_dark = "#111415"
+swamp_teal   = "#0d2822"
 alert_amber  = "#ffb000"
 recess_teal  = "#080a0a"
-cyber_blue   = "#a5b4fc"
 toxic_green  = "#39ff14"
-unread_moss  = "#1f3e37"
-laser_white  = "#f0f4f8"
+mint_green   = "#6ee7b7"
+laser_cyan   = "#00ffcc"
+slate_gray   = "#6f8a7e"
+laser_white  = "#f0fbf5"
 
 [username]
 show_always = true
-style_user = "bold fg:cyber_blue"
+style_user = "bold fg:laser_white"
 style_root = "bold fg:alert_amber"
 format = '[$user]($style)[:](bold fg:toxic_green)'
 
@@ -45,8 +46,8 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bold fg:toxic_green"
-format = ' [\(git:](fg:unread_moss)[$branch]($style)[\)](fg:unread_moss)'
+style = "bold fg:mint_green"
+format = ' [\(git:](fg:slate_gray)[$branch]($style)[\)](fg:slate_gray)'
 
 [git_status]
 style = "bold fg:alert_amber"
@@ -54,7 +55,7 @@ format = ' [$all_status$ahead_behind]($style)'
 
 [python]
 symbol = " "
-style = "fg:toxic_green"
+style = "fg:laser_cyan"
 format = ' [$symbol($version)]($style)'
 
 [rust]
@@ -64,7 +65,7 @@ format = ' [$symbol($version)]($style)'
 
 [golang]
 symbol = " "
-style = "fg:cyber_blue"
+style = "fg:laser_cyan"
 format = ' [$symbol($version)]($style)'
 
 [nodejs]
@@ -74,7 +75,7 @@ format = ' [$symbol($version)]($style)'
 
 [docker_context]
 symbol = " "
-style = "fg:cyber_blue"
+style = "fg:laser_cyan"
 format = ' [$symbol$context]($style)'
 
 [cmd_duration]

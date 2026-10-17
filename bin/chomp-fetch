@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# chomp-fetch: Custom High-Density Cyber-Swamp Terminal Fetch for CHOMP_0x
+# ==============================================================================
+import os
+import platform
+import subprocess
+import sys
+
+# High-Readability ANSI 24-bit TrueColor Escapes
+G    = "\033[38;2;57;255;20m"    # Toxic Neon Green (#39ff14)
+W    = "\033[38;2;240;251;245m"  # Crisp Specular White (#f0fbf5)
+MINT = "\033[38;2;110;231;183m"  # Sharp Cyber Mint (#6ee7b7)
+Y    = "\033[38;2;255;176;0m"    # Alert/Hazard Amber (#ffb000)
+C    = "\033[38;2;0;255;204m"    # Laser Cyan (#00ffcc)
+GR   = "\033[38;2;120;145;135m"  # Readable Tactical Slate/Sage (#789187)
+R    = "\033[0m"
+BOLD = "\033[1m"
+DIM  = "\033[2m"
+
+def get_uptime():
+    try:
+        with open("/proc/uptime", "r") as f:
+            seconds = float(f.readline().split()[0])
+        hrs = int(seconds // 3600)
+        mins = int((seconds % 3600) // 60)
+        return f"{hrs}h {mins}m"
+    except Exception:
+        return "unknown"
+
+def get_memory():
+    try:
+        mem_total, mem_avail = 0, 0
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_avail = int(line.split()[1])
+        used = (mem_total - mem_avail) / 1024 / 1024
+        total = mem_total / 1024 / 1024
+        pct = (used / total) * 100 if total > 0 else 0
+        bars = int(pct / 10)
+        bar_str = "[" + "=" * bars + "-" * (10 - bars) + "]"
+        return f"{used:.1f}G / {total:.1f}G {bar_str}"
+    except Exception:
+        return "unknown"
+
+def get_packages():
+    try:
+        out = subprocess.check_output("pacman -Qq 2>/dev/null | wc -l", shell=True).decode().strip()
+        return f"{out} (pacman)"
+    except Exception:
+        return "N/A"
+
+def main():
+    user = os.getenv("USER", "jaws")
+    hostname = platform.node()
+    os_name = "Arch Linux x86_64"
+    kernel = platform.release()
+    uptime = get_uptime()
+    memory = get_memory()
+    packages = get_packages()
+    shell = os.path.basename(os.getenv("SHELL", "zsh"))
+    term = os.getenv("TERM", "kitty")
+
+    chomp_mascot = [
+        r"                   .-------------.         ",
+        r"                 .'               '.       ",
+        r"                /     .--------.    \      ",
+        r"               /     /   EAR    \    \     ",
+        r"              |     |            |    |    ",
+        r"              |      \          / _.-' \   ",
+        r"             /        '--------' [====] \  ",
+        r"   .----.   /       /            [VISOR] \ ",
+        r" .'      '.'       /     .-''''-. '----'  |",
+        r"/          \      |     (  ..    )  __    |",
+        r"|  (TAIL)   \     |      \      /  |[_][_]|",
+        r" \           \     \      '----'  /       /",
+        r"  '.          '.    '.           /       / ",
+        r"    '---.._     '--.  '---------'       /  ",
+        r"           '--..    '--.               /   ",
+        r"                '--.    '-------------'    ",
+        r"                    '--(_____________)     ",
+    ]
+
+    chomp_header = [
+        f"{BOLD}{G}  ____ _   _  ___  __  __ ____  {R}",
+        f"{BOLD}{G} / ___| | | |/ _ \\|  \\/  |  _ \\ {R}",
+        f"{BOLD}{G}| |   | |_| | | | | |\\/| | |_) |{R}",
+        f"{BOLD}{G}| |___|  _  | |_| | |  | |  __/ {R}",
+        f"{BOLD}{G} \\____|_| |_|\\___/|_|  |_|_|    {R}",
+        f"{BOLD}{G}  _____ _   _ _____             {R}",
+        f"{BOLD}{G} |_   _| | | | ____|            {R}",
+        f"{BOLD}{G}   | | | |_| |  _|              {R}",
+        f"{BOLD}{G}   | | |  _  | |___             {R}",
+        f"{BOLD}{G}   |_| |_| |_|_____|            {R}",
+        f"{BOLD}{G} _   _    _    __  _____  ____  {R}",
+        f"{BOLD}{G}| | | |  / \\   \\ \\/ / _ \\|  _ \\ {R}",
+        f"{BOLD}{G}| |_| | / _ \\   \\  / | | | |_) |{R}",
+        f"{BOLD}{G}|  _  |/ ___ \\  /  \\ |_| |  _ < {R}",
+        f"{BOLD}{G}|_| |_/_/   \\_\\/_/\\_\\___/|_| \\_\\{R}",
+    ]
+
+    info_lines = [
+        f"{BOLD}{Y}[STATUS: FULL COUCHLOCK]{R}",
+        f"{BOLD}{C}[SYS_BREACH: 0x_CHOMP_v2.0]{R}",
+        f"{GR}------------------------------------------------------------{R}",
+        f"{G}[ HOST ]{R} ❯ {W}{user}@{hostname}{R} {GR}// chassis: matte-black{R}",
+        f"{G}[ OS   ]{R} ❯ {W}{os_name}{R} {GR}// AwesomeWM 4.3{R}",
+        f"{G}[ KRNL ]{R} ❯ {W}{kernel}{R}",
+        f"{G}[ UPTM ]{R} ❯ {W}{uptime}{R}",
+        f"{G}[ PACK ]{R} ❯ {W}{packages}{R}",
+        f"{G}[ SHEL ]{R} ❯ {W}{shell}{R} {GR}// starship [CHOMP_0x]{R}",
+        f"{G}[ TERM ]{R} ❯ {W}{term}{R} {GR}// IosevkaTerm Nerd Font{R}",
+        f"{G}[ MEM  ]{R} ❯ {MINT}{memory}{R}",
+        f"{GR}------------------------------------------------------------{R}",
+        f"{G}███{MINT}███{C}███{Y}███{GR}███{W}███{R}",
+    ]
+
+    print()
+    max_top = max(len(chomp_mascot), len(chomp_header))
+    for i in range(max_top):
+        l = chomp_mascot[i] if i < len(chomp_mascot) else " " * 43
+        r = chomp_header[i] if i < len(chomp_header) else ""
+        print(f" {G}{l}{R}   {r}")
+
+    print()
+    for line in info_lines:
+        print(f"   {line}")
+    print()
+
+if __name__ == "__main__":
+    main()

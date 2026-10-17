@@ -14,8 +14,9 @@ local is_lab = (mode == "lab")
 local is_cyber = (mode == "cyber")
 local is_space = (mode == "space")
 local is_shred = (mode == "shred")
-local is_larry = (mode == "larry")
-local is_flat = (is_lab or is_cyber or is_space or is_shred or is_larry)
+local is_chomp = (mode == "chomp" or mode == "larry")
+local is_larry = is_chomp
+local is_flat = (is_lab or is_cyber or is_space or is_shred or is_chomp)
 
 -- Mode-aware telemetry color palette
 local P
@@ -129,13 +130,13 @@ elseif is_shred then
         pill_bdr   = "#4a5260",
         pill_bw    = 1,
     }
-elseif is_larry then
+elseif is_chomp then
     P = {
         cpu        = "#39ff14",
         temp_ok    = "#39ff14",
         temp_hot   = "#ffb000",
         gpu        = "#39ff14",
-        sys        = "#a5b4fc",
+        sys        = "#6ee7b7",
         net_ok     = "#39ff14",
         net_off    = "#ffb000",
         vol_ok     = "#39ff14",
@@ -143,11 +144,11 @@ elseif is_larry then
         bat_ok     = "#39ff14",
         bat_chg    = "#39ff14",
         bat_warn   = "#ffb000",
-        bat_crit   = "#ff0055",
-        bat_badge  = "#0d2e27",
-        pill_bg1   = "#151718",
-        pill_bg2   = "#151718",
-        pill_fg    = "#a5b4fc",
+        bat_crit   = "#ff3b5c",
+        bat_badge  = "#0d2822",
+        pill_bg1   = "#111415",
+        pill_bg2   = "#111415",
+        pill_fg    = "#e2f5ec",
         pill_bdr   = "#39ff14",
         pill_bw    = 1,
     }
@@ -597,8 +598,8 @@ awful.screen.connect_for_each_screen(function(s)
     -- Set screen wallpaper
     set_wallpaper(s)
 
-    -- Tags (strictly SYS, DEV, SWAMP, ROOT, LOGS for Larry theme)
-    local tag_names = is_larry and { "SYS", "DEV", "SWAMP", "ROOT", "LOGS" } or { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+    -- Tags (strictly SYS, DEV, SWAMP, ROOT, LOGS for Chomp theme)
+    local tag_names = is_chomp and { "SYS", "DEV", "SWAMP", "ROOT", "LOGS" } or { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
     awful.tag(tag_names, s, awful.layout.layouts[1])
 
     -- Dedicated Special Scratchpad Tag (hidden from pager & tag switcher)
@@ -616,9 +617,9 @@ awful.screen.connect_for_each_screen(function(s)
         awful.button({ }, 5, function () awful.layout.inc(-1) end)
     ))
 
-    -- Taglist widget template for Larry theme:
+    -- Taglist widget template for Chomp theme:
     local taglist_template = nil
-    if is_larry then
+    if is_chomp then
         taglist_template = {
             {
                 {
@@ -633,7 +634,7 @@ awful.screen.connect_for_each_screen(function(s)
             },
             id                 = "background_role",
             widget             = wibox.container.background,
-            shape              = slime_shapes.larry_tag_wedge(8, 4),
+            shape              = slime_shapes.chomp_tag_wedge(8, 4),
             shape_border_width = 1,
             shape_border_color = "#39ff1444",
         }
@@ -645,7 +646,7 @@ awful.screen.connect_for_each_screen(function(s)
         filter          = function(t) return not t.hide and t.name ~= "scratchpad" end,
         buttons         = taglist_buttons,
         widget_template = taglist_template,
-        layout          = is_larry and {
+        layout          = is_chomp and {
             spacing = 4,
             layout  = wibox.layout.fixed.horizontal,
         } or nil,
@@ -657,8 +658,8 @@ awful.screen.connect_for_each_screen(function(s)
         task_shape = slime_shapes.rocky_pill(5, 4.2)
     elseif is_shred then
         task_shape = slime_shapes.shred_pill(6, 4.2)
-    elseif is_larry then
-        task_shape = slime_shapes.larry_widget_pod(6)
+    elseif is_chomp then
+        task_shape = slime_shapes.chomp_widget_pod(6)
     elseif is_cyber then
         task_shape = function(cr, w, h)
             gears.shape.rounded_rect(cr, w, h, 2)
@@ -701,8 +702,8 @@ awful.screen.connect_for_each_screen(function(s)
             id                 = "background_role",
             widget             = wibox.container.background,
             shape              = task_shape,
-            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred or is_larry) and 1 or 0),
-            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or (is_larry and "#39ff14" or "#7928ca")))),
+            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred or is_chomp) and 1 or 0),
+            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or (is_chomp and "#39ff14" or "#7928ca")))),
         },
     }
 
@@ -728,17 +729,17 @@ awful.screen.connect_for_each_screen(function(s)
         bar_bgimage = slime_shapes.render_space_bar_bg()
     elseif is_lab then
         bar_bgimage = slime_shapes.render_lab_bar_bg()
-    elseif is_larry then
-        bar_bgimage = slime_shapes.render_larry_bar_bg()
+    elseif is_chomp then
+        bar_bgimage = slime_shapes.render_chomp_bar_bg()
     else
         bar_bgimage = slime_shapes.render_bar_bg(bar_drip_height, 3.7)
     end
 
-    -- Standalone Larry widgets (Launcher Prompt >_ and Center Mascot Pod)
-    local larry_prompt_btn = nil
-    local larry_mascot_widget = nil
-    if is_larry then
-        larry_prompt_btn = wibox.widget {
+    -- Standalone Chomp widgets (Launcher Prompt >_ and Center Mascot Pod)
+    local chomp_prompt_btn = nil
+    local chomp_mascot_widget = nil
+    if is_chomp then
+        chomp_prompt_btn = wibox.widget {
             {
                 {
                     markup = "<span foreground='#39ff14' weight='bold'>&gt;_</span>",
@@ -752,8 +753,8 @@ awful.screen.connect_for_each_screen(function(s)
                 bottom = 3,
                 widget = wibox.container.margin,
             },
-            bg                 = "#151718",
-            shape              = slime_shapes.larry_widget_pod(5),
+            bg                 = "#111415",
+            shape              = slime_shapes.chomp_widget_pod(5),
             shape_border_width = 1,
             shape_border_color = "#39ff14",
             widget             = wibox.container.background,
@@ -764,10 +765,10 @@ awful.screen.connect_for_each_screen(function(s)
             ),
         }
 
-        larry_mascot_widget = wibox.widget {
+        chomp_mascot_widget = wibox.widget {
             {
                 {
-                    image  = os.getenv("HOME") .. "/.config/awesome/theme/muskrat_head.png",
+                    image  = os.getenv("HOME") .. "/.config/awesome/theme/chomp_head.png",
                     resize = true,
                     widget = wibox.widget.imagebox,
                 },
@@ -777,14 +778,14 @@ awful.screen.connect_for_each_screen(function(s)
                 right  = 16,
                 widget = wibox.container.margin,
             },
-            shape              = slime_shapes.larry_mascot_pod(12),
-            bg                 = "#0d2e27",
+            shape              = slime_shapes.chomp_mascot_pod(12),
+            bg                 = "#0d2822",
             shape_border_width = 1,
             shape_border_color = "#39ff14",
             widget             = wibox.container.background,
             buttons            = gears.table.join(
                 awful.button({}, 1, function()
-                    scratchpad.toggle("kitty --class larry-pad " .. os.getenv("HOME") .. "/.local/bin/larry-pad", "larry-pad")
+                    scratchpad.toggle("kitty --class chomp-pad " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
                 end)
             ),
         }
@@ -804,12 +805,12 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox:struts({ top = is_flat and 36 or 34, bottom = 0, left = 0, right = 0 })
 
     local left_widgets
-    if is_larry then
+    if is_chomp then
         left_widgets = {
             layout = wibox.layout.fixed.horizontal,
             spacing = 6,
             wibox.widget {
-                larry_prompt_btn,
+                chomp_prompt_btn,
                 left = 6,
                 widget = wibox.container.margin,
             },
@@ -830,11 +831,11 @@ awful.screen.connect_for_each_screen(function(s)
     end
 
     local middle_widget
-    if is_larry then
+    if is_chomp then
         middle_widget = {
             layout = wibox.layout.align.horizontal,
             s.mytasklist,
-            larry_mascot_widget,
+            chomp_mascot_widget,
             nil,
         }
     else

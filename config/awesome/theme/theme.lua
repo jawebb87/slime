@@ -16,7 +16,7 @@ do
         f:close()
         if content then
             content = content:gsub("%s+", "")
-            if content == "origin" or content == "lab" or content == "slime" or content == "cyber" or content == "space" or content == "shred" or content == "larry" then
+            if content == "origin" or content == "lab" or content == "slime" or content == "cyber" or content == "space" or content == "shred" or content == "larry" or content == "chomp" then
                 mode = content
             end
         end
@@ -38,8 +38,8 @@ local space_font_family  = "SpaceMono Nerd Font"
 local space_font_size    = "9"
 local shred_font_family  = "JetBrainsMono Nerd Font"
 local shred_font_size    = "10"
-local larry_font_family  = "IosevkaTerm Nerd Font"
-local larry_font_size    = "10"
+local chomp_font_family  = "IosevkaTerm Nerd Font"
+local chomp_font_size    = "10"
 
 local active_font_family = slime_font_family
 local active_font_size   = slime_font_size
@@ -58,9 +58,9 @@ elseif mode == "space" then
 elseif mode == "shred" then
     active_font_family = shred_font_family
     active_font_size   = shred_font_size
-elseif mode == "larry" then
-    active_font_family = larry_font_family
-    active_font_size   = larry_font_size
+elseif mode == "chomp" or mode == "larry" then
+    active_font_family = chomp_font_family
+    active_font_size   = chomp_font_size
 end
 theme.font                     = active_font_family .. " " .. active_font_size
 theme.hotkeys_font             = active_font_family .. " Bold " .. active_font_size
@@ -431,52 +431,53 @@ elseif mode == "shred" then
 
     -- Wallpaper
     theme.wallpaper = os.getenv("HOME") .. "/Pictures/wallpaper/shred.jpg"
-elseif mode == "larry" then
+elseif mode == "chomp" or mode == "larry" then
     -- ==============================================================================
-    -- Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT Cyber-Swamp Brutalist Theme
+    -- Standalone: "Chomp the Haxor" / CHOMP_0x Cyber-Swamp Brutalist Theme
+    -- High-Readability Monolithic Industrial Aesthetics
     -- ==============================================================================
     theme.border_width       = dpi(2)
     theme.border_width_focus = dpi(3)
-    theme.border_normal      = "#10231f"
-    theme.border_focus       = "#39ff14"
-    theme.border_marked      = "#ffb000"
+    theme.border_normal      = "#16382f" -- Distinct deep emerald slate
+    theme.border_focus       = "#39ff14" -- High-voltage toxic green laser
+    theme.border_marked      = "#ffb000" -- Alert amber
 
-    -- Core Color Palette (Base Chassis, Marsh Teal, Toxic Green & Cyber Blue)
-    theme.bg_normal   = "#151718"
-    theme.bg_focus    = "#0d2e27"
+    -- Core Color Palette (Matte Chassis, Marsh Teal, Toxic Green & Phosphor White)
+    theme.bg_normal   = "#111415"
+    theme.bg_focus    = "#0d2822"
     theme.bg_urgent   = "#ffb000"
-    theme.bg_minimize = "#080a0a"
-    theme.bg_systray  = "#151718"
+    theme.bg_minimize = "#090c0c"
+    theme.bg_systray  = "#111415"
 
-    theme.fg_normal   = "#a5b4fc"
-    theme.fg_focus    = "#39ff14"
+    theme.fg_normal   = "#e2f5ec" -- Crisp, high-contrast phosphor white-mint
+    theme.fg_focus    = "#39ff14" -- Toxic laser green
     theme.fg_urgent   = "#000000"
-    theme.fg_minimize = "#1f3e37"
+    theme.fg_minimize = "#6f8a7e" -- Clearly readable tactical slate
 
     -- Taglist Theming (SYS, DEV, SWAMP, ROOT, LOGS)
     theme.taglist_bg_focus    = "#39ff14"
     theme.taglist_fg_focus    = "#0a140f"
     theme.taglist_bg_urgent   = "#ffb000"
     theme.taglist_fg_urgent   = "#000000"
-    theme.taglist_bg_occupied = "#182220"
-    theme.taglist_fg_occupied = "#a5b4fc"
-    theme.taglist_bg_empty    = "#151718"
-    theme.taglist_fg_empty    = "#1f3e37"
+    theme.taglist_bg_occupied = "#182622"
+    theme.taglist_fg_occupied = "#e2f5ec"
+    theme.taglist_bg_empty    = "#111415"
+    theme.taglist_fg_empty    = "#6f8a7e"
 
     -- Tasklist Theming
-    theme.tasklist_bg_normal   = "#151718"
-    theme.tasklist_fg_normal   = "#a5b4fc"
-    theme.tasklist_bg_focus    = "#0d2e27"
+    theme.tasklist_bg_normal   = "#111415"
+    theme.tasklist_fg_normal   = "#e2f5ec"
+    theme.tasklist_bg_focus    = "#0d2822"
     theme.tasklist_fg_focus    = "#39ff14"
     theme.tasklist_bg_urgent   = "#ffb000"
     theme.tasklist_fg_urgent   = "#000000"
-    theme.tasklist_bg_minimize = "#080a0a"
-    theme.tasklist_fg_minimize = "#1f3e37"
+    theme.tasklist_bg_minimize = "#090c0c"
+    theme.tasklist_fg_minimize = "#6f8a7e"
 
     -- Context Menu Theming
-    theme.menu_bg_normal    = "#151718f8"
-    theme.menu_bg_focus     = "#0d2e27"
-    theme.menu_fg_normal    = "#a5b4fc"
+    theme.menu_bg_normal    = "#111415f8"
+    theme.menu_bg_focus     = "#0d2822"
+    theme.menu_fg_normal    = "#e2f5ec"
     theme.menu_fg_focus     = "#39ff14"
     theme.menu_border_color = "#39ff14"
     theme.menu_border_width = dpi(1)
@@ -484,26 +485,26 @@ elseif mode == "larry" then
     theme.menu_width        = dpi(140)
 
     -- Hotkeys Popup / Help Modal
-    theme.hotkeys_bg              = "#151718f8"
-    theme.hotkeys_fg              = "#a5b4fc"
+    theme.hotkeys_bg              = "#111415f8"
+    theme.hotkeys_fg              = "#e2f5ec"
     theme.hotkeys_border_color    = "#39ff14"
     theme.hotkeys_border_width    = dpi(2)
     theme.hotkeys_modifiers_fg    = "#ffb000"
-    theme.hotkeys_label_bg        = "#0d2e27"
+    theme.hotkeys_label_bg        = "#0d2822"
     theme.hotkeys_label_fg        = "#39ff14"
     theme.hotkeys_group_margin    = dpi(16)
 
     -- Titlebars
-    theme.titlebar_bg_normal = "#151718"
-    theme.titlebar_bg_focus  = "#0d2e27"
-    theme.titlebar_fg_normal = "#1f3e37"
+    theme.titlebar_bg_normal = "#111415"
+    theme.titlebar_bg_focus  = "#0d2822"
+    theme.titlebar_fg_normal = "#6f8a7e"
     theme.titlebar_fg_focus  = "#39ff14"
 
     -- Wibar Height
     theme.wibar_height = dpi(36)
 
     -- Wallpaper
-    theme.wallpaper = os.getenv("HOME") .. "/Pictures/wallpaper/larry.jpg"
+    theme.wallpaper = os.getenv("HOME") .. "/Pictures/wallpaper/chomp.jpg"
 else
     -- ==========================================
     -- Slime Theme Aesthetics (Post-Contamination)
@@ -591,7 +592,7 @@ elseif mode == "space" then
     layout_color = "#0088cc"
 elseif mode == "shred" then
     layout_color = "#c8d0dc"
-elseif mode == "larry" then
+elseif mode == "chomp" or mode == "larry" then
     layout_color = "#39ff14"
 end
 for _, l in ipairs({

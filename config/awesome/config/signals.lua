@@ -46,9 +46,9 @@ local function apply_window_shape(c)
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             awful.titlebar.hide(c, side)
         end
-    elseif beautiful.mode == "larry" then
-        -- Standalone "Larry the Haxor": Monolithic chamfers, zero rounded corners
-        c.shape = slime_shapes.larry_window(6)
+    elseif beautiful.mode == "chomp" or beautiful.mode == "larry" then
+        -- Standalone "Chomp the Haxor": Monolithic chamfers, zero rounded corners
+        c.shape = slime_shapes.chomp_window(6)
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             awful.titlebar.hide(c, side)
         end
@@ -174,7 +174,7 @@ end)
 
 -- Border styling & lightweight redraw of bottom drip / cyber / space perimeter glow on focus/unfocus
 client.connect_signal("focus", function(c)
-    if beautiful.mode == "larry" then
+    if beautiful.mode == "chomp" or beautiful.mode == "larry" then
         c.border_width = beautiful.border_width_focus or 3
     end
     c.border_color = beautiful.border_focus
@@ -193,7 +193,7 @@ client.connect_signal("focus", function(c)
     end
 end)
 client.connect_signal("unfocus", function(c)
-    if beautiful.mode == "larry" then
+    if beautiful.mode == "chomp" or beautiful.mode == "larry" then
         c.border_width = beautiful.border_width or 2
     end
     c.border_color = beautiful.border_normal

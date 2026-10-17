@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # ==============================================================================
-# larry-fetch: Custom High-Density Cyber-Swamp Terminal Fetch for LARRY_0x_MUSKRAT
+# chomp-fetch: Custom High-Density Cyber-Swamp Terminal Fetch for CHOMP_0x
 # ==============================================================================
 import os
 import platform
 import subprocess
 import sys
 
-# ANSI 24-bit TrueColor Escapes
-G  = "\033[38;2;57;255;20m"    # Toxic Neon Green (#39ff14)
-DG = "\033[38;2;13;46;39m"    # Deep Swamp Teal (#0d2e27)
-Y  = "\033[38;2;255;176;0m"   # Alert/Hazard Amber (#ffb000)
-B  = "\033[38;2;165;180;252m" # Low-sat Cyber Blue (#a5b4fc)
-W  = "\033[38;2;240;244;248m" # Crisp White (#f0f4f8)
-M  = "\033[38;2;31;62;55m"    # Dim Moss Green (#1f3e37)
-R  = "\033[0m"
+# High-Readability ANSI 24-bit TrueColor Escapes
+G    = "\033[38;2;57;255;20m"    # Toxic Neon Green (#39ff14)
+W    = "\033[38;2;240;251;245m"  # Crisp Specular White (#f0fbf5)
+MINT = "\033[38;2;110;231;183m"  # Sharp Cyber Mint (#6ee7b7)
+Y    = "\033[38;2;255;176;0m"    # Alert/Hazard Amber (#ffb000)
+C    = "\033[38;2;0;255;204m"    # Laser Cyan (#00ffcc)
+GR   = "\033[38;2;120;145;135m"  # Readable Tactical Slate/Sage (#789187)
+R    = "\033[0m"
 BOLD = "\033[1m"
 DIM  = "\033[2m"
 
@@ -64,38 +64,39 @@ def main():
     shell = os.path.basename(os.getenv("SHELL", "zsh"))
     term = os.getenv("TERM", "kitty")
 
-    larry_art = [
-        r"               .--------.        ",
-        r"             .'          '.      ",
-        r"            /   .-.        \     ",
-        r"           /   /   \   _.._ \    ",
-        r"          |   | (O) | [====] |   ",
-        r"          |    '-'        __  \  ",
-        r"         /      \       =(..)  \===",
-        r"        /        \        ||    \ ",
-        r"       /   .-''''-.      /  \    |",
-        r"   .--/   /        \    /    \   |",
-        r"  / _/   |          |  |  __  |  |",
-        r" | /     |  HOODIE  |  | [__] |  |",
-        r" ( \     |          |   \____/   |",
-        r"  \ '._   \        /             /",
-        r"   '---'   '------'     .------. '",
-        r"   (===TAIL===)        (________) ",
+    chomp_mascot = [
+        r"                   .-------------.         ",
+        r"                 .'               '.       ",
+        r"                /     .--------.    \      ",
+        r"               /     /   EAR    \    \     ",
+        r"              |     |            |    |    ",
+        r"              |      \          / _.-' \   ",
+        r"             /        '--------' [====] \  ",
+        r"   .----.   /       /            [VISOR] \ ",
+        r" .'      '.'       /     .-''''-. '----'  |",
+        r"/          \      |     (  ..    )  __    |",
+        r"|  (TAIL)   \     |      \      /  |[_][_]|",
+        r" \           \     \      '----'  /       /",
+        r"  '.          '.    '.           /       / ",
+        r"    '---.._     '--.  '---------'       /  ",
+        r"           '--..    '--.               /   ",
+        r"                '--.    '-------------'    ",
+        r"                    '--(_____________)     ",
     ]
 
-    header_block = [
-        f"{BOLD}{G} _        _    ____  ____  __   __{R}",
-        f"{BOLD}{G}| |      / \\  |  _ \\|  _ \\ \\ \\ / /{R}",
-        f"{BOLD}{G}| |     / _ \\ | |_) | |_) | \\ V / {R}",
-        f"{BOLD}{G}| |___ / ___ \\|  _ <|  _ <   | |  {R}",
-        f"{BOLD}{G}|_____/_/   \\_\\_| \\_\\_| \\_\\  |_|  {R}",
-        f"{BOLD}{G}    _____ _   _ _____{R}",
-        f"{BOLD}{G}   |_   _| | | | ____|{R}",
-        f"{BOLD}{G}     | | | |_| |  _|  {R}",
-        f"{BOLD}{G}     | | |  _  | |___ {R}",
-        f"{BOLD}{G}     |_| |_| |_|_____|{R}",
-        f"{BOLD}{G} _   _    _    __  _____  ____ {R}",
-        f"{BOLD}{G}| | | |  / \\   \\ \\/ / _ \\|  _ \\{R}",
+    chomp_header = [
+        f"{BOLD}{G}  ____ _   _  ___  __  __ ____  {R}",
+        f"{BOLD}{G} / ___| | | |/ _ \\|  \\/  |  _ \\ {R}",
+        f"{BOLD}{G}| |   | |_| | | | | |\\/| | |_) |{R}",
+        f"{BOLD}{G}| |___|  _  | |_| | |  | |  __/ {R}",
+        f"{BOLD}{G} \\____|_| |_|\\___/|_|  |_|_|    {R}",
+        f"{BOLD}{G}  _____ _   _ _____             {R}",
+        f"{BOLD}{G} |_   _| | | | ____|            {R}",
+        f"{BOLD}{G}   | | | |_| |  _|              {R}",
+        f"{BOLD}{G}   | | |  _  | |___             {R}",
+        f"{BOLD}{G}   |_| |_| |_|_____|            {R}",
+        f"{BOLD}{G} _   _    _    __  _____  ____  {R}",
+        f"{BOLD}{G}| | | |  / \\   \\ \\/ / _ \\|  _ \\ {R}",
         f"{BOLD}{G}| |_| | / _ \\   \\  / | | | |_) |{R}",
         f"{BOLD}{G}|  _  |/ ___ \\  /  \\ |_| |  _ < {R}",
         f"{BOLD}{G}|_| |_/_/   \\_\\/_/\\_\\___/|_| \\_\\{R}",
@@ -103,25 +104,25 @@ def main():
 
     info_lines = [
         f"{BOLD}{Y}[STATUS: FULL COUCHLOCK]{R}",
-        f"{BOLD}{B}[SYS_BREACH: LARRY_THE_MUSKRAT_v1.0]{R}",
-        f"{DIM}{M}----------------------------------------{R}",
-        f"{G}[ HOST ]{R} ❯ {W}{user}@{hostname}{R} // chassis: matte-black",
-        f"{G}[ OS   ]{R} ❯ {W}{os_name}{R} // AwesomeWM 4.3",
+        f"{BOLD}{C}[SYS_BREACH: 0x_CHOMP_v2.0]{R}",
+        f"{GR}------------------------------------------------------------{R}",
+        f"{G}[ HOST ]{R} ❯ {W}{user}@{hostname}{R} {GR}// chassis: matte-black{R}",
+        f"{G}[ OS   ]{R} ❯ {W}{os_name}{R} {GR}// AwesomeWM 4.3{R}",
         f"{G}[ KRNL ]{R} ❯ {W}{kernel}{R}",
         f"{G}[ UPTM ]{R} ❯ {W}{uptime}{R}",
         f"{G}[ PACK ]{R} ❯ {W}{packages}{R}",
-        f"{G}[ SHEL ]{R} ❯ {W}{shell}{R} // starship [LARRY_0x]",
-        f"{G}[ TERM ]{R} ❯ {W}{term}{R} // IosevkaTerm Nerd Font",
-        f"{G}[ MEM  ]{R} ❯ {W}{memory}{R}",
-        f"{DIM}{M}----------------------------------------{R}",
-        f"{G}███{Y}███{B}███{DG}███{M}███{W}███{R}",
+        f"{G}[ SHEL ]{R} ❯ {W}{shell}{R} {GR}// starship [CHOMP_0x]{R}",
+        f"{G}[ TERM ]{R} ❯ {W}{term}{R} {GR}// IosevkaTerm Nerd Font{R}",
+        f"{G}[ MEM  ]{R} ❯ {MINT}{memory}{R}",
+        f"{GR}------------------------------------------------------------{R}",
+        f"{G}███{MINT}███{C}███{Y}███{GR}███{W}███{R}",
     ]
 
     print()
-    max_top = max(len(larry_art), len(header_block))
+    max_top = max(len(chomp_mascot), len(chomp_header))
     for i in range(max_top):
-        l = larry_art[i] if i < len(larry_art) else " " * 34
-        r = header_block[i] if i < len(header_block) else ""
+        l = chomp_mascot[i] if i < len(chomp_mascot) else " " * 43
+        r = chomp_header[i] if i < len(chomp_header) else ""
         print(f" {G}{l}{R}   {r}")
 
     print()

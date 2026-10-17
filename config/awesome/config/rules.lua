@@ -73,7 +73,7 @@ awful.rules.rules = {
             "key-cheat", "log-pad", "vim-cheat", "weather-pad", "zodiac-pad",
             "btop-float", "term-scratch", "notes-pad", "fzf-pad", "lazygit-pad",
             "ranger-pad", "ipython-pad", "agy-pad", "limusic-app", "limusic",
-            "font-pad", "larry-pad", "larry-fetch-pad",
+            "font-pad", "chomp-pad", "chomp-fetch-pad", "larry-pad", "larry-fetch-pad",
         },
         class = {
             "Audio-pad", "Wifi-pad", "Clip-pad", "Docker-pad", "Emoji-pad",
@@ -81,6 +81,7 @@ awful.rules.rules = {
             "Btop-float", "Term-scratch", "Notes-pad", "Fzf-pad", "Lazygit-pad",
             "Ranger-pad", "Ipython-pad", "Agy-pad", "limusic-app", "Limusic-app",
             "limusic", "Limusic", "Font-pad", "font-pad",
+            "Chomp-pad", "chomp-pad", "Chomp-fetch-pad", "chomp-fetch-pad",
             "Larry-pad", "larry-pad", "Larry-fetch-pad", "larry-fetch-pad",
         },
       },
@@ -91,10 +92,10 @@ awful.rules.rules = {
       }
     },
 
-    -- Larry the Haxor Interactive Console Dropdown (custom dimensions)
+    -- Chomp the Haxor Interactive Console Dropdown (custom dimensions)
     { rule_any = {
-        instance = { "larry-pad", "larry-fetch-pad" },
-        class = { "larry-pad", "Larry-pad", "larry-fetch-pad", "Larry-fetch-pad" },
+        instance = { "chomp-pad", "chomp-fetch-pad", "larry-pad", "larry-fetch-pad" },
+        class = { "chomp-pad", "Chomp-pad", "chomp-fetch-pad", "Chomp-fetch-pad", "larry-pad", "Larry-pad", "larry-fetch-pad", "Larry-fetch-pad" },
       },
       properties = {
           floating = true,

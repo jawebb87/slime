@@ -1,16 +1,16 @@
 /* ============================================================================
- * Rofi Launcher Theme - Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT
+ * Rofi Launcher Theme - Standalone: "Chomp the Haxor" / CHOMP_0x
  * ============================================================================ */
 
 * {
-    bg:          #151718f6;
-    bg-alt:      #080a0a;
-    bg-selected: #0d2e27;
-    fg:          #a5b4fc;
-    fg-muted:    #1f3e37;
+    bg:          #111415f6;
+    bg-alt:      #0a0c0d;
+    bg-selected: #0d2822;
+    fg:          #e2f5ec;
+    fg-muted:    #6f8a7e;
     accent:      #39ff14;
     amber:       #ffb000;
-    border-dark: #10231f;
+    border-dark: #16382f;
 
     background-color: transparent;
     text-color:       @fg;
@@ -46,7 +46,7 @@ prompt {
 }
 
 entry {
-    placeholder:       "SYS_BREACH // EXECUTE COMMAND...";
+    placeholder:       "CHOMP_0x // EXECUTE COMMAND...";
     placeholder-color: @fg-muted;
     text-color:        @accent;
 }
@@ -71,7 +71,7 @@ element normal.normal {
 }
 
 element alternate.normal {
-    background-color: #121415;
+    background-color: #141819;
     text-color:       @fg;
 }
 

@@ -1,0 +1,92 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Standalone: "Chomp the Haxor" / CHOMP_0x
+ * ============================================================================ */
+
+* {
+    bg:          #111415f6;
+    bg-alt:      #0a0c0d;
+    bg-selected: #0d2822;
+    fg:          #e2f5ec;
+    fg-muted:    #6f8a7e;
+    accent:      #39ff14;
+    amber:       #ffb000;
+    border-dark: #16382f;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "IosevkaTerm Nerd Font Bold 11";
+}
+
+window {
+    width:            580px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    0px;
+    padding:          14px;
+}
+
+mainbox {
+    spacing:  10px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @accent;
+    border-radius:    0px;
+    padding:          10px 12px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder:       "CHOMP_0x // EXECUTE COMMAND...";
+    placeholder-color: @fg-muted;
+    text-color:        @accent;
+}
+
+listview {
+    lines:        8;
+    columns:      1;
+    fixed-height: false;
+    spacing:      4px;
+    scrollbar:    false;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 0px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element alternate.normal {
+    background-color: #141819;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @accent;
+    border:           0px 0px 0px 3px;
+    border-color:     @accent;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color:     inherit;
+}

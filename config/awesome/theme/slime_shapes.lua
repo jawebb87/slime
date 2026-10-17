@@ -1371,11 +1371,11 @@ function slime_shapes.shred_pill(slant, seed)
 end
 
 -- ==============================================================================
--- 9. Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT Cyber-Swamp Brutalist Theme
+-- 9. Standalone: "Chomp the Haxor" / CHOMP_0x Cyber-Swamp Brutalist Theme
 -- ==============================================================================
 
 -- 9a. Chamfered Sensor Frame (Top-left & Bottom-right 45° chamfers, sharp 90° corners):
-function slime_shapes.larry_widget_pod(chamfer)
+function slime_shapes.chomp_widget_pod(chamfer)
     chamfer = chamfer or 6
     return function(cr, w, h)
         ensure_best_antialias(cr)
@@ -1390,9 +1390,10 @@ function slime_shapes.larry_widget_pod(chamfer)
         cr:close_path()
     end
 end
+slime_shapes.larry_widget_pod = slime_shapes.chomp_widget_pod
 
 -- 9b. Industrial 45° Parallelogram / Chamfered Block for Workspace Tags:
-function slime_shapes.larry_tag_wedge(slant, chamfer)
+function slime_shapes.chomp_tag_wedge(slant, chamfer)
     slant = slant or 8
     chamfer = chamfer or 4
     return function(cr, w, h)
@@ -1409,9 +1410,10 @@ function slime_shapes.larry_tag_wedge(slant, chamfer)
         cr:close_path()
     end
 end
+slime_shapes.larry_tag_wedge = slime_shapes.chomp_tag_wedge
 
 -- 9c. Chamfered / Sharp Angular Window Shape (Zero rounded corners):
-function slime_shapes.larry_window(chamfer)
+function slime_shapes.chomp_window(chamfer)
     chamfer = chamfer or 6
     return function(cr, w, h)
         ensure_best_antialias(cr)
@@ -1428,9 +1430,10 @@ function slime_shapes.larry_window(chamfer)
         cr:close_path()
     end
 end
+slime_shapes.larry_window = slime_shapes.chomp_window
 
 -- 9d. Inverted Trapezoid Console Pod for Center Muskrat Mascot Widget:
-function slime_shapes.larry_mascot_pod(chamfer)
+function slime_shapes.chomp_mascot_pod(chamfer)
     chamfer = chamfer or 10
     return function(cr, w, h)
         ensure_best_antialias(cr)
@@ -1443,25 +1446,26 @@ function slime_shapes.larry_mascot_pod(chamfer)
         cr:close_path()
     end
 end
+slime_shapes.larry_mascot_pod = slime_shapes.chomp_mascot_pod
 
--- 9e. Custom Cairo Renderer for Larry Wibar Background:
--- Draws Heavy Matte Dark Chassis (#151718) to Marsh Teal (#0d2e27),
+-- 9e. Custom Cairo Renderer for Chomp Wibar Background:
+-- Draws Heavy Matte Dark Chassis (#111415) to Marsh Teal (#0d2822),
 -- sharp toxic green (#39ff14) laser baseline, subtle 45° cybernetic grid traces,
 -- and the centered inverted trapezoid console pod outline.
-function slime_shapes.render_larry_bar_bg()
+function slime_shapes.render_chomp_bar_bg()
     return function(_, cr, w, h)
         cr:save()
         ensure_best_antialias(cr)
 
-        -- Matte Dark Chassis (#151718)
+        -- Matte Dark Chassis (#111415)
         cr:rectangle(0, 0, w, h)
-        cr:set_source_rgba(0.082, 0.090, 0.094, 0.98) -- #151718
+        cr:set_source_rgba(0.067, 0.078, 0.082, 0.98) -- #111415
         cr:fill_preserve()
         cr:clip_preserve()
 
         -- Subtle 45° diagonal cybernetic sensor lines
         cr:set_line_width(1.0)
-        cr:set_source_rgba(0.224, 1.000, 0.078, 0.04) -- #39ff14 at 4%
+        cr:set_source_rgba(0.224, 1.000, 0.078, 0.05) -- #39ff14 at 5%
         local gx = -h
         while gx < w + h do
             cr:move_to(gx, 0)
@@ -1470,7 +1474,7 @@ function slime_shapes.render_larry_bar_bg()
         end
         cr:stroke()
 
-        -- Center Inverted Trapezoid Console Notch where the Muskrat Mascot rests
+        -- Center Inverted Trapezoid Console Notch where the Chomp Mascot rests
         local pod_w = 90
         local pod_cx = w * 0.5
         local pod_x1 = pod_cx - pod_w * 0.5
@@ -1483,7 +1487,7 @@ function slime_shapes.render_larry_bar_bg()
         cr:line_to(pod_x2 - pod_chamfer, h)
         cr:line_to(pod_x1 + pod_chamfer, h)
         cr:close_path()
-        cr:set_source_rgba(0.051, 0.180, 0.153, 0.95) -- #0d2e27 Deep marsh-water teal
+        cr:set_source_rgba(0.051, 0.157, 0.133, 0.95) -- #0d2822 Deep marsh-water teal
         cr:fill_preserve()
 
         -- 1.5px Toxic Green Pod Outline
@@ -1491,13 +1495,13 @@ function slime_shapes.render_larry_bar_bg()
         cr:set_source_rgba(0.224, 1.000, 0.078, 0.95) -- #39ff14
         cr:stroke()
 
-        -- Bottom sharp laser rail: Deep swamp teal (#0d2e27) with high-voltage toxic green (#39ff14) core
+        -- Bottom sharp laser rail: Deep swamp teal (#0d2822) with high-voltage toxic green (#39ff14) core
         local laser = cairo.Pattern.create_linear(0, 0, w, 0)
-        laser:add_color_stop_rgba(0.00, 0.051, 0.180, 0.153, 0.8) -- #0d2e27
+        laser:add_color_stop_rgba(0.00, 0.051, 0.157, 0.133, 0.8) -- #0d2822
         laser:add_color_stop_rgba(0.15, 0.224, 1.000, 0.078, 0.95) -- #39ff14
         laser:add_color_stop_rgba(0.50, 0.224, 1.000, 0.078, 1.0)  -- #39ff14
         laser:add_color_stop_rgba(0.85, 0.224, 1.000, 0.078, 0.95) -- #39ff14
-        laser:add_color_stop_rgba(1.00, 0.051, 0.180, 0.153, 0.8) -- #0d2e27
+        laser:add_color_stop_rgba(1.00, 0.051, 0.157, 0.133, 0.8) -- #0d2822
         cr:rectangle(0, h - 1.5, w, 1.5)
         cr:set_source(laser)
         cr:fill()
@@ -1505,6 +1509,7 @@ function slime_shapes.render_larry_bar_bg()
         cr:restore()
     end
 end
+slime_shapes.render_larry_bar_bg = slime_shapes.render_chomp_bar_bg
 
 return slime_shapes
 

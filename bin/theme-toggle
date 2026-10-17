@@ -35,8 +35,8 @@ case "${1:-toggle}" in
     shred|shredder|gunmetal|blade|5)
         NEXT="shred"
         ;;
-    larry|muskrat|haxor|couchlock|6)
-        NEXT="larry"
+    chomp|larry|muskrat|haxor|couchlock|6)
+        NEXT="chomp"
         ;;
     *)
         if [ "$CURRENT" = "origin" ]; then
@@ -50,7 +50,7 @@ case "${1:-toggle}" in
         elif [ "$CURRENT" = "space" ]; then
             NEXT="shred"
         elif [ "$CURRENT" = "shred" ]; then
-            NEXT="larry"
+            NEXT="chomp"
         else
             NEXT="origin"
         fi
@@ -143,7 +143,7 @@ elif [ "$NEXT" = "shred" ]; then
     TITLE="Standalone: THE SHREDDER [SHRED//RPM]"
     BODY="Gunmetal, Razor Angles & Rotary Ripper Teeth active (Super+o to cycle)"
 else
-    TITLE="Standalone: LARRY THE HAXOR [LARRY//0x_MUSKRAT]"
+    TITLE="Standalone: CHOMP THE HAXOR [CHOMP//0x_CHOMP]"
     BODY="Cyber-Swamp Brutalist Console & Full Couchlock active (Super+o to cycle)"
 fi
 
