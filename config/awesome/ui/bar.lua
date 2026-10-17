@@ -14,7 +14,8 @@ local is_lab = (mode == "lab")
 local is_cyber = (mode == "cyber")
 local is_space = (mode == "space")
 local is_shred = (mode == "shred")
-local is_flat = (is_lab or is_cyber or is_space or is_shred)
+local is_larry = (mode == "larry")
+local is_flat = (is_lab or is_cyber or is_space or is_shred or is_larry)
 
 -- Mode-aware telemetry color palette
 local P
@@ -128,6 +129,28 @@ elseif is_shred then
         pill_bdr   = "#4a5260",
         pill_bw    = 1,
     }
+elseif is_larry then
+    P = {
+        cpu        = "#39ff14",
+        temp_ok    = "#39ff14",
+        temp_hot   = "#ffb000",
+        gpu        = "#39ff14",
+        sys        = "#a5b4fc",
+        net_ok     = "#39ff14",
+        net_off    = "#ffb000",
+        vol_ok     = "#39ff14",
+        vol_mute   = "#ffb000",
+        bat_ok     = "#39ff14",
+        bat_chg    = "#39ff14",
+        bat_warn   = "#ffb000",
+        bat_crit   = "#ff0055",
+        bat_badge  = "#0d2e27",
+        pill_bg1   = "#151718",
+        pill_bg2   = "#151718",
+        pill_fg    = "#a5b4fc",
+        pill_bdr   = "#39ff14",
+        pill_bw    = 1,
+    }
 else
     P = {
         cpu        = "#d8eb34",
@@ -175,6 +198,8 @@ local function pill_container(widget, bg_color, fg_color)
         shape_fn = slime_shapes.rocky_pill(6, pill_seed)
     elseif is_shred then
         shape_fn = slime_shapes.shred_pill(7, pill_seed)
+    elseif is_larry then
+        shape_fn = slime_shapes.larry_widget_pod(6)
     elseif is_cyber then
         shape_fn = function(cr, w, h)
             gears.shape.rounded_rect(cr, w, h, 2)
@@ -273,10 +298,17 @@ gears.timer {
                 end
             end
         end
-        cpu_textbox.markup = string.format(
-            "<span foreground='%s'> %d%%</span><span foreground='%s'>%s</span>",
-            P.cpu, usage, temp_color, temp_str
-        )
+        if is_larry then
+            cpu_textbox.markup = string.format(
+                "<span foreground='#39ff14' weight='bold'>CPU</span>  <span foreground='#f0f4f8'>%d%%</span>",
+                usage
+            )
+        else
+            cpu_textbox.markup = string.format(
+                "<span foreground='%s'> %d%%</span><span foreground='%s'>%s</span>",
+                P.cpu, usage, temp_color, temp_str
+            )
+        end
     end,
 }
 local cpu_pill = pill_container(cpu_textbox, P.pill_bg1)
@@ -312,11 +344,12 @@ gears.timer {
     callback  = function()
         local meminfo = read_file("/proc/meminfo")
         local ram_str = " --G"
+        local used_gb = 0
         if meminfo then
             local total = tonumber(meminfo:match("MemTotal:%s+(%d+)"))
             local avail = tonumber(meminfo:match("MemAvailable:%s+(%d+)"))
             if total and avail then
-                local used_gb = (total - avail) / (1024 * 1024)
+                used_gb = (total - avail) / (1024 * 1024)
                 ram_str = string.format(" %.1fG", used_gb)
             end
         end
@@ -328,10 +361,17 @@ gears.timer {
                 gpu_str = string.format(" %d°C  ", math.floor(raw / 1000 + 0.5))
             end
         end
-        sys_textbox.markup = string.format(
-            "<span foreground='%s'>%s</span><span foreground='%s'>%s%s</span>",
-            P.gpu, gpu_str, P.sys, ram_str, disk_free_str
-        )
+        if is_larry then
+            sys_textbox.markup = string.format(
+                "<span foreground='#39ff14' weight='bold'>MEM</span>  <span foreground='#f0f4f8'>%.1fG</span>",
+                used_gb
+            )
+        else
+            sys_textbox.markup = string.format(
+                "<span foreground='%s'>%s</span><span foreground='%s'>%s%s</span>",
+                P.gpu, gpu_str, P.sys, ram_str, disk_free_str
+            )
+        end
     end,
 }
 local sys_pill = pill_container(sys_textbox, P.pill_bg2)
@@ -355,7 +395,11 @@ gears.timer {
             "nmcli -t -f TYPE,STATE,CONNECTION dev status 2>/dev/null | grep ':connected:' | head -n 1",
             function(stdout)
                 local net_type, _, conn = stdout:match("^([^:]+):([^:]+):([^\r\n]+)")
-                if net_type == "wifi" and conn and conn ~= "" then
+                if is_larry then
+                    local net_str = (net_type == "wifi" and conn and conn ~= "") and "ONLINE" or (net_type == "ethernet" and "ETH" or "OFFLINE")
+                    local col = (net_str == "OFFLINE") and "#ffb000" or "#39ff14"
+                    wifi_textbox.markup = string.format("<span foreground='%s' weight='bold'>NET</span>  <span foreground='#f0f4f8'>%s</span>", col, net_str)
+                elseif net_type == "wifi" and conn and conn ~= "" then
                     wifi_textbox.markup = string.format("<span foreground='%s'> %s</span>", P.net_ok, gears.string.xml_escape(conn))
                 elseif net_type == "ethernet" then
                     wifi_textbox.markup = string.format("<span foreground='%s'>󰈀 Wired</span>", P.net_ok)
@@ -384,7 +428,11 @@ local function update_volume()
         local muted = stdout:find("MUTED", 1, true) ~= nil
         if vol_num then
             local pct = math.floor(vol_num * 100 + 0.5)
-            if muted then
+            if is_larry then
+                local col = muted and "#ffb000" or "#39ff14"
+                local txt = muted and "MUTE" or string.format("%d%%", pct)
+                vol_textbox.markup = string.format("<span foreground='%s' weight='bold'>VOL</span>  <span foreground='#f0f4f8'>%s</span>", col, txt)
+            elseif muted then
                 vol_textbox.markup = string.format("<span foreground='%s' weight='bold'> %d%%</span>", P.vol_mute, pct)
             else
                 vol_textbox.markup = string.format("<span foreground='%s'> %d%%</span>", P.vol_ok, pct)
@@ -449,7 +497,12 @@ local function update_battery()
     if thresh < 100 then
         thresh_badge = string.format(" <span foreground='%s' size='small'>[%d%%]</span>", P.bat_badge, thresh)
     end
-    bat_textbox.markup = string.format("<span foreground='%s'>%s %d%%</span>%s", color, icon, cap, thresh_badge)
+    if is_larry then
+        local col = (cap <= 20) and "#ff0055" or ((cap <= 50) and "#ffb000" or "#39ff14")
+        bat_textbox.markup = string.format("<span foreground='%s' weight='bold'>BAT</span>  <span foreground='#f0f4f8'>%d%%%s</span>", col, cap, (status == "Charging" or ac == "1") and " " or "")
+    else
+        bat_textbox.markup = string.format("<span foreground='%s'>%s %d%%</span>%s", color, icon, cap, thresh_badge)
+    end
 end
 gears.timer {
     timeout   = 10,
@@ -489,7 +542,7 @@ bat_pill:buttons(gears.table.join(
 ))
 
 -- 6. Clock Pill (left-click -> weather_pad.py, right-click -> zodiac_pad.py)
-local mytextclock = wibox.widget.textclock("  %a %b %d   %I:%M %p ")
+local mytextclock = wibox.widget.textclock(is_larry and "  %H:%M " or "  %a %b %d   %I:%M %p ")
 local clock_pill = pill_container(mytextclock, P.pill_bg2)
 clock_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
@@ -544,8 +597,9 @@ awful.screen.connect_for_each_screen(function(s)
     -- Set screen wallpaper
     set_wallpaper(s)
 
-    -- Tags (1 through 9)
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    -- Tags (strictly SYS, DEV, SWAMP, ROOT, LOGS for Larry theme)
+    local tag_names = is_larry and { "SYS", "DEV", "SWAMP", "ROOT", "LOGS" } or { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+    awful.tag(tag_names, s, awful.layout.layouts[1])
 
     -- Dedicated Special Scratchpad Tag (hidden from pager & tag switcher)
     s.scratch_tag = scratchpad.get_scratch_tag(s)
@@ -562,11 +616,39 @@ awful.screen.connect_for_each_screen(function(s)
         awful.button({ }, 5, function () awful.layout.inc(-1) end)
     ))
 
+    -- Taglist widget template for Larry theme:
+    local taglist_template = nil
+    if is_larry then
+        taglist_template = {
+            {
+                {
+                    id     = "text_role",
+                    widget = wibox.widget.textbox,
+                },
+                left   = 10,
+                right  = 10,
+                top    = 3,
+                bottom = 3,
+                widget = wibox.container.margin,
+            },
+            id                 = "background_role",
+            widget             = wibox.container.background,
+            shape              = slime_shapes.larry_tag_wedge(8, 4),
+            shape_border_width = 1,
+            shape_border_color = "#39ff1444",
+        }
+    end
+
     -- Taglist (strictly excludes hidden scratchpad tags)
     s.mytaglist = awful.widget.taglist {
-        screen  = s,
-        filter  = function(t) return not t.hide and t.name ~= "scratchpad" end,
-        buttons = taglist_buttons,
+        screen          = s,
+        filter          = function(t) return not t.hide and t.name ~= "scratchpad" end,
+        buttons         = taglist_buttons,
+        widget_template = taglist_template,
+        layout          = is_larry and {
+            spacing = 4,
+            layout  = wibox.layout.fixed.horizontal,
+        } or nil,
     }
 
     -- Tasklist
@@ -575,6 +657,8 @@ awful.screen.connect_for_each_screen(function(s)
         task_shape = slime_shapes.rocky_pill(5, 4.2)
     elseif is_shred then
         task_shape = slime_shapes.shred_pill(6, 4.2)
+    elseif is_larry then
+        task_shape = slime_shapes.larry_widget_pod(6)
     elseif is_cyber then
         task_shape = function(cr, w, h)
             gears.shape.rounded_rect(cr, w, h, 2)
@@ -617,8 +701,8 @@ awful.screen.connect_for_each_screen(function(s)
             id                 = "background_role",
             widget             = wibox.container.background,
             shape              = task_shape,
-            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred) and 1 or 0),
-            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or "#7928ca"))),
+            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred or is_larry) and 1 or 0),
+            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or (is_larry and "#39ff14" or "#7928ca")))),
         },
     }
 
@@ -644,8 +728,66 @@ awful.screen.connect_for_each_screen(function(s)
         bar_bgimage = slime_shapes.render_space_bar_bg()
     elseif is_lab then
         bar_bgimage = slime_shapes.render_lab_bar_bg()
+    elseif is_larry then
+        bar_bgimage = slime_shapes.render_larry_bar_bg()
     else
         bar_bgimage = slime_shapes.render_bar_bg(bar_drip_height, 3.7)
+    end
+
+    -- Standalone Larry widgets (Launcher Prompt >_ and Center Mascot Pod)
+    local larry_prompt_btn = nil
+    local larry_mascot_widget = nil
+    if is_larry then
+        larry_prompt_btn = wibox.widget {
+            {
+                {
+                    markup = "<span foreground='#39ff14' weight='bold'>&gt;_</span>",
+                    font   = "IosevkaTerm Nerd Font Bold 11",
+                    align  = "center",
+                    widget = wibox.widget.textbox,
+                },
+                left   = 10,
+                right  = 10,
+                top    = 3,
+                bottom = 3,
+                widget = wibox.container.margin,
+            },
+            bg                 = "#151718",
+            shape              = slime_shapes.larry_widget_pod(5),
+            shape_border_width = 1,
+            shape_border_color = "#39ff14",
+            widget             = wibox.container.background,
+            buttons            = gears.table.join(
+                awful.button({}, 1, function()
+                    awful.spawn("rofi -show drun")
+                end)
+            ),
+        }
+
+        larry_mascot_widget = wibox.widget {
+            {
+                {
+                    image  = os.getenv("HOME") .. "/.config/awesome/theme/muskrat_head.png",
+                    resize = true,
+                    widget = wibox.widget.imagebox,
+                },
+                top    = 2,
+                bottom = 2,
+                left   = 16,
+                right  = 16,
+                widget = wibox.container.margin,
+            },
+            shape              = slime_shapes.larry_mascot_pod(12),
+            bg                 = "#0d2e27",
+            shape_border_width = 1,
+            shape_border_color = "#39ff14",
+            widget             = wibox.container.background,
+            buttons            = gears.table.join(
+                awful.button({}, 1, function()
+                    scratchpad.toggle("kitty --class larry-fetch-pad -e " .. os.getenv("HOME") .. "/.local/bin/larry-fetch", "larry-fetch-pad")
+                end)
+            ),
+        }
     end
 
     -- Create top wibar
@@ -661,29 +803,58 @@ awful.screen.connect_for_each_screen(function(s)
 
     s.mywibox:struts({ top = is_flat and 36 or 34, bottom = 0, left = 0, right = 0 })
 
+    local left_widgets
+    if is_larry then
+        left_widgets = {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 6,
+            wibox.widget {
+                larry_prompt_btn,
+                left = 6,
+                widget = wibox.container.margin,
+            },
+            s.mytaglist,
+            s.mypromptbox,
+        }
+    else
+        left_widgets = {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 8,
+            wibox.widget {
+                pill_container(s.mytaglist),
+                left = 8,
+                widget = wibox.container.margin,
+            },
+            s.mypromptbox,
+        }
+    end
+
+    local middle_widget
+    if is_larry then
+        middle_widget = {
+            layout = wibox.layout.align.horizontal,
+            s.mytasklist,
+            larry_mascot_widget,
+            nil,
+        }
+    else
+        middle_widget = {
+            s.mytasklist,
+            left = 12,
+            right = 12,
+            top = 2,
+            bottom = 2,
+            widget = wibox.container.margin,
+        }
+    end
+
     -- Add widgets to the wibar
     local bar_bg_widget = wibox.widget {
         {
             {
                 layout = wibox.layout.align.horizontal,
-                { -- Left widgets
-                    layout = wibox.layout.fixed.horizontal,
-                    spacing = 8,
-                    wibox.widget {
-                        pill_container(s.mytaglist),
-                        left = 8,
-                        widget = wibox.container.margin,
-                    },
-                    s.mypromptbox,
-                },
-                { -- Middle widget
-                    s.mytasklist,
-                    left = 12,
-                    right = 12,
-                    top = 2,
-                    bottom = 2,
-                    widget = wibox.container.margin,
-                },
+                left_widgets,
+                middle_widget,
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
                     spacing = 6,

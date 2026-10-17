@@ -1,11 +1,11 @@
-# Starship Prompt Configuration - Act II: Biohazard Slime (Contamination Terminal)
+# Starship Prompt Configuration - Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT
 "$schema" = 'https://starship.rs/config-schema.json'
 
-palette = 'slime'
+palette = 'larry'
 
 format = """
-[\\[BIO//HAZARD\\]](bold fg:neon_lime) \
-[❯](bold fg:toxic_yellow) \
+[\\[SYS_BREACH//LARRY_0x\\]](bold fg:toxic_green) \
+[❯](bold fg:toxic_green) \
 $username\
 $directory\
 $git_branch\
@@ -17,76 +17,76 @@ $nodejs\
 $docker_context\
 $cmd_duration\
 $status\
-[ ☣](bold fg:neon_lime)\
+[ 🦫](bold fg:toxic_green)\
 $line_break\
 $character"""
 
-[palettes.slime]
-neon_lime     = "#55f736"
-hyper_lime    = "#74ff2e"
-bio_teal      = "#36e385"
-toxic_yellow  = "#d8eb34"
-pale_lichen   = "#c6f582"
-hazard_red    = "#ff4343"
-dim_text      = "#709677"
+[palettes.larry]
+chassis_dark = "#151718"
+swamp_teal   = "#0d2e27"
+alert_amber  = "#ffb000"
+recess_teal  = "#080a0a"
+cyber_blue   = "#a5b4fc"
+toxic_green  = "#39ff14"
+unread_moss  = "#1f3e37"
+laser_white  = "#f0f4f8"
 
 [username]
 show_always = true
-style_user = "bold fg:neon_lime"
-style_root = "bold fg:hazard_red"
-format = '[$user]($style)[:](bold fg:dim_text)'
+style_user = "bold fg:cyber_blue"
+style_root = "bold fg:alert_amber"
+format = '[$user]($style)[:](bold fg:toxic_green)'
 
 [directory]
-style = "bold fg:pale_lichen"
+style = "bold fg:toxic_green"
 format = "[$path]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bold fg:toxic_yellow"
-format = ' [\(git:](fg:bio_teal)[$branch]($style)[\)](fg:bio_teal)'
+style = "bold fg:toxic_green"
+format = ' [\(git:](fg:unread_moss)[$branch]($style)[\)](fg:unread_moss)'
 
 [git_status]
-style = "bold fg:hazard_red"
+style = "bold fg:alert_amber"
 format = ' [$all_status$ahead_behind]($style)'
 
 [python]
 symbol = " "
-style = "fg:neon_lime"
+style = "fg:toxic_green"
 format = ' [$symbol($version)]($style)'
 
 [rust]
 symbol = " "
-style = "fg:toxic_yellow"
+style = "fg:alert_amber"
 format = ' [$symbol($version)]($style)'
 
 [golang]
 symbol = " "
-style = "fg:bio_teal"
+style = "fg:cyber_blue"
 format = ' [$symbol($version)]($style)'
 
 [nodejs]
 symbol = " "
-style = "fg:neon_lime"
+style = "fg:toxic_green"
 format = ' [$symbol($version)]($style)'
 
 [docker_context]
 symbol = " "
-style = "fg:bio_teal"
+style = "fg:cyber_blue"
 format = ' [$symbol$context]($style)'
 
 [cmd_duration]
-min_time = 2000
-style = "bold fg:toxic_yellow"
+min_time = 2_000
+style = "fg:alert_amber"
 format = ' [⏱ $duration]($style)'
 
 [status]
 disabled = false
-symbol = " ✘"
-style = "bold fg:hazard_red"
-format = '[$symbol $status]($style)'
+style = "bold fg:alert_amber"
+format = ' [\[EXIT:$status\]]($style)'
 
 [character]
-success_symbol = "[❯](bold fg:neon_lime)[❯](bold fg:toxic_yellow) "
-error_symbol = "[❯](bold fg:hazard_red)[❯](bold fg:hazard_red) "
+success_symbol = "[❯❯](bold fg:toxic_green) "
+error_symbol = "[❯❯](bold fg:alert_amber) "

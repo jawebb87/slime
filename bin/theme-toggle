@@ -35,6 +35,9 @@ case "${1:-toggle}" in
     shred|shredder|gunmetal|blade|5)
         NEXT="shred"
         ;;
+    larry|muskrat|haxor|couchlock|6)
+        NEXT="larry"
+        ;;
     *)
         if [ "$CURRENT" = "origin" ]; then
             NEXT="lab"
@@ -46,6 +49,8 @@ case "${1:-toggle}" in
             NEXT="space"
         elif [ "$CURRENT" = "space" ]; then
             NEXT="shred"
+        elif [ "$CURRENT" = "shred" ]; then
+            NEXT="larry"
         else
             NEXT="origin"
         fi
@@ -134,9 +139,12 @@ elif [ "$NEXT" = "cyber" ]; then
 elif [ "$NEXT" = "space" ]; then
     TITLE="Act IV: ORBITAL CONTAINMENT [ORB//DECK]"
     BODY="Deep Space Vessel & Cryo-Stasis active (Super+o to cycle)"
-else
+elif [ "$NEXT" = "shred" ]; then
     TITLE="Standalone: THE SHREDDER [SHRED//RPM]"
     BODY="Gunmetal, Razor Angles & Rotary Ripper Teeth active (Super+o to cycle)"
+else
+    TITLE="Standalone: LARRY THE HAXOR [LARRY//0x_MUSKRAT]"
+    BODY="Cyber-Swamp Brutalist Console & Full Couchlock active (Super+o to cycle)"
 fi
 
 dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Remote.Eval \

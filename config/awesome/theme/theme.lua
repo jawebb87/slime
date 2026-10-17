@@ -16,7 +16,7 @@ do
         f:close()
         if content then
             content = content:gsub("%s+", "")
-            if content == "origin" or content == "lab" or content == "slime" or content == "cyber" or content == "space" or content == "shred" then
+            if content == "origin" or content == "lab" or content == "slime" or content == "cyber" or content == "space" or content == "shred" or content == "larry" then
                 mode = content
             end
         end
@@ -38,6 +38,8 @@ local space_font_family  = "SpaceMono Nerd Font"
 local space_font_size    = "9"
 local shred_font_family  = "JetBrainsMono Nerd Font"
 local shred_font_size    = "10"
+local larry_font_family  = "IosevkaTerm Nerd Font"
+local larry_font_size    = "10"
 
 local active_font_family = slime_font_family
 local active_font_size   = slime_font_size
@@ -56,6 +58,9 @@ elseif mode == "space" then
 elseif mode == "shred" then
     active_font_family = shred_font_family
     active_font_size   = shred_font_size
+elseif mode == "larry" then
+    active_font_family = larry_font_family
+    active_font_size   = larry_font_size
 end
 theme.font                     = active_font_family .. " " .. active_font_size
 theme.hotkeys_font             = active_font_family .. " Bold " .. active_font_size
@@ -426,6 +431,79 @@ elseif mode == "shred" then
 
     -- Wallpaper
     theme.wallpaper = os.getenv("HOME") .. "/Pictures/wallpaper/shred.jpg"
+elseif mode == "larry" then
+    -- ==============================================================================
+    -- Standalone: "Larry the Haxor" / LARRY_0x_MUSKRAT Cyber-Swamp Brutalist Theme
+    -- ==============================================================================
+    theme.border_width       = dpi(2)
+    theme.border_width_focus = dpi(3)
+    theme.border_normal      = "#10231f"
+    theme.border_focus       = "#39ff14"
+    theme.border_marked      = "#ffb000"
+
+    -- Core Color Palette (Base Chassis, Marsh Teal, Toxic Green & Cyber Blue)
+    theme.bg_normal   = "#151718"
+    theme.bg_focus    = "#0d2e27"
+    theme.bg_urgent   = "#ffb000"
+    theme.bg_minimize = "#080a0a"
+    theme.bg_systray  = "#151718"
+
+    theme.fg_normal   = "#a5b4fc"
+    theme.fg_focus    = "#39ff14"
+    theme.fg_urgent   = "#000000"
+    theme.fg_minimize = "#1f3e37"
+
+    -- Taglist Theming (SYS, DEV, SWAMP, ROOT, LOGS)
+    theme.taglist_bg_focus    = "#39ff14"
+    theme.taglist_fg_focus    = "#0a140f"
+    theme.taglist_bg_urgent   = "#ffb000"
+    theme.taglist_fg_urgent   = "#000000"
+    theme.taglist_bg_occupied = "#182220"
+    theme.taglist_fg_occupied = "#a5b4fc"
+    theme.taglist_bg_empty    = "#151718"
+    theme.taglist_fg_empty    = "#1f3e37"
+
+    -- Tasklist Theming
+    theme.tasklist_bg_normal   = "#151718"
+    theme.tasklist_fg_normal   = "#a5b4fc"
+    theme.tasklist_bg_focus    = "#0d2e27"
+    theme.tasklist_fg_focus    = "#39ff14"
+    theme.tasklist_bg_urgent   = "#ffb000"
+    theme.tasklist_fg_urgent   = "#000000"
+    theme.tasklist_bg_minimize = "#080a0a"
+    theme.tasklist_fg_minimize = "#1f3e37"
+
+    -- Context Menu Theming
+    theme.menu_bg_normal    = "#151718f8"
+    theme.menu_bg_focus     = "#0d2e27"
+    theme.menu_fg_normal    = "#a5b4fc"
+    theme.menu_fg_focus     = "#39ff14"
+    theme.menu_border_color = "#39ff14"
+    theme.menu_border_width = dpi(1)
+    theme.menu_height       = dpi(26)
+    theme.menu_width        = dpi(140)
+
+    -- Hotkeys Popup / Help Modal
+    theme.hotkeys_bg              = "#151718f8"
+    theme.hotkeys_fg              = "#a5b4fc"
+    theme.hotkeys_border_color    = "#39ff14"
+    theme.hotkeys_border_width    = dpi(2)
+    theme.hotkeys_modifiers_fg    = "#ffb000"
+    theme.hotkeys_label_bg        = "#0d2e27"
+    theme.hotkeys_label_fg        = "#39ff14"
+    theme.hotkeys_group_margin    = dpi(16)
+
+    -- Titlebars
+    theme.titlebar_bg_normal = "#151718"
+    theme.titlebar_bg_focus  = "#0d2e27"
+    theme.titlebar_fg_normal = "#1f3e37"
+    theme.titlebar_fg_focus  = "#39ff14"
+
+    -- Wibar Height
+    theme.wibar_height = dpi(36)
+
+    -- Wallpaper
+    theme.wallpaper = os.getenv("HOME") .. "/Pictures/wallpaper/larry.jpg"
 else
     -- ==========================================
     -- Slime Theme Aesthetics (Post-Contamination)
@@ -513,6 +591,8 @@ elseif mode == "space" then
     layout_color = "#0088cc"
 elseif mode == "shred" then
     layout_color = "#c8d0dc"
+elseif mode == "larry" then
+    layout_color = "#39ff14"
 end
 for _, l in ipairs({
     "fairh", "fairv", "floating", "magnifier", "max", "fullscreen",

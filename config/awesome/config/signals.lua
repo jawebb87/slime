@@ -46,6 +46,12 @@ local function apply_window_shape(c)
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             awful.titlebar.hide(c, side)
         end
+    elseif beautiful.mode == "larry" then
+        -- Standalone "Larry the Haxor": Monolithic chamfers, zero rounded corners
+        c.shape = slime_shapes.larry_window(6)
+        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+            awful.titlebar.hide(c, side)
+        end
     else
         local seed = get_client_seed(c)
         c.shape = slime_shapes.dripping_window(WIN_CORNER_RADIUS, WIN_DRIP_HEIGHT, seed)
@@ -168,6 +174,9 @@ end)
 
 -- Border styling & lightweight redraw of bottom drip / cyber / space perimeter glow on focus/unfocus
 client.connect_signal("focus", function(c)
+    if beautiful.mode == "larry" then
+        c.border_width = beautiful.border_width_focus or 3
+    end
     c.border_color = beautiful.border_focus
     if c._bottom_drip_bg then
         c._bottom_drip_bg:emit_signal("widget::redraw_needed")
@@ -184,6 +193,9 @@ client.connect_signal("focus", function(c)
     end
 end)
 client.connect_signal("unfocus", function(c)
+    if beautiful.mode == "larry" then
+        c.border_width = beautiful.border_width or 2
+    end
     c.border_color = beautiful.border_normal
     if c._bottom_drip_bg then
         c._bottom_drip_bg:emit_signal("widget::redraw_needed")

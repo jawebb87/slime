@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# larry-fetch: Custom High-Density Cyber-Swamp Terminal Fetch for LARRY_0x_MUSKRAT
+# ==============================================================================
+import os
+import platform
+import subprocess
+import sys
+
+# ANSI 24-bit TrueColor Escapes
+G  = "\033[38;2;57;255;20m"    # Toxic Neon Green (#39ff14)
+DG = "\033[38;2;13;46;39m"    # Deep Swamp Teal (#0d2e27)
+Y  = "\033[38;2;255;176;0m"   # Alert/Hazard Amber (#ffb000)
+B  = "\033[38;2;165;180;252m" # Low-sat Cyber Blue (#a5b4fc)
+W  = "\033[38;2;240;244;248m" # Crisp White (#f0f4f8)
+M  = "\033[38;2;31;62;55m"    # Dim Moss Green (#1f3e37)
+R  = "\033[0m"
+BOLD = "\033[1m"
+DIM  = "\033[2m"
+
+def get_uptime():
+    try:
+        with open("/proc/uptime", "r") as f:
+            seconds = float(f.readline().split()[0])
+        hrs = int(seconds // 3600)
+        mins = int((seconds % 3600) // 60)
+        return f"{hrs}h {mins}m"
+    except Exception:
+        return "unknown"
+
+def get_memory():
+    try:
+        mem_total, mem_avail = 0, 0
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_avail = int(line.split()[1])
+        used = (mem_total - mem_avail) / 1024 / 1024
+        total = mem_total / 1024 / 1024
+        pct = (used / total) * 100 if total > 0 else 0
+        bars = int(pct / 10)
+        bar_str = "[" + "=" * bars + "-" * (10 - bars) + "]"
+        return f"{used:.1f}G / {total:.1f}G {bar_str}"
+    except Exception:
+        return "unknown"
+
+def get_packages():
+    try:
+        out = subprocess.check_output("pacman -Qq 2>/dev/null | wc -l", shell=True).decode().strip()
+        return f"{out} (pacman)"
+    except Exception:
+        return "N/A"
+
+def main():
+    user = os.getenv("USER", "jaws")
+    hostname = platform.node()
+    os_name = "Arch Linux x86_64"
+    kernel = platform.release()
+    uptime = get_uptime()
+    memory = get_memory()
+    packages = get_packages()
+    shell = os.path.basename(os.getenv("SHELL", "zsh"))
+    term = os.getenv("TERM", "kitty")
+
+    larry_art = [
+        r"               .--------.        ",
+        r"             .'          '.      ",
+        r"            /   .-.        \     ",
+        r"           /   /   \   _.._ \    ",
+        r"          |   | (O) | [====] |   ",
+        r"          |    '-'        __  \  ",
+        r"         /      \       =(..)  \===",
+        r"        /        \        ||    \ ",
+        r"       /   .-''''-.      /  \    |",
+        r"   .--/   /        \    /    \   |",
+        r"  / _/   |          |  |  __  |  |",
+        r" | /     |  HOODIE  |  | [__] |  |",
+        r" ( \     |          |   \____/   |",
+        r"  \ '._   \        /             /",
+        r"   '---'   '------'     .------. '",
+        r"   (===TAIL===)        (________) ",
+    ]
+
+    header_block = [
+        f"{BOLD}{G} _        _    ____  ____  __   __{R}",
+        f"{BOLD}{G}| |      / \\  |  _ \\|  _ \\ \\ \\ / /{R}",
+        f"{BOLD}{G}| |     / _ \\ | |_) | |_) | \\ V / {R}",
+        f"{BOLD}{G}| |___ / ___ \\|  _ <|  _ <   | |  {R}",
+        f"{BOLD}{G}|_____/_/   \\_\\_| \\_\\_| \\_\\  |_|  {R}",
+        f"{BOLD}{G}    _____ _   _ _____{R}",
+        f"{BOLD}{G}   |_   _| | | | ____|{R}",
+        f"{BOLD}{G}     | | | |_| |  _|  {R}",
+        f"{BOLD}{G}     | | |  _  | |___ {R}",
+        f"{BOLD}{G}     |_| |_| |_|_____|{R}",
+        f"{BOLD}{G} _   _    _    __  _____  ____ {R}",
+        f"{BOLD}{G}| | | |  / \\   \\ \\/ / _ \\|  _ \\{R}",
+        f"{BOLD}{G}| |_| | / _ \\   \\  / | | | |_) |{R}",
+        f"{BOLD}{G}|  _  |/ ___ \\  /  \\ |_| |  _ < {R}",
+        f"{BOLD}{G}|_| |_/_/   \\_\\/_/\\_\\___/|_| \\_\\{R}",
+    ]
+
+    info_lines = [
+        f"{BOLD}{Y}[STATUS: FULL COUCHLOCK]{R}",
+        f"{BOLD}{B}[SYS_BREACH: LARRY_THE_MUSKRAT_v1.0]{R}",
+        f"{DIM}{M}----------------------------------------{R}",
+        f"{G}[ HOST ]{R} ❯ {W}{user}@{hostname}{R} // chassis: matte-black",
+        f"{G}[ OS   ]{R} ❯ {W}{os_name}{R} // AwesomeWM 4.3",
+        f"{G}[ KRNL ]{R} ❯ {W}{kernel}{R}",
+        f"{G}[ UPTM ]{R} ❯ {W}{uptime}{R}",
+        f"{G}[ PACK ]{R} ❯ {W}{packages}{R}",
+        f"{G}[ SHEL ]{R} ❯ {W}{shell}{R} // starship [LARRY_0x]",
+        f"{G}[ TERM ]{R} ❯ {W}{term}{R} // IosevkaTerm Nerd Font",
+        f"{G}[ MEM  ]{R} ❯ {W}{memory}{R}",
+        f"{DIM}{M}----------------------------------------{R}",
+        f"{G}███{Y}███{B}███{DG}███{M}███{W}███{R}",
+    ]
+
+    print()
+    max_top = max(len(larry_art), len(header_block))
+    for i in range(max_top):
+        l = larry_art[i] if i < len(larry_art) else " " * 34
+        r = header_block[i] if i < len(header_block) else ""
+        print(f" {G}{l}{R}   {r}")
+
+    print()
+    for line in info_lines:
+        print(f"   {line}")
+    print()
+
+if __name__ == "__main__":
+    main()

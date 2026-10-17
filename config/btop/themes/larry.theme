@@ -1,0 +1,86 @@
+# "Larry the Haxor" / LARRY_0x_MUSKRAT Cyber-Swamp Theme for btop
+# Palette: Heavy Chassis #151718, Marsh Teal #0d2e27, Toxic Green #39ff14, Alert Amber #ffb000, Cyber Blue #a5b4fc
+
+# Main background
+theme[main_bg]="#151718"
+
+# Main text color
+theme[main_fg]="#a5b4fc"
+
+# Title color for boxes
+theme[title]="#39ff14"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#ffb000"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#0d2e27"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#39ff14"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#1f3e37"
+
+# Color of text appearing on top of graphs
+theme[graph_text]="#f0f4f8"
+
+# Background color of the percentage meters
+theme[meter_bg]="#080a0a"
+
+# Misc colors for processes box
+theme[proc_misc]="#39ff14"
+
+# Box outline colors
+theme[cpu_box]="#39ff14"
+theme[mem_box]="#10231f"
+theme[net_box]="#10231f"
+theme[proc_box]="#39ff14"
+
+# Box divider line
+theme[div_line]="#10231f"
+
+# Temperature graph colors (Toxic Green -> Hazard Amber -> Alert Red)
+theme[temp_start]="#39ff14"
+theme[temp_mid]="#ffb000"
+theme[temp_end]="#ff0055"
+
+# CPU graph colors (Toxic Green -> Electric Lime -> Alert Amber)
+theme[cpu_start]="#39ff14"
+theme[cpu_mid]="#74ff2e"
+theme[cpu_end]="#ffb000"
+
+# Mem/Disk free meter (Marsh Teal -> Toxic Green)
+theme[free_start]="#1f3e37"
+theme[free_mid]="#0d2e27"
+theme[free_end]="#39ff14"
+
+# Mem/Disk cached meter
+theme[cached_start]="#080a0a"
+theme[cached_mid]="#0d2e27"
+theme[cached_end]="#a5b4fc"
+
+# Mem/Disk available meter
+theme[available_start]="#0d2e27"
+theme[available_mid]="#1f594d"
+theme[available_end]="#39ff14"
+
+# Mem/Disk used meter (Marsh Teal -> Hazard Amber -> Critical Alert Red)
+theme[used_start]="#0d2e27"
+theme[used_mid]="#ffb000"
+theme[used_end]="#ff0055"
+
+# Download graph colors
+theme[download_start]="#0d2e27"
+theme[download_mid]="#1f594d"
+theme[download_end]="#39ff14"
+
+# Upload graph colors
+theme[upload_start]="#0d2e27"
+theme[upload_mid]="#ffb000"
+theme[upload_end]="#39ff14"
+
+# Process box color gradient
+theme[process_start]="#39ff14"
+theme[process_mid]="#a5b4fc"
+theme[process_end]="#ffb000"
