@@ -41,7 +41,7 @@
 * **Live Telemetry Status Bar ([ui/bar.lua](file:///home/jaws/.config/awesome/ui/bar.lua)):**
   * **CPU Pill (``):** Live CPU utilization % + AMD `k10temp` temperature (turns yellow ≥70°C, red ≥85°C). Click toggles `btop-float`.
   * **System Pill (``):** AMD GPU (`amdgpu`) temperature + used RAM (`GiB`) + free `/` disk space (`GiB`). Click toggles `btop-float`.
-  * **Network Pill (`` / ``):** Live Wi-Fi SSID or ` Wired` via `nmcli` (or red `Offline` when disconnected). Click toggles `wifi_pad.py`.
+  * **Network Pill (`` / `󰈀`):** Live Wi-Fi SSID or `󰈀 Wired` via `nmcli` (or red `Offline` when disconnected). Click toggles `wifi_pad.py`.
   * **Volume Pill (``):** Live PipeWire volume % via `wpctl` (turns hazard red ` %` when muted). Left-click toggles `audio_pad.py`, right-click toggles mute, scroll wheel adjusts ±5%.
   * **Battery Pill (``):** Live `/sys/class/power_supply/BAT0` capacity & charging status (turns hazard red ≤20% on battery; displays `[80%]` badge when capped). Left-click toggles power profile (`power-saver` ↔ `balanced`); right-click toggles battery charge threshold (`80%` ↔ `100%`) via UPower with instant notifications.
   * **Clock Pill (``):** Date and time in `#c6f582` (left-click toggles `weather_pad.py`, right-click toggles `zodiac_pad.py`).
