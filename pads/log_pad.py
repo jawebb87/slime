@@ -177,7 +177,7 @@ class LogPadApp:
         tk.Label(
             title_box,
             text="\uf022",  # fa-list-alt
-            font=("MartianMono Nerd Font", 15),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 15),
             fg=THEME["accent_yellow"],
             bg=THEME["bg_surface"],
         ).pack(side="left", padx=(0, 8))
@@ -185,7 +185,7 @@ class LogPadApp:
         tk.Label(
             title_box,
             text="LOG PAD",
-            font=("DejaVu Sans", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_surface"],
         ).pack(side="left")
@@ -210,7 +210,7 @@ class LogPadApp:
             badge = tk.Label(
                 btn_frame,
                 text=f"[{src['key']}]",
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=4,
@@ -222,7 +222,7 @@ class LogPadApp:
             lbl_name = tk.Label(
                 btn_frame,
                 text=src["name"],
-                font=("DejaVu Sans", 9, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
                 fg=THEME["fg"],
                 bg=THEME["bg_card"],
             )
@@ -239,7 +239,7 @@ class LogPadApp:
         self.btn_follow = tk.Button(
             right_box,
             text="Tail: ON (f)",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["key_bg"],
             bg=THEME["status_running"],
             activebackground=THEME["bg_hover"],
@@ -255,7 +255,7 @@ class LogPadApp:
         btn_refresh = tk.Button(
             right_box,
             text="\uf021 (r)",  # fa-refresh
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["status_running"],
@@ -270,7 +270,7 @@ class LogPadApp:
         btn_close = tk.Button(
             right_box,
             text="\uf00d",  # fa-times
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -293,7 +293,7 @@ class LogPadApp:
         tk.Label(
             search_frame,
             text="\uf002",  # fa-search
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["accent_yellow"],
             bg=THEME["bg_card"],
         ).pack(side="left", padx=(12, 6))
@@ -305,7 +305,7 @@ class LogPadApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             insertbackground=THEME["accent_blue"],
@@ -318,7 +318,7 @@ class LogPadApp:
         self.lbl_matches = tk.Label(
             search_frame,
             text="",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
         )
@@ -328,7 +328,7 @@ class LogPadApp:
         self.btn_next_match = tk.Button(
             search_frame,
             text="▼ (n)",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
             activebackground=THEME["bg_hover"],
@@ -342,7 +342,7 @@ class LogPadApp:
         self.btn_prev_match = tk.Button(
             search_frame,
             text="▲ (N)",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
             activebackground=THEME["bg_hover"],
@@ -357,7 +357,7 @@ class LogPadApp:
         btn_clear = tk.Button(
             search_frame,
             text="Esc: Clear",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["fg_dim"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -387,7 +387,7 @@ class LogPadApp:
             text_container,
             bg=THEME["key_bg"],
             fg=THEME["fg"],
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             bd=0,
             padx=10,
             pady=8,
@@ -400,13 +400,13 @@ class LogPadApp:
         self.scrollbar.config(command=self.text_widget.yview)
 
         # Define syntax highlighting tags
-        self.text_widget.tag_configure("error", foreground=THEME["status_stopped"], font=("MartianMono Nerd Font", 9, "bold"))
-        self.text_widget.tag_configure("warn", foreground=THEME["status_paused"], font=("MartianMono Nerd Font", 9, "bold"))
+        self.text_widget.tag_configure("error", foreground=THEME["status_stopped"], font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"))
+        self.text_widget.tag_configure("warn", foreground=THEME["status_paused"], font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"))
         self.text_widget.tag_configure("info", foreground=THEME["accent_blue"])
         self.text_widget.tag_configure("success", foreground=THEME["status_running"])
         self.text_widget.tag_configure("timestamp", foreground=THEME["accent_aqua"])
         self.text_widget.tag_configure("match_hl", background=THEME["accent_yellow"], foreground=THEME["key_bg"])
-        self.text_widget.tag_configure("match_active", background=THEME["accent_orange"], foreground=THEME["key_bg"], font=("MartianMono Nerd Font", 9, "bold"))
+        self.text_widget.tag_configure("match_active", background=THEME["accent_orange"], foreground=THEME["key_bg"], font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"))
 
     def _build_footer(self):
         """Bottom keybindings cheat-sheet footer bar."""
@@ -432,7 +432,7 @@ class LogPadApp:
             k_badge = tk.Label(
                 box,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=5,
@@ -443,7 +443,7 @@ class LogPadApp:
             d_lbl = tk.Label(
                 box,
                 text=desc,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )
@@ -453,7 +453,7 @@ class LogPadApp:
         self.lbl_info = tk.Label(
             footer_frame,
             text="Lines: 0",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )

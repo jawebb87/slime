@@ -1,0 +1,86 @@
+# Cyberpunk Future theme for btop (Bio-Grid Cyberdeck)
+# Palette: Obsidian #090812, Electric Purple #a855f7, Acid Cyan #00f0ff, Hot Magenta #ff007f, Toxic Slime #55f736
+
+# Main background
+theme[main_bg]="#090812"
+
+# Main text color
+theme[main_fg]="#e0d8f6"
+
+# Title color for boxes
+theme[title]="#00f0ff"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#55f736"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#161326"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#00f0ff"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#4c3f78"
+
+# Color of text appearing on top of graphs
+theme[graph_text]="#e0d8f6"
+
+# Background color of the percentage meters
+theme[meter_bg]="#120f24"
+
+# Misc colors for processes box
+theme[proc_misc]="#a855f7"
+
+# Box outline colors
+theme[cpu_box]="#a855f7"
+theme[mem_box]="#7928ca"
+theme[net_box]="#7928ca"
+theme[proc_box]="#a855f7"
+
+# Box divider line
+theme[div_line]="#161326"
+
+# Temperature graph colors (Acid Cyan -> Electric Purple -> Hot Magenta)
+theme[temp_start]="#00f0ff"
+theme[temp_mid]="#a855f7"
+theme[temp_end]="#ff007f"
+
+# CPU graph colors (Toxic Slime Power -> Acid Cyan -> Electric Purple)
+theme[cpu_start]="#55f736"
+theme[cpu_mid]="#00f0ff"
+theme[cpu_end]="#a855f7"
+
+# Mem/Disk free meter (Neon Violet -> Toxic Slime)
+theme[free_start]="#7928ca"
+theme[free_mid]="#00f0ff"
+theme[free_end]="#55f736"
+
+# Mem/Disk cached meter
+theme[cached_start]="#161326"
+theme[cached_mid]="#7928ca"
+theme[cached_end]="#00f0ff"
+
+# Mem/Disk available meter
+theme[available_start]="#7928ca"
+theme[available_mid]="#a855f7"
+theme[available_end]="#55f736"
+
+# Mem/Disk used meter (Electric Purple -> Acid Cyan -> Hot Magenta at critical)
+theme[used_start]="#7928ca"
+theme[used_mid]="#a855f7"
+theme[used_end]="#ff007f"
+
+# Download graph colors
+theme[download_start]="#7928ca"
+theme[download_mid]="#a855f7"
+theme[download_end]="#00f0ff"
+
+# Upload graph colors
+theme[upload_start]="#161326"
+theme[upload_mid]="#55f736"
+theme[upload_end]="#00f0ff"
+
+# Process box color gradient
+theme[process_start]="#55f736"
+theme[process_mid]="#00f0ff"
+theme[process_end]="#a855f7"

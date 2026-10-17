@@ -344,7 +344,7 @@ class ZodiacApp:
         lbl_logo = tk.Label(
             title_box,
             text="✨",
-            font=("MartianMono Nerd Font", 14),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 14),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
         )
@@ -353,7 +353,7 @@ class ZodiacApp:
         lbl_title = tk.Label(
             title_box,
             text="ZODIAC CALENDAR",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -364,7 +364,7 @@ class ZodiacApp:
         lbl_today_badge = tk.Label(
             header_bar,
             text=f" Today: {lbl_today_str} ",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["accent_blue"],
             bg=THEME["key_bg"],
             padx=8,
@@ -379,7 +379,7 @@ class ZodiacApp:
         self.lbl_status = tk.Label(
             right_box,
             text=self._get_status_text(),
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=self._get_status_color(),
             bg=THEME["key_bg"],
             padx=8,
@@ -390,7 +390,7 @@ class ZodiacApp:
         btn_sync = tk.Button(
             right_box,
             text="⟳ Sync (r)",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -406,7 +406,7 @@ class ZodiacApp:
         btn_settings = tk.Button(
             right_box,
             text="⚙ Config (s)",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["fg_dim"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -477,7 +477,7 @@ class ZodiacApp:
         btn_prev = tk.Button(
             top_row,
             text="◀ Prev (J)",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -492,7 +492,7 @@ class ZodiacApp:
         btn_today = tk.Button(
             top_row,
             text="Today (t)",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -507,7 +507,7 @@ class ZodiacApp:
         self.lbl_month_year = tk.Label(
             top_row,
             text="",
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_surface"],
         )
@@ -516,7 +516,7 @@ class ZodiacApp:
         btn_next = tk.Button(
             top_row,
             text="Next ▶ (K)",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -539,7 +539,7 @@ class ZodiacApp:
         self.lbl_agenda_date = tk.Label(
             top_agenda_bar,
             text="AGENDA",
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_surface"],
         )
@@ -588,7 +588,7 @@ class ZodiacApp:
             lbl_k = tk.Label(
                 box,
                 text=f" {key} ",
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=4,
@@ -599,7 +599,7 @@ class ZodiacApp:
             lbl_d = tk.Label(
                 box,
                 text=f" {desc}",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )
@@ -682,7 +682,7 @@ class ZodiacApp:
             lbl = tk.Label(
                 self.grid_frame,
                 text=day_str,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"] if c in (0, 6) else THEME["fg_dim"],
                 bg=THEME["bg_surface"],
                 pady=4,
@@ -733,7 +733,7 @@ class ZodiacApp:
                 lbl_num = tk.Label(
                     cell_frame,
                     text=str(d.day),
-                    font=("MartianMono Nerd Font", 9, "bold" if (is_today or is_selected) else "normal"),
+                    font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold" if (is_today or is_selected) else "normal"),
                     fg=THEME["key_fg"] if is_today else cell_fg,
                     bg=cell_bg,
                 )
@@ -744,7 +744,7 @@ class ZodiacApp:
                     lbl_dot = tk.Label(
                         cell_frame,
                         text="●",
-                        font=("MartianMono Nerd Font", 7),
+                        font=(THEME.get("font", "MartianMono Nerd Font"), 7),
                         fg=THEME["status_running"],
                         bg=cell_bg,
                     )
@@ -801,7 +801,7 @@ class ZodiacApp:
             lbl_none = tk.Label(
                 empty_box,
                 text="No events scheduled for this day.",
-                font=("MartianMono Nerd Font", 10, "italic"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10, "italic"),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )
@@ -818,7 +818,7 @@ class ZodiacApp:
             lbl_up_title = tk.Label(
                 self.agenda_frame,
                 text="UPCOMING EVENTS",
-                font=("MartianMono Nerd Font", 10, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
                 fg=THEME["accent_aqua"],
                 bg=THEME["bg_surface"],
             )
@@ -854,7 +854,7 @@ class ZodiacApp:
             lbl_d = tk.Label(
                 top_row,
                 text=f" {d_str} ",
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["accent_aqua"],
                 bg=THEME["key_bg"],
                 padx=4,
@@ -875,7 +875,7 @@ class ZodiacApp:
         lbl_t = tk.Label(
             top_row,
             text=f" {time_text} ",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=time_color,
             bg=THEME["key_bg"],
             padx=5,
@@ -887,7 +887,7 @@ class ZodiacApp:
         lbl_sum = tk.Label(
             top_row,
             text=evt.get("summary", "Untitled Event"),
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
             anchor="w",
@@ -904,7 +904,7 @@ class ZodiacApp:
             lbl_loc = tk.Label(
                 loc_row,
                 text=f"{icon} {loc}",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["accent_blue"],
                 bg=THEME["bg_card"],
                 anchor="w",
@@ -922,7 +922,7 @@ class ZodiacApp:
             lbl_desc = tk.Label(
                 desc_row,
                 text=desc_short,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
                 anchor="w",
@@ -967,7 +967,7 @@ class ZodiacApp:
         lbl_hdr = tk.Label(
             container,
             text="⚙ GOOGLE CALENDAR SETUP (READ-ONLY)",
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
         )
@@ -984,7 +984,7 @@ class ZodiacApp:
         lbl_inst = tk.Label(
             container,
             text=instructions,
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             justify="left",
@@ -994,7 +994,7 @@ class ZodiacApp:
         lbl_entry = tk.Label(
             container,
             text="Secret iCal URL:",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["accent_blue"],
             bg=THEME["bg_card"],
         )
@@ -1007,7 +1007,7 @@ class ZodiacApp:
         entry = tk.Entry(
             entry_frame,
             textvariable=url_var,
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -1034,7 +1034,7 @@ class ZodiacApp:
         btn_save = tk.Button(
             btn_box,
             text="✔ Save & Sync",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_bg"],
             bg=THEME["status_running"],
             activebackground=THEME["bg_hover"],
@@ -1050,7 +1050,7 @@ class ZodiacApp:
         btn_cancel = tk.Button(
             btn_box,
             text="Cancel",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],

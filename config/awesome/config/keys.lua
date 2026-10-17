@@ -219,10 +219,27 @@ keys.globalkeys = gears.table.join(
         scratchpad.toggle("kitty --class agy-pad " .. os.getenv("HOME") .. "/.local/bin/agy --dangerously-skip-permissions", "agy-pad")
     end, {description = "toggle antigravity assistant", group = "scratchpad"}),
 
-    -- Theme Toggle: Biohazard Slime <-> Laboratory White (Pre-Contamination)
+    awful.key({ modkey }, "y", function ()
+        scratchpad.toggle("limusic-app", "limusic")
+    end, {description = "toggle limusic music player dropdown", group = "scratchpad"}),
+
+    awful.key({ modkey }, "/", function ()
+        scratchpad.toggle("kitty --class fzf-pad " .. os.getenv("HOME") .. "/.local/bin/qtile-fzf", "fzf-pad")
+    end, {description = "toggle fzf file finder dropdown", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "f", function ()
+        scratchpad.toggle("python3 " .. python_bench .. "font_pad.py", "font-pad")
+    end, {description = "toggle desktop font selector dropdown", group = "scratchpad"}),
+
+    -- Lock Screen
+    awful.key({ "Control", "Mod1" }, "l", function ()
+        awful.spawn("slock")
+    end, {description = "lock screen (slock)", group = "awesome"}),
+
+    -- Theme Toggle: Origin -> Lab -> Slime -> Cyber -> Space
     awful.key({ modkey }, "o", function ()
         awful.spawn(os.getenv("HOME") .. "/.local/bin/theme-toggle")
-    end, {description = "toggle Slime / Laboratory White theme", group = "awesome"})
+    end, {description = "cycle Origin / Lab / Slime / Cyber / Space theme", group = "awesome"})
     -- }}}
 )
 

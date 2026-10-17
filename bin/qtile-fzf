@@ -1,12 +1,29 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# qtile-fzf: Interactive File Finder for Qtile Dropdown
+# qtile-fzf: Interactive File Finder Dropdown (Slime / Laboratory White)
 # ==============================================================================
 
 set -e
 
-# Search starting from $HOME, ignoring common heavy cache/build/trash folders
 SEARCH_ROOT="${1:-$HOME}"
+MODE="slime"
+if [ -f "$HOME/.config/awesome/theme_mode" ]; then
+    MODE="$(tr -d '[:space:]' < "$HOME/.config/awesome/theme_mode")"
+fi
+
+if [ "$MODE" = "origin" ]; then
+    FZF_COLORS="bg+:#241e17,bg:#141712,spinner:#9ece6a,hl:#d08770,fg:#d8dee9,header:#9ece6a,info:#5a784d,pointer:#9ece6a,marker:#9ece6a,fg+:#eceff4,prompt:#9ece6a,hl+:#d08770"
+elif [ "$MODE" = "lab" ]; then
+    FZF_COLORS="bg+:#e2e8f0,bg:#f7f9fb,spinner:#0284c7,hl:#1d4ed8,fg:#0a0c0e,header:#0f766e,info:#0369a1,pointer:#0a0c0e,marker:#0f766e,fg+:#000000,prompt:#0284c7,hl+:#dc2626"
+elif [ "$MODE" = "cyber" ]; then
+    FZF_COLORS="bg+:#161326,bg:#090812,spinner:#55f736,hl:#00f0ff,fg:#e0d8f6,header:#a855f7,info:#55f736,pointer:#55f736,marker:#00f0ff,fg+:#ffffff,prompt:#a855f7,hl+:#ff007f"
+elif [ "$MODE" = "space" ]; then
+    FZF_COLORS="bg+:#e1e4ea,bg:#f5f6f9,spinner:#0088cc,hl:#c25d00,fg:#1b2028,header:#0088cc,info:#e59500,pointer:#e59500,marker:#0088cc,fg+:#1b2028,prompt:#0088cc,hl+:#d32f2f"
+elif [ "$MODE" = "shred" ]; then
+    FZF_COLORS="bg+:#222730,bg:#0b0c0e,spinner:#ff2a2a,hl:#ff5500,fg:#c8d0dc,header:#e2e8f0,info:#8b95a5,pointer:#ff2a2a,marker:#ff2a2a,fg+:#ffffff,prompt:#ff2a2a,hl+:#ff5500"
+else
+    FZF_COLORS="bg+:#16281a,bg:#0b140d,spinner:#55f736,hl:#d8eb34,fg:#c6f582,header:#55f736,info:#36e385,pointer:#74ff2e,marker:#55f736,fg+:#ffffff,prompt:#55f736,hl+:#ff4343"
+fi
 
 SELECTED=$(find "$SEARCH_ROOT" \
     -maxdepth 6 \
@@ -17,25 +34,25 @@ SELECTED=$(find "$SEARCH_ROOT" \
     -not -path '*/__pycache__*' \
     2>/dev/null | fzf \
     --prompt="🔍 Search Files > " \
-    --header="[Enter] Open  |  [Ctrl-v] Vim  |  [Ctrl-y] Copy Path  |  [Esc] Quit" \
-    --preview="batcat --color=always --line-range :100 {} 2>/dev/null || cat {} 2>/dev/null | head -n 100" \
+    --header="[Enter] Open  |  [Ctrl-v] Neovim  |  [Ctrl-y] Copy Path  |  [Esc] Quit" \
+    --preview="bat --color=always --line-range :100 {} 2>/dev/null || cat {} 2>/dev/null | head -n 100" \
     --preview-window="right:60%:wrap" \
     --bind="ctrl-y:execute-silent(echo -n {} | xclip -selection clipboard)+abort" \
-    --bind="ctrl-v:execute(vim {})" \
+    --bind="ctrl-v:execute(nvim {})" \
     --reverse \
-    --color="bg+:#3c3836,bg:#282828,spinner:#fabd2f,hl:#83a598" \
-    --color="fg:#ebdbb2,header:#fabd2f,info:#8ec07c,pointer:#fabd2f" \
-    --color="marker:#b8bb26,fg+:#fbf1c7,prompt:#83a598,hl+:#fabd2f")
+    --color="$FZF_COLORS")
 
 if [ -n "$SELECTED" ]; then
     if [ -d "$SELECTED" ]; then
-        if command -v ranger &>/dev/null; then
+        if command -v yazi &>/dev/null; then
+            exec yazi "$SELECTED"
+        elif command -v ranger &>/dev/null; then
             exec ranger "$SELECTED"
         else
-            cd "$SELECTED" && exec bash
+            cd "$SELECTED" && exec zsh
         fi
     elif file -b --mime "$SELECTED" | grep -qE "text/|json|javascript|x-shellscript|x-empty"; then
-        exec vim "$SELECTED"
+        exec nvim "$SELECTED"
     else
         xdg-open "$SELECTED" >/dev/null 2>&1 &
         disown

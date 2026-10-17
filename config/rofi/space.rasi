@@ -1,0 +1,109 @@
+/* ============================================================================
+ * Rofi Configuration - Act IV: Orbital Containment / Deep Space Vessel
+ * ============================================================================ */
+
+configuration {
+    modi:                       "drun,run,window";
+    show-icons:                 true;
+    display-drun:               "🛰️ Deck";
+    display-run:                "🚀 Vector";
+    display-window:             "✦ Orbit";
+    drun-display-format:        "{name}";
+    window-format:              "{w} · {c} · {t}";
+    font:                       "SpaceMono Nerd Font 10";
+}
+
+* {
+    bg:                         #f5f6f9;
+    bg-alt:                     #e1e4ea;
+    fg:                         #1b2028;
+    fg-dim:                     #5a6578;
+    accent:                     #0088cc;
+    solar:                      #e59500;
+    urgent:                     #d32f2f;
+
+    background-color:           transparent;
+    text-color:                 @fg;
+    margin:                     0px;
+    padding:                    0px;
+    spacing:                    0px;
+}
+
+window {
+    location:                   center;
+    anchor:                     center;
+    width:                      540px;
+    background-color:           @bg;
+    border:                     2px solid;
+    border-color:               @solar;
+    border-radius:              4px;
+}
+
+mainbox {
+    padding:                    16px;
+    spacing:                    12px;
+    children:                   [ "inputbar", "listview" ];
+}
+
+inputbar {
+    background-color:           @bg-alt;
+    border:                     1px solid;
+    border-color:               @accent;
+    border-radius:              4px;
+    padding:                    10px 14px;
+    spacing:                    10px;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:                 @accent;
+    font:                       "SpaceMono Nerd Font 10";
+}
+
+entry {
+    placeholder:                "Enter orbital transponder command...";
+    placeholder-color:          @fg-dim;
+    text-color:                 @fg;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    fixed-height:               true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    spacing:                    4px;
+}
+
+element {
+    padding:                    8px 12px;
+    spacing:                    12px;
+    border-radius:              4px;
+}
+
+element normal.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element selected.normal {
+    background-color:           @bg-alt;
+    text-color:                 @fg;
+    border:                     1px solid;
+    border-color:               @solar;
+}
+
+element-icon {
+    size:                       24px;
+    vertical-align:             0.5;
+}
+
+element-text {
+    vertical-align:             0.5;
+    text-color:                 inherit;
+}

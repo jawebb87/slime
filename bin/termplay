@@ -8,15 +8,56 @@
 
 set -eo pipefail
 
-# ANSI Colors (Gruvbox)
+# ANSI Colors (Lab / Slime / Cyber)
 COLOR_RESET="\033[0m"
 COLOR_BOLD="\033[1m"
-COLOR_YELLOW="\033[38;2;250;189;47m"
-COLOR_GREEN="\033[38;2;184;187;38m"
-COLOR_BLUE="\033[38;2;131;165;152m"
-COLOR_RED="\033[38;2;251;73;52m"
-COLOR_AQUA="\033[38;2;142;192;124m"
-COLOR_GRAY="\033[38;2;146;131;116m"
+THEME_MODE="slime"
+if [ -f "$HOME/.config/awesome/theme_mode" ]; then
+    THEME_MODE="$(tr -d '[:space:]' < "$HOME/.config/awesome/theme_mode")"
+fi
+if [ "$THEME_MODE" = "origin" ]; then
+    COLOR_YELLOW="\033[38;2;208;135;112m"
+    COLOR_GREEN="\033[38;2;158;206;106m"
+    COLOR_BLUE="\033[38;2;90;120;77m"
+    COLOR_RED="\033[38;2;191;97;106m"
+    COLOR_AQUA="\033[38;2;143;188;187m"
+    COLOR_GRAY="\033[38;2;216;222;233m"
+elif [ "$THEME_MODE" = "lab" ]; then
+    COLOR_YELLOW="\033[38;2;180;83;9m"
+    COLOR_GREEN="\033[38;2;15;118;110m"
+    COLOR_BLUE="\033[38;2;2;132;199m"
+    COLOR_RED="\033[38;2;220;38;38m"
+    COLOR_AQUA="\033[38;2;3;105;161m"
+    COLOR_GRAY="\033[38;2;71;85;105m"
+elif [ "$THEME_MODE" = "cyber" ]; then
+    COLOR_YELLOW="\033[38;2;168;85;247m"
+    COLOR_GREEN="\033[38;2;85;247;54m"
+    COLOR_BLUE="\033[38;2;0;240;255m"
+    COLOR_RED="\033[38;2;255;0;127m"
+    COLOR_AQUA="\033[38;2;0;240;255m"
+    COLOR_GRAY="\033[38;2;224;216;246m"
+elif [ "$THEME_MODE" = "space" ]; then
+    COLOR_YELLOW="\033[38;2;229;149;0m"
+    COLOR_GREEN="\033[38;2;13;138;82m"
+    COLOR_BLUE="\033[38;2;0;136;204m"
+    COLOR_RED="\033[38;2;211;47;47m"
+    COLOR_AQUA="\033[38;2;0;136;204m"
+    COLOR_GRAY="\033[38;2;90;101;120m"
+elif [ "$THEME_MODE" = "shred" ]; then
+    COLOR_YELLOW="\033[38;2;255;85;0m"
+    COLOR_GREEN="\033[38;2;200;208;220m"
+    COLOR_BLUE="\033[38;2;139;149;165m"
+    COLOR_RED="\033[38;2;255;42;42m"
+    COLOR_AQUA="\033[38;2;226;232;240m"
+    COLOR_GRAY="\033[38;2;74;82;96m"
+else
+    COLOR_YELLOW="\033[38;2;216;235;52m"
+    COLOR_GREEN="\033[38;2;85;247;54m"
+    COLOR_BLUE="\033[38;2;54;227;133m"
+    COLOR_RED="\033[38;2;255;67;67m"
+    COLOR_AQUA="\033[38;2;116;255;46m"
+    COLOR_GRAY="\033[38;2;198;245;130m"
+fi
 
 print_banner() {
     echo -e "${COLOR_YELLOW}${COLOR_BOLD}▶ termplay${COLOR_RESET} ${COLOR_GRAY}- Terminal Video Player${COLOR_RESET}"

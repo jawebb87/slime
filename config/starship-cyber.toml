@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Act III: Cyberpunk Future (Bio-Grid Cyberdeck)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'cyber'
+
+format = """
+[\\[NET//LINK\\]](bold fg:electric_purple) \
+[❯](bold fg:acid_cyan) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ ⚡](bold fg:toxic_slime)\
+$line_break\
+$character"""
+
+[palettes.cyber]
+obsidian        = "#090812"
+surface_card    = "#161326"
+deep_indigo     = "#120f24"
+fg_text         = "#e0d8f6"
+electric_purple = "#a855f7"
+neon_violet     = "#7928ca"
+acid_cyan       = "#00f0ff"
+hot_magenta     = "#ff007f"
+toxic_slime     = "#55f736"
+
+[username]
+show_always = true
+style_user = "bold fg:electric_purple"
+style_root = "bold fg:hot_magenta"
+format = '[$user]($style)[:](bold fg:neon_violet)'
+
+[directory]
+style = "bold fg:acid_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:electric_purple"
+format = ' [\(git:](fg:neon_violet)[$branch]($style)[\)](fg:neon_violet)'
+
+[git_status]
+style = "bold fg:hot_magenta"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "fg:toxic_slime"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:hot_magenta"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:acid_cyan"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:toxic_slime"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:acid_cyan"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:hot_magenta"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:hot_magenta"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:electric_purple)[❯](bold fg:acid_cyan) "
+error_symbol = "[❯](bold fg:hot_magenta)[❯](bold fg:hot_magenta) "

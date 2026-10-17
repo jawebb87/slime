@@ -72,13 +72,15 @@ awful.rules.rules = {
             "audio-pad", "wifi-pad", "clip-pad", "docker-pad", "emoji-pad",
             "key-cheat", "log-pad", "vim-cheat", "weather-pad", "zodiac-pad",
             "btop-float", "term-scratch", "notes-pad", "fzf-pad", "lazygit-pad",
-            "ranger-pad", "ipython-pad", "agy-pad",
+            "ranger-pad", "ipython-pad", "agy-pad", "limusic-app", "limusic",
+            "font-pad",
         },
         class = {
             "Audio-pad", "Wifi-pad", "Clip-pad", "Docker-pad", "Emoji-pad",
             "Key-cheat", "Log-pad", "Vim-cheat", "Weather-pad", "Zodiac-pad",
             "Btop-float", "Term-scratch", "Notes-pad", "Fzf-pad", "Lazygit-pad",
-            "Ranger-pad", "Ipython-pad", "Agy-pad",
+            "Ranger-pad", "Ipython-pad", "Agy-pad", "limusic-app", "Limusic-app",
+            "limusic", "Limusic", "Font-pad", "font-pad",
         },
       },
       properties = {

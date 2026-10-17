@@ -48,27 +48,102 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 
-# Zsh Autosuggestions (styled in dark moss green)
+# Zsh Autosuggestions & Syntax Highlighting (Dual Theme: Slime / Laboratory White)
 if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a5c3e'
 fi
 
-# Zsh Syntax Highlighting (styled to match the Slime palette)
 if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    typeset -A ZSH_HIGHLIGHT_STYLES
-    ZSH_HIGHLIGHT_STYLES[command]='fg=#55f736,bold'
-    ZSH_HIGHLIGHT_STYLES[builtin]='fg=#74ff2e,bold'
-    ZSH_HIGHLIGHT_STYLES[alias]='fg=#55f736,bold'
-    ZSH_HIGHLIGHT_STYLES[function]='fg=#74ff2e'
-    ZSH_HIGHLIGHT_STYLES[path]='fg=#c6f582,underline'
-    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#d8eb34'
-    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#d8eb34'
-    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#d8eb34'
-    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#36e385'
-    ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff4343,bold' # Red alert for unrecognized commands!
+    typeset -gA ZSH_HIGHLIGHT_STYLES
 fi
 
-# Initialize Starship Prompt (Slime two-line powerline)
+_apply_slime_zsh_theme() {
+    local mode="slime"
+    if [[ -f "$HOME/.config/awesome/theme_mode" ]]; then
+        mode="${$(<"$HOME/.config/awesome/theme_mode")//[[:space:]]/}"
+    fi
+    [[ "$mode" == "$_CURRENT_ZSH_THEME_MODE" ]] && return
+    _CURRENT_ZSH_THEME_MODE="$mode"
+
+    if [[ "$mode" == "origin" ]]; then
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#5a784d'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#9ece6a,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#9ece6a,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#9ece6a,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#7fa96b'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#5a784d,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#d08770'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#d08770'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#d08770'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#8fbcbb'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#bf616a,bold'
+    elif [[ "$mode" == "lab" ]]; then
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#64748b'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#0f766e,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#0284c7,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#0f766e,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#0284c7'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#1d4ed8,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#b45309'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#b45309'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#b45309'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#0369a1'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#dc2626,bold'
+    elif [[ "$mode" == "cyber" ]]; then
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6c5f8d'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#a855f7,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#55f736,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#a855f7,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#55f736'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#00f0ff,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#00f0ff'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#00f0ff'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#00f0ff'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#74ff2e'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff007f,bold'
+    elif [[ "$mode" == "space" ]]; then
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#5a6578'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#0088cc,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#c25d00,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#0088cc,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#006699'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#0088cc,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#0d8a52'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#0d8a52'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#0d8a52'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#c25d00'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#d32f2f,bold'
+    elif [[ "$mode" == "shred" ]]; then
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#525b69'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#e2e8f0,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#ff5500,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#c8d0dc,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#8b95a5'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#c8d0dc,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#ff5500'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#ff5500'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#ff5500'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#ff2a2a'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff2a2a,bold'
+    else
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a5c3e'
+        ZSH_HIGHLIGHT_STYLES[command]='fg=#55f736,bold'
+        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#74ff2e,bold'
+        ZSH_HIGHLIGHT_STYLES[alias]='fg=#55f736,bold'
+        ZSH_HIGHLIGHT_STYLES[function]='fg=#74ff2e'
+        ZSH_HIGHLIGHT_STYLES[path]='fg=#c6f582,underline'
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#d8eb34'
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#d8eb34'
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#d8eb34'
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#36e385'
+        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff4343,bold'
+    fi
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _apply_slime_zsh_theme
+_apply_slime_zsh_theme
+
+# Initialize Starship Prompt (Lab / Slime / Cyber)
 eval "$(starship init zsh)"

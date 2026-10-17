@@ -120,7 +120,7 @@ class ContainerCard:
         self.lbl_status = tk.Label(
             top_row,
             text=f" {status_text} ",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=status_color,
             bg=THEME["key_bg"],
             padx=6,
@@ -132,7 +132,7 @@ class ContainerCard:
         self.lbl_name = tk.Label(
             top_row,
             text=self.data.get("Names", "unknown"),
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
             padx=10,
@@ -148,7 +148,7 @@ class ContainerCard:
             self.lbl_stats = tk.Label(
                 top_row,
                 text=stats_str,
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["accent_blue"],
                 bg=THEME["key_bg"],
                 padx=8,
@@ -166,7 +166,7 @@ class ContainerCard:
         self.lbl_image = tk.Label(
             bot_row,
             text=f"Image: {image}",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
         )
@@ -179,7 +179,7 @@ class ContainerCard:
             self.lbl_ports = tk.Label(
                 bot_row,
                 text=f"Ports: {clean_ports}",
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["accent_aqua"],
                 bg=THEME["bg_card"],
                 padx=12,
@@ -192,7 +192,7 @@ class ContainerCard:
         self.lbl_status_msg = tk.Label(
             bot_row,
             text=status_msg,
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
         )
@@ -288,7 +288,7 @@ class DockerPadApp:
         lbl_logo = tk.Label(
             title_box,
             text="\uf120",  # FontAwesome terminal icon
-            font=("MartianMono Nerd Font", 15),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 15),
             fg=THEME["accent_blue"],
             bg=THEME["bg_card"],
         )
@@ -297,7 +297,7 @@ class DockerPadApp:
         lbl_title = tk.Label(
             title_box,
             text="DOCKER SERVICES",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -316,7 +316,7 @@ class DockerPadApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="\uf002",  # fa-search
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )
@@ -328,7 +328,7 @@ class DockerPadApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -341,7 +341,7 @@ class DockerPadApp:
         self.lbl_counts = tk.Label(
             header_bar,
             text="Loading...",
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             padx=12,
@@ -425,7 +425,7 @@ class DockerPadApp:
             k_lbl = tk.Label(
                 box,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=5,
@@ -436,7 +436,7 @@ class DockerPadApp:
             a_lbl = tk.Label(
                 box,
                 text=action,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
             )
@@ -446,7 +446,7 @@ class DockerPadApp:
         self.lbl_toast = tk.Label(
             footer,
             text="Ready",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
             padx=10,
@@ -664,7 +664,7 @@ class DockerPadApp:
         tk.Label(
             hdr,
             text=f"Logs: {name} (Last 150 lines)",
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         ).pack(side="left", padx=8)
@@ -672,7 +672,7 @@ class DockerPadApp:
         btn_close = tk.Button(
             hdr,
             text="✕ Close (Esc)",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["status_stopped"],
@@ -692,7 +692,7 @@ class DockerPadApp:
             txt_frame,
             bg=THEME["key_bg"],
             fg=THEME["fg"],
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             bd=0,
             yscrollcommand=scroll.set,
             wrap="none",

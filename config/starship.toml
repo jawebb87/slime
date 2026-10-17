@@ -1,13 +1,12 @@
-# Starship Prompt Configuration - Slime Theme
+# Starship Prompt Configuration - Act II: Biohazard Slime (Contamination Terminal)
 "$schema" = 'https://starship.rs/config-schema.json'
 
 palette = 'slime'
 
 format = """
-[](fg:neon_lime)\
-$os\
+[\\[BIO//HAZARD\\]](bold fg:neon_lime) \
+[❯](bold fg:toxic_yellow) \
 $username\
-[](bg:swamp_mid fg:neon_lime)\
 $directory\
 $git_branch\
 $git_status\
@@ -16,93 +15,66 @@ $rust\
 $golang\
 $nodejs\
 $docker_context\
-$time\
 $cmd_duration\
 $status\
+[ ☣](bold fg:neon_lime)\
 $line_break\
 $character"""
 
 [palettes.slime]
 neon_lime     = "#55f736"
-swamp_deep    = "#0c140d"
-swamp_dark    = "#122015"
-swamp_mid     = "#1a331e"
-swamp_accent  = "#24492b"
+hyper_lime    = "#74ff2e"
+bio_teal      = "#36e385"
 toxic_yellow  = "#d8eb34"
 pale_lichen   = "#c6f582"
 hazard_red    = "#ff4343"
-bright_text   = "#f0ffcd"
 dim_text      = "#709677"
-
-[os]
-disabled = false
-style = "bg:neon_lime fg:swamp_deep bold"
-format = '[$symbol]($style)'
-
-[os.symbols]
-Arch = " "
-Debian = " "
-Ubuntu = " "
-Linux = " "
 
 [username]
 show_always = true
-style_user = "bg:neon_lime fg:swamp_deep bold"
-style_root = "bg:hazard_red fg:bright_text bold"
-format = '[$user ]($style)'
+style_user = "bold fg:neon_lime"
+style_root = "bold fg:hazard_red"
+format = '[$user]($style)[:](bold fg:dim_text)'
 
 [directory]
-style = "bg:swamp_mid fg:pale_lichen"
-format = "[  $path ]($style)[](fg:swamp_mid)"
+style = "bold fg:pale_lichen"
+format = "[$path]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙"
-"Downloads" = ""
-"Music"     = ""
-"Pictures"  = ""
-"Projects"  = "󰲋"
-
 [git_branch]
-symbol = " "
-style = "bg:swamp_accent fg:toxic_yellow bold"
-format = '[](fg:swamp_mid bg:swamp_accent)[ $symbol$branch]($style)'
+symbol = ""
+style = "bold fg:toxic_yellow"
+format = ' [\(git:](fg:bio_teal)[$branch]($style)[\)](fg:bio_teal)'
 
 [git_status]
-style = "bg:swamp_accent fg:toxic_yellow"
-format = '[$all_status$ahead_behind ]($style)[](fg:swamp_accent)'
+style = "bold fg:hazard_red"
+format = ' [$all_status$ahead_behind]($style)'
 
 [python]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:neon_lime"
+format = ' [$symbol($version)]($style)'
 
 [rust]
 symbol = " "
-style = "bg:swamp_dark fg:toxic_yellow"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:toxic_yellow"
+format = ' [$symbol($version)]($style)'
 
 [golang]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:bio_teal"
+format = ' [$symbol($version)]($style)'
 
 [nodejs]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:neon_lime"
+format = ' [$symbol($version)]($style)'
 
 [docker_context]
 symbol = " "
-style = "bg:swamp_dark fg:toxic_yellow"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol$context ]($style)[](fg:swamp_dark)'
-
-[time]
-disabled = false
-time_format = "%R"
-style = "fg:dim_text"
-format = ' [ $time]($style)'
+style = "fg:bio_teal"
+format = ' [$symbol$context]($style)'
 
 [cmd_duration]
 min_time = 2000
@@ -116,5 +88,5 @@ style = "bold fg:hazard_red"
 format = '[$symbol $status]($style)'
 
 [character]
-success_symbol = "[└─](bold fg:toxic_yellow)[❯](bold fg:neon_lime) "
-error_symbol = "[└─](bold fg:hazard_red)[❯](bold fg:hazard_red) "
+success_symbol = "[❯](bold fg:neon_lime)[❯](bold fg:toxic_yellow) "
+error_symbol = "[❯](bold fg:hazard_red)[❯](bold fg:hazard_red) "

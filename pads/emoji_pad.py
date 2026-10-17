@@ -430,7 +430,7 @@ class EmojiPadApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="🔍",
-            font=("Noto Color Emoji", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             bg=THEME["bg_card"],
         )
         lbl_search_icon.pack(side="left", padx=(6, 2))
@@ -445,7 +445,7 @@ class EmojiPadApp:
             fg=THEME["fg"],
             insertbackground=THEME["accent_blue"],
             relief="flat",
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             bd=0,
         )
         self.search_entry.pack(side="left", fill="x", expand=True, padx=4)
@@ -455,7 +455,7 @@ class EmojiPadApp:
         self.lbl_count = tk.Label(
             search_frame,
             text="",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
             padx=6,
@@ -472,7 +472,7 @@ class EmojiPadApp:
             btn = tk.Label(
                 self.tabs_bar,
                 text=icon,
-                font=("Noto Color Emoji", 10),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10),
                 bg=THEME["bg_surface"],
                 padx=4,
                 pady=2,
@@ -551,7 +551,7 @@ class EmojiPadApp:
         self.lbl_preview_char = tk.Label(
             char_frame,
             text="✨",
-            font=("Noto Color Emoji", 20),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 20),
             bg=THEME["bg_card"],
         )
         self.lbl_preview_char.pack(expand=True, fill="both")
@@ -562,7 +562,7 @@ class EmojiPadApp:
         self.lbl_preview_name = tk.Label(
             detail_col,
             text="",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
             anchor="w",
@@ -572,7 +572,7 @@ class EmojiPadApp:
         self.lbl_preview_code = tk.Label(
             detail_col,
             text="",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
             anchor="w",
@@ -583,7 +583,7 @@ class EmojiPadApp:
         self.lbl_toast = tk.Label(
             footer,
             text="[↵] Copy",
-            font=("MartianMono Nerd Font", 8, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
             anchor="e",
@@ -696,7 +696,7 @@ class EmojiPadApp:
                 self.canvas.winfo_width() / 2 or 160,
                 100,
                 text="No emojis found",
-                font=("MartianMono Nerd Font", 10),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10),
                 fill=THEME["fg_dim"],
                 justify="center",
             )
@@ -746,14 +746,14 @@ class EmojiPadApp:
                     self.canvas.create_text(
                         xc, yc,
                         text=char,
-                        font=("Noto Color Emoji", 18),
+                        font=(THEME.get("font", "MartianMono Nerd Font"), 18),
                         tags=("text", tag),
                     )
             else:
                 self.canvas.create_text(
                     xc, yc,
                     text=char,
-                    font=("Noto Color Emoji", 18),
+                    font=(THEME.get("font", "MartianMono Nerd Font"), 18),
                     tags=("text", tag),
                 )
 

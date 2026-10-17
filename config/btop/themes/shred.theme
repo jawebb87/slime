@@ -1,0 +1,62 @@
+# ==============================================================================
+# btop++ Theme - Standalone: The Shredder (Gunmetal & Razor Angles)
+# ==============================================================================
+
+theme[main_bg]="#0b0c0e"
+theme[main_fg]="#d8dee9"
+theme[title]="#e2e8f0"
+theme[hi_fg]="#ff2a2a"
+theme[selected_bg]="#222730"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#4a5260"
+theme[graph_text]="#8b95a5"
+theme[meter_bg]="#14171c"
+theme[proc_misc]="#c8d0dc"
+
+# Box outlines (Machined Gunmetal & Tungsten Steel)
+theme[cpu_box]="#8b95a5"
+theme[mem_box]="#6e7785"
+theme[net_box]="#4a5260"
+theme[proc_box]="#c8d0dc"
+theme[div_line]="#323842"
+
+# Temperature gradient (Cold Steel -> Grinding Orange -> Friction Spark Red)
+theme[temp_start]="#8b95a5"
+theme[temp_mid]="#ff5500"
+theme[temp_end]="#ff2a2a"
+
+# CPU graph (Gunmetal -> Honed Steel -> Friction Spark Red)
+theme[cpu_start]="#5c6e84"
+theme[cpu_mid]="#c8d0dc"
+theme[cpu_end]="#ff2a2a"
+
+# Memory meters
+theme[free_start]="#323842"
+theme[free_mid]="#5c6e84"
+theme[free_end]="#8b95a5"
+
+theme[cached_start]="#4a5260"
+theme[cached_mid]="#8b95a5"
+theme[cached_end]="#c8d0dc"
+
+theme[available_start]="#5c6e84"
+theme[available_mid]="#9aa7b8"
+theme[available_end]="#e2e8f0"
+
+theme[used_start]="#c8d0dc"
+theme[used_mid]="#ff5500"
+theme[used_end]="#ff2a2a"
+
+# Network graphs
+theme[download_start]="#4a5260"
+theme[download_mid]="#8b95a5"
+theme[download_end]="#e2e8f0"
+
+theme[upload_start]="#8b95a5"
+theme[upload_mid]="#ff5500"
+theme[upload_end]="#ff2a2a"
+
+# Process gradient
+theme[process_start]="#8b95a5"
+theme[process_mid]="#c8d0dc"
+theme[process_end]="#ff2a2a"

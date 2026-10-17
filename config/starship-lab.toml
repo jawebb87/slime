@@ -1,13 +1,12 @@
-# Starship Prompt Configuration - Laboratory White Theme (Pre-Contamination)
+# Starship Prompt Configuration - Act I: Laboratory White (Pre-Contamination Console)
 "$schema" = 'https://starship.rs/config-schema.json'
 
 palette = 'lab'
 
 format = """
-[](fg:neon_lime)\
-$os\
+[\\[LAB//SYS\\]](bold fg:lab_teal) \
+[❯](bold fg:clinical_blue) \
 $username\
-[](bg:swamp_mid fg:neon_lime)\
 $directory\
 $git_branch\
 $git_status\
@@ -16,97 +15,70 @@ $rust\
 $golang\
 $nodejs\
 $docker_context\
-$time\
 $cmd_duration\
 $status\
+[ ⚗](bold fg:lab_teal)\
 $line_break\
 $character"""
 
 [palettes.lab]
-neon_lime     = "#0a0c0e"
-swamp_deep    = "#ffffff"
-swamp_dark    = "#e2e8f0"
-swamp_mid     = "#dde4ec"
-swamp_accent  = "#cbd5e1"
-toxic_yellow  = "#0284c7"
-pale_lichen   = "#0a0c0e"
+ink_black     = "#0a0c0e"
+lab_teal      = "#0f766e"
+clinical_blue = "#0284c7"
+cobalt_blue   = "#1d4ed8"
+slate_muted   = "#64748b"
+amber_warn    = "#b45309"
 hazard_red    = "#dc2626"
-bright_text   = "#ffffff"
-dim_text      = "#475569"
-
-[os]
-disabled = false
-style = "bg:neon_lime fg:swamp_deep bold"
-format = '[$symbol]($style)'
-
-[os.symbols]
-Arch = " "
-Debian = " "
-Ubuntu = " "
-Linux = " "
 
 [username]
 show_always = true
-style_user = "bg:neon_lime fg:swamp_deep bold"
-style_root = "bg:hazard_red fg:bright_text bold"
-format = '[$user ]($style)'
+style_user = "bold fg:ink_black"
+style_root = "bold fg:hazard_red"
+format = '[$user]($style)[:](bold fg:slate_muted)'
 
 [directory]
-style = "bg:swamp_mid fg:pale_lichen"
-format = "[  $path ]($style)[](fg:swamp_mid)"
+style = "bold fg:clinical_blue"
+format = "[$path]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙"
-"Downloads" = ""
-"Music"     = ""
-"Pictures"  = ""
-"Projects"  = "󰲋"
-
 [git_branch]
-symbol = " "
-style = "bg:swamp_accent fg:toxic_yellow bold"
-format = '[](fg:swamp_mid bg:swamp_accent)[ $symbol$branch]($style)'
+symbol = ""
+style = "bold fg:lab_teal"
+format = ' [\(git:](fg:slate_muted)[$branch]($style)[\)](fg:slate_muted)'
 
 [git_status]
-style = "bg:swamp_accent fg:toxic_yellow"
-format = '[$all_status$ahead_behind ]($style)[](fg:swamp_accent)'
+style = "bold fg:amber_warn"
+format = ' [$all_status$ahead_behind]($style)'
 
 [python]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:lab_teal"
+format = ' [$symbol($version)]($style)'
 
 [rust]
 symbol = " "
-style = "bg:swamp_dark fg:toxic_yellow"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:amber_warn"
+format = ' [$symbol($version)]($style)'
 
 [golang]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:clinical_blue"
+format = ' [$symbol($version)]($style)'
 
 [nodejs]
 symbol = " "
-style = "bg:swamp_dark fg:pale_lichen"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+style = "fg:lab_teal"
+format = ' [$symbol($version)]($style)'
 
 [docker_context]
 symbol = " "
-style = "bg:swamp_dark fg:toxic_yellow"
-format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol$context ]($style)[](fg:swamp_dark)'
-
-[time]
-disabled = false
-time_format = "%R"
-style = "fg:dim_text"
-format = ' [ $time]($style)'
+style = "fg:clinical_blue"
+format = ' [$symbol$context]($style)'
 
 [cmd_duration]
 min_time = 2000
-style = "bold fg:toxic_yellow"
+style = "bold fg:amber_warn"
 format = ' [⏱ $duration]($style)'
 
 [status]
@@ -116,5 +88,5 @@ style = "bold fg:hazard_red"
 format = '[$symbol $status]($style)'
 
 [character]
-success_symbol = "[└─](bold fg:toxic_yellow)[❯](bold fg:neon_lime) "
-error_symbol = "[└─](bold fg:hazard_red)[❯](bold fg:hazard_red) "
+success_symbol = "[❯](bold fg:lab_teal)[❯](bold fg:clinical_blue) "
+error_symbol = "[❯](bold fg:hazard_red)[❯](bold fg:hazard_red) "

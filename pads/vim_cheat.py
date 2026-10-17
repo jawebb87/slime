@@ -237,7 +237,7 @@ class AccordionSection:
         self.lbl_arrow = tk.Label(
             self.header,
             text="▶",
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
             width=2,
@@ -249,7 +249,7 @@ class AccordionSection:
         self.lbl_icon = tk.Label(
             self.header,
             text=data.get("icon", "\uf121"),
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=data.get("color", THEME["accent_blue"]),
             bg=THEME["bg_card"],
             width=2,
@@ -261,7 +261,7 @@ class AccordionSection:
         self.lbl_title = tk.Label(
             self.header,
             text=data["category"],
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=data.get("color", THEME["accent_blue"]),
             bg=THEME["bg_card"],
             anchor="w",
@@ -272,7 +272,7 @@ class AccordionSection:
         self.lbl_count = tk.Label(
             self.header,
             text=f"{len(data['items'])} keys",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_hover"],
             padx=8,
@@ -336,7 +336,7 @@ class AccordionSection:
             pill = tk.Label(
                 row,
                 text=f" {keys} ",
-                font=("MartianMono Nerd Font", 10, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=8,
@@ -350,7 +350,7 @@ class AccordionSection:
             desc_lbl = tk.Label(
                 row,
                 text=desc,
-                font=("MartianMono Nerd Font", 10),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10),
                 fg=THEME["fg"],
                 bg=row_bg,
                 anchor="w",
@@ -362,7 +362,7 @@ class AccordionSection:
             mode_lbl = tk.Label(
                 row,
                 text=mode,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_hover"],
                 padx=6,
@@ -434,7 +434,7 @@ class VimCheatApp:
         lbl_logo = tk.Label(
             title_box,
             text="\uf120",  # FontAwesome terminal icon
-            font=("MartianMono Nerd Font", 15),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 15),
             fg=THEME["accent_green"],
             bg=THEME["bg_card"],
         )
@@ -443,7 +443,7 @@ class VimCheatApp:
         lbl_title = tk.Label(
             title_box,
             text="VIM CHEATSHEET",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -457,7 +457,7 @@ class VimCheatApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="\uf002",  # FontAwesome search icon
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )
@@ -469,7 +469,7 @@ class VimCheatApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -485,7 +485,7 @@ class VimCheatApp:
         self.btn_expand_all = tk.Button(
             btn_box,
             text="▼ Expand All",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["bg_active"],
@@ -501,7 +501,7 @@ class VimCheatApp:
         self.btn_collapse_all = tk.Button(
             btn_box,
             text="▶ Collapse All",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["bg_active"],
@@ -581,7 +581,7 @@ class VimCheatApp:
             k_lbl = tk.Label(
                 box,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=5,
@@ -592,7 +592,7 @@ class VimCheatApp:
             a_lbl = tk.Label(
                 box,
                 text=action,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
             )

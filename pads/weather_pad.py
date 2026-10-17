@@ -240,7 +240,7 @@ class WeatherApp:
         loc_icon = tk.Label(
             loc_frame,
             text="\uf041",  # fa-map-marker
-            font=("MartianMono Nerd Font", 16),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 16),
             fg=THEME["accent_red"],
             bg=THEME["bg_surface"],
         )
@@ -249,7 +249,7 @@ class WeatherApp:
         self.lbl_location = tk.Label(
             loc_frame,
             text="Denver, Colorado",
-            font=("DejaVu Sans", 13, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 13, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_surface"],
         )
@@ -262,7 +262,7 @@ class WeatherApp:
         self.lbl_status = tk.Label(
             status_box,
             text="Checking forecast...",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )
@@ -271,7 +271,7 @@ class WeatherApp:
         self.btn_refresh = tk.Button(
             status_box,
             text="\uf021 Refresh (r)",  # fa-refresh
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_bg"],
             bg=THEME["status_running"],
             activebackground=THEME["bg_hover"],
@@ -287,7 +287,7 @@ class WeatherApp:
         btn_close = tk.Button(
             status_box,
             text="\uf00d",  # fa-times
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -337,7 +337,7 @@ class WeatherApp:
         self.lbl_hero_icon = tk.Label(
             temp_row,
             text="\uf185",  # fa-sun-o
-            font=("MartianMono Nerd Font", 42),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 42),
             fg=THEME["accent_yellow"],
             bg=THEME["bg_card"],
         )
@@ -349,7 +349,7 @@ class WeatherApp:
         self.lbl_hero_temp_f = tk.Label(
             temp_text_col,
             text="--°F",
-            font=("DejaVu Sans", 34, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 34, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -358,7 +358,7 @@ class WeatherApp:
         self.lbl_hero_temp_c = tk.Label(
             temp_text_col,
             text="(--°C)",
-            font=("DejaVu Sans", 13),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 13),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
         )
@@ -368,7 +368,7 @@ class WeatherApp:
         self.lbl_hero_desc = tk.Label(
             left_hero,
             text="Loading conditions...",
-            font=("DejaVu Sans", 13, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 13, "bold"),
             fg=THEME["accent_blue"],
             bg=THEME["bg_card"],
         )
@@ -377,7 +377,7 @@ class WeatherApp:
         self.lbl_hero_feels = tk.Label(
             left_hero,
             text="Feels like: --°F",
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
         )
@@ -419,7 +419,7 @@ class WeatherApp:
             tk.Label(
                 pill_title_box,
                 text=glyph,
-                font=("MartianMono Nerd Font", 10),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10),
                 fg=color,
                 bg=THEME["bg_surface"],
             ).pack(side="left", padx=(0, 6))
@@ -427,7 +427,7 @@ class WeatherApp:
             tk.Label(
                 pill_title_box,
                 text=title,
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             ).pack(side="left")
@@ -435,7 +435,7 @@ class WeatherApp:
             val_lbl = tk.Label(
                 pill,
                 text="--",
-                font=("DejaVu Sans", 11, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
                 fg=THEME["fg"],
                 bg=THEME["bg_surface"],
             )
@@ -447,7 +447,7 @@ class WeatherApp:
         section_lbl = tk.Label(
             self.main_container,
             text="\uf073  3-DAY EXTENDED FORECAST (Use 'h' / 'l' to select day)",
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["accent_yellow"],
             bg=THEME["bg"],
         )
@@ -476,7 +476,7 @@ class WeatherApp:
             lbl_title = tk.Label(
                 card,
                 text=f"Day {idx + 1}",
-                font=("DejaVu Sans", 11, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
                 fg=THEME["fg_header"],
                 bg=THEME["bg_card"],
             )
@@ -486,7 +486,7 @@ class WeatherApp:
             lbl_date = tk.Label(
                 card,
                 text="--",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
             )
@@ -501,7 +501,7 @@ class WeatherApp:
             lbl_icon = tk.Label(
                 content_row,
                 text="\uf185",
-                font=("MartianMono Nerd Font", 24),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 24),
                 fg=THEME["accent_yellow"],
                 bg=THEME["bg_card"],
             )
@@ -515,7 +515,7 @@ class WeatherApp:
             lbl_high_low = tk.Label(
                 temps_col,
                 text="High: --°F  Low: --°F",
-                font=("DejaVu Sans", 10, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
                 fg=THEME["fg"],
                 bg=THEME["bg_card"],
             )
@@ -525,7 +525,7 @@ class WeatherApp:
             lbl_condition = tk.Label(
                 temps_col,
                 text="--",
-                font=("DejaVu Sans", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["accent_blue"],
                 bg=THEME["bg_card"],
             )
@@ -536,7 +536,7 @@ class WeatherApp:
             lbl_details = tk.Label(
                 card,
                 text="Precip: --",
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
             )
@@ -557,7 +557,7 @@ class WeatherApp:
         self.lbl_hourly_heading = tk.Label(
             self.main_container,
             text="\uf017  HOURLY TIMELINE - TODAY",
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["accent_aqua"],
             bg=THEME["bg"],
         )
@@ -592,7 +592,7 @@ class WeatherApp:
             lbl_time = tk.Label(
                 slot,
                 text="--",
-                font=("MartianMono Nerd Font", 9, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
                 fg=THEME["accent_yellow"],
                 bg=THEME["bg_surface"],
             )
@@ -601,7 +601,7 @@ class WeatherApp:
             lbl_icon = tk.Label(
                 slot,
                 text="\uf185",
-                font=("MartianMono Nerd Font", 18),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 18),
                 fg=THEME["accent_yellow"],
                 bg=THEME["bg_surface"],
             )
@@ -610,7 +610,7 @@ class WeatherApp:
             lbl_temp = tk.Label(
                 slot,
                 text="--°F",
-                font=("DejaVu Sans", 11, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
                 fg=THEME["fg_header"],
                 bg=THEME["bg_surface"],
             )
@@ -619,7 +619,7 @@ class WeatherApp:
             lbl_rain = tk.Label(
                 slot,
                 text="0% Rain",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["accent_aqua"],
                 bg=THEME["bg_surface"],
             )
@@ -628,7 +628,7 @@ class WeatherApp:
             lbl_wind = tk.Label(
                 slot,
                 text="-- mph",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )
@@ -662,7 +662,7 @@ class WeatherApp:
             k_badge = tk.Label(
                 box,
                 text=key,
-                font=("MartianMono Nerd Font", 9, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=6,
@@ -673,7 +673,7 @@ class WeatherApp:
             d_lbl = tk.Label(
                 box,
                 text=desc,
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )

@@ -132,7 +132,7 @@ class ClipCard:
         self.lbl_badge = tk.Label(
             top_row,
             text=f" #{self.index + 1}  {type_label} ",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=type_color,
             bg=THEME["key_bg"],
             padx=6,
@@ -146,7 +146,7 @@ class ClipCard:
         self.lbl_time = tk.Label(
             top_row,
             text=f"Copied at {time_str}",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
             padx=8,
@@ -162,7 +162,7 @@ class ClipCard:
         self.lbl_metrics = tk.Label(
             top_row,
             text=metrics_str,
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_blue"],
             bg=THEME["key_bg"],
             padx=8,
@@ -179,7 +179,7 @@ class ClipCard:
         self.lbl_preview = tk.Label(
             self.inner,
             text=preview_text,
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             anchor="w",
@@ -276,7 +276,7 @@ class ClipPadApp:
         lbl_logo = tk.Label(
             title_box,
             text="\uf0ea",  # FontAwesome clipboard icon
-            font=("MartianMono Nerd Font", 15),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 15),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
         )
@@ -285,7 +285,7 @@ class ClipPadApp:
         lbl_title = tk.Label(
             title_box,
             text="CLIPBOARD HISTORY",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -304,7 +304,7 @@ class ClipPadApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="\uf002",  # fa-search
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )
@@ -316,7 +316,7 @@ class ClipPadApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -329,7 +329,7 @@ class ClipPadApp:
         self.lbl_counts = tk.Label(
             header_bar,
             text="0 Clips",
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             padx=12,
@@ -409,7 +409,7 @@ class ClipPadApp:
             lbl_k = tk.Label(
                 pill,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=5,
@@ -420,7 +420,7 @@ class ClipPadApp:
             lbl_d = tk.Label(
                 pill,
                 text=desc,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
                 padx=4,
@@ -431,7 +431,7 @@ class ClipPadApp:
         self.lbl_toast = tk.Label(
             footer,
             text="Ready",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
             padx=10,
@@ -660,7 +660,44 @@ class ClipPadApp:
             return "break"
 
 
+def run_daemon():
+    """Headless background daemon that continuously records X11 clipboard changes."""
+    os.makedirs(CACHE_DIR, mode=0o700, exist_ok=True)
+    last_clip = get_current_xclip() or ""
+
+    while True:
+        try:
+            current = get_current_xclip()
+            if current and current.strip() and current != last_clip:
+                last_clip = current
+                history = []
+                if os.path.exists(HISTORY_FILE):
+                    try:
+                        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+                            history = json.load(f)
+                    except Exception:
+                        history = []
+
+                if not history or history[0].get("text") != current:
+                    history = [e for e in history if e.get("text") != current]
+                    history.insert(0, {"text": current, "timestamp": time.time()})
+                    history = history[:MAX_HISTORY_ENTRIES]
+
+                    tmp_path = f"{HISTORY_FILE}.tmp"
+                    fd = os.open(tmp_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+                    with open(fd, "w", encoding="utf-8") as f:
+                        json.dump(history, f, indent=2, ensure_ascii=False)
+                    os.replace(tmp_path, HISTORY_FILE)
+        except Exception:
+            pass
+        time.sleep(0.8)
+
+
 def main():
+    if "--daemon" in sys.argv:
+        run_daemon()
+        return
+
     root = tk.Tk(className="clip-pad")
     app = ClipPadApp(root)
     root.mainloop()

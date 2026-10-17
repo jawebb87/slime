@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# theme-toggle: Switch between Biohazard Slime (Post-Contamination) and
-#               Laboratory White (Pre-Contamination) across the entire desktop.
+# theme-toggle: Cycle across the 5-Act Desktop Narrative:
+#   Act 0   (origin) : The Specimen Origin / Deep Wood (Forest Soil & Spores)
+#   Act I   (lab)    : Pre-Contamination (Laboratory White)
+#   Act II  (slime)  : Biological Contamination (Biohazard Slime)
+#   Act III (cyber)  : Cyberpunk Future (Obsidian UV + Slime Bio-Reactor)
+#   Act IV  (space)  : Orbital Containment / Deep Space Vessel (Hull White & Solar Gold)
 # ==============================================================================
 
 set -eo pipefail
@@ -13,17 +17,37 @@ if [ -f "$MODE_FILE" ]; then
 fi
 
 case "${1:-toggle}" in
-    lab|white|pre)
+    origin|wood|forest|spore|0)
+        NEXT="origin"
+        ;;
+    lab|white|pre|1)
         NEXT="lab"
         ;;
-    slime|green|post)
+    slime|green|post|2)
         NEXT="slime"
         ;;
+    cyber|cyberpunk|future|uv|3)
+        NEXT="cyber"
+        ;;
+    space|orbit|orbital|vessel|4)
+        NEXT="space"
+        ;;
+    shred|shredder|gunmetal|blade|5)
+        NEXT="shred"
+        ;;
     *)
-        if [ "$CURRENT" = "lab" ]; then
-            NEXT="slime"
-        else
+        if [ "$CURRENT" = "origin" ]; then
             NEXT="lab"
+        elif [ "$CURRENT" = "lab" ]; then
+            NEXT="slime"
+        elif [ "$CURRENT" = "slime" ]; then
+            NEXT="cyber"
+        elif [ "$CURRENT" = "cyber" ]; then
+            NEXT="space"
+        elif [ "$CURRENT" = "space" ]; then
+            NEXT="shred"
+        else
+            NEXT="origin"
         fi
         ;;
 esac
@@ -56,25 +80,63 @@ if [ -f "$HOME/.config/btop/btop.conf" ]; then
     sed -i "s|^color_theme = .*|color_theme = \"${NEXT}\"|" "$HOME/.config/btop/btop.conf"
 fi
 
-# 6. GTK-3.0 / GTK-4.0 dark-theme preference
-DARK_PREF="1"
-[ "$NEXT" = "lab" ] && DARK_PREF="0"
+# 6. GTK-3.0 / GTK-4.0 & GSettings color-scheme and per-theme font preference
+if [ "$NEXT" = "lab" ] || [ "$NEXT" = "space" ]; then
+    DARK_PREF="0"
+    GTK_THEME="Adwaita"
+    COLOR_SCHEME="prefer-light"
+else
+    DARK_PREF="1"
+    GTK_THEME="Adwaita-dark"
+    COLOR_SCHEME="prefer-dark"
+fi
+
+THEME_FONT=""
+if [ -f "$HOME/.config/rofi/${NEXT}.rasi" ]; then
+    THEME_FONT="$(sed -n -E 's/^[[:space:]]*font:[[:space:]]*"([^"]+)";.*$/\1/p' "$HOME/.config/rofi/${NEXT}.rasi" | head -n 1)"
+fi
+
+if command -v gsettings >/dev/null 2>&1; then
+    gsettings set org.gnome.desktop.interface color-scheme "$COLOR_SCHEME" 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME" 2>/dev/null || true
+    if [ -n "$THEME_FONT" ]; then
+        gsettings set org.gnome.desktop.interface font-name "$THEME_FONT" 2>/dev/null || true
+        gsettings set org.gnome.desktop.interface monospace-font-name "$THEME_FONT" 2>/dev/null || true
+    fi
+fi
+
 for gtk_ini in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
     if [ -f "$gtk_ini" ]; then
-        sed -i "s|^gtk-application-prefer-dark-theme=.*|gtk-application-prefer-dark-theme=${DARK_PREF}|" "$gtk_ini"
+        sed -i -E "s|^gtk-application-prefer-dark-theme[[:space:]]*=.*|gtk-application-prefer-dark-theme = ${DARK_PREF}|" "$gtk_ini"
+        sed -i -E "s|^gtk-theme-name[[:space:]]*=.*|gtk-theme-name = ${GTK_THEME}|" "$gtk_ini"
+        if [ -n "$THEME_FONT" ]; then
+            sed -i -E "s|^gtk-font-name[[:space:]]*=.*|gtk-font-name = ${THEME_FONT}|" "$gtk_ini"
+        fi
     fi
 done
 
 # 7. Reset cached Python Tkinter scratchpads so they respawn with the new theme palette
-pkill -f "Projects/qtile_bench/.*\.py" 2>/dev/null || true
+pkill -f '^python3 .*/Projects/qtile_bench/.*\.py$' 2>/dev/null || true
 
 # 8. Reload AwesomeWM & display theme transition notification
-if [ "$NEXT" = "lab" ]; then
-    TITLE="Protocol: PRE-CONTAMINATION"
-    BODY="Laboratory White theme active (Super+o to toggle)"
+if [ "$NEXT" = "origin" ]; then
+    TITLE="Act 0: THE SPECIMEN ORIGIN [EXP//LOG]"
+    BODY="Deep Wood & Mycelium Spore active (Super+o to cycle)"
+elif [ "$NEXT" = "lab" ]; then
+    TITLE="Act I: PRE-CONTAMINATION [LAB//SYS]"
+    BODY="Laboratory White theme active (Super+o to cycle)"
+elif [ "$NEXT" = "slime" ]; then
+    TITLE="Act II: BIOLOGICAL CONTAMINATION [BIO//HAZARD]"
+    BODY="Biohazard Slime theme active (Super+o to cycle)"
+elif [ "$NEXT" = "cyber" ]; then
+    TITLE="Act III: CYBERPUNK FUTURE [NET//LINK]"
+    BODY="Obsidian UV + Slime Bio-Reactor active (Super+o to cycle)"
+elif [ "$NEXT" = "space" ]; then
+    TITLE="Act IV: ORBITAL CONTAINMENT [ORB//DECK]"
+    BODY="Deep Space Vessel & Cryo-Stasis active (Super+o to cycle)"
 else
-    TITLE="Alert: BIOLOGICAL CONTAMINATION"
-    BODY="Biohazard Slime theme active (Super+o to toggle)"
+    TITLE="Standalone: THE SHREDDER [SHRED//RPM]"
+    BODY="Gunmetal, Razor Angles & Rotary Ripper Teeth active (Super+o to cycle)"
 fi
 
 dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Remote.Eval \

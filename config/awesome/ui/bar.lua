@@ -8,50 +8,149 @@ local slime_shapes = require("theme.slime_shapes")
 
 local modkey = apps.modkey
 local python_bench = os.getenv("HOME") .. "/Projects/qtile_bench/"
-local is_lab = (beautiful.mode == "lab")
+local mode = beautiful.mode or "slime"
+local is_origin = (mode == "origin")
+local is_lab = (mode == "lab")
+local is_cyber = (mode == "cyber")
+local is_space = (mode == "space")
+local is_shred = (mode == "shred")
+local is_flat = (is_lab or is_cyber or is_space or is_shred)
 
 -- Mode-aware telemetry color palette
-local P = is_lab and {
-    cpu        = "#0a0c0e",
-    temp_ok    = "#0284c7",
-    temp_hot   = "#dc2626",
-    gpu        = "#0369a1",
-    sys        = "#0a0c0e",
-    net_ok     = "#0a0c0e",
-    net_off    = "#dc2626",
-    vol_ok     = "#0a0c0e",
-    vol_mute   = "#dc2626",
-    bat_ok     = "#0a0c0e",
-    bat_chg    = "#0284c7",
-    bat_warn   = "#b45309",
-    bat_crit   = "#dc2626",
-    bat_badge  = "#0284c7",
-    pill_bg1   = "#ffffff",
-    pill_bg2   = "#f8fafc",
-    pill_fg    = "#0a0c0e",
-    pill_bdr   = "#000000",
-    pill_bw    = 2,
-} or {
-    cpu        = "#d8eb34",
-    temp_ok    = "#d8eb34",
-    temp_hot   = "#ff4343",
-    gpu        = "#55ffaa",
-    sys        = "#c6f582",
-    net_ok     = "#74ff2e",
-    net_off    = "#ff4343",
-    vol_ok     = "#c6f582",
-    vol_mute   = "#ff4343",
-    bat_ok     = "#55f736",
-    bat_chg    = "#d8eb34",
-    bat_warn   = "#d8eb34",
-    bat_crit   = "#ff4343",
-    bat_badge  = "#36e385",
-    pill_bg1   = "#142417",
-    pill_bg2   = "#16281a",
-    pill_fg    = beautiful.fg_normal,
-    pill_bdr   = "#24492b",
-    pill_bw    = 1,
-}
+local P
+if is_origin then
+    P = {
+        cpu        = "#9ece6a",
+        temp_ok    = "#5a784d",
+        temp_hot   = "#d08770",
+        gpu        = "#8fbcbb",
+        sys        = "#d8dee9",
+        net_ok     = "#9ece6a",
+        net_off    = "#d08770",
+        vol_ok     = "#d8dee9",
+        vol_mute   = "#d08770",
+        bat_ok     = "#9ece6a",
+        bat_chg    = "#ebcb8b",
+        bat_warn   = "#d08770",
+        bat_crit   = "#bf616a",
+        bat_badge  = "#5a784d",
+        pill_bg1   = "#241e17",
+        pill_bg2   = "#1c1914",
+        pill_fg    = "#d8dee9",
+        pill_bdr   = "#5a784d",
+        pill_bw    = 1,
+    }
+elseif is_lab then
+    P = {
+        cpu        = "#0a0c0e",
+        temp_ok    = "#0284c7",
+        temp_hot   = "#dc2626",
+        gpu        = "#0369a1",
+        sys        = "#0a0c0e",
+        net_ok     = "#0a0c0e",
+        net_off    = "#dc2626",
+        vol_ok     = "#0a0c0e",
+        vol_mute   = "#dc2626",
+        bat_ok     = "#0a0c0e",
+        bat_chg    = "#0284c7",
+        bat_warn   = "#b45309",
+        bat_crit   = "#dc2626",
+        bat_badge  = "#0284c7",
+        pill_bg1   = "#ffffff",
+        pill_bg2   = "#f8fafc",
+        pill_fg    = "#0a0c0e",
+        pill_bdr   = "#000000",
+        pill_bw    = 2,
+    }
+elseif is_cyber then
+    P = {
+        cpu        = "#00f0ff",
+        temp_ok    = "#a855f7",
+        temp_hot   = "#ff007f",
+        gpu        = "#55f736",
+        sys        = "#e0d8f6",
+        net_ok     = "#00f0ff",
+        net_off    = "#ff007f",
+        vol_ok     = "#a855f7",
+        vol_mute   = "#ff007f",
+        bat_ok     = "#55f736",
+        bat_chg    = "#74ff2e",
+        bat_warn   = "#ff007f",
+        bat_crit   = "#ff007f",
+        bat_badge  = "#00f0ff",
+        pill_bg1   = "#161326",
+        pill_bg2   = "#120f24",
+        pill_fg    = "#e0d8f6",
+        pill_bdr   = "#a855f7",
+        pill_bw    = 1,
+    }
+elseif is_space then
+    P = {
+        cpu        = "#1b2028",
+        temp_ok    = "#0088cc",
+        temp_hot   = "#d32f2f",
+        gpu        = "#0088cc",
+        sys        = "#1b2028",
+        net_ok     = "#0088cc",
+        net_off    = "#d32f2f",
+        vol_ok     = "#1b2028",
+        vol_mute   = "#d32f2f",
+        bat_ok     = "#0d8a52",
+        bat_chg    = "#e59500",
+        bat_warn   = "#c25d00",
+        bat_crit   = "#d32f2f",
+        bat_badge  = "#0088cc",
+        pill_bg1   = "#f5f6f9",
+        pill_bg2   = "#e1e4ea",
+        pill_fg    = "#1b2028",
+        pill_bdr   = "#e59500",
+        pill_bw    = 1,
+    }
+elseif is_shred then
+    P = {
+        cpu        = "#e2e8f0",
+        temp_ok    = "#8b95a5",
+        temp_hot   = "#ff2a2a",
+        gpu        = "#ff5500",
+        sys        = "#c8d0dc",
+        net_ok     = "#e2e8f0",
+        net_off    = "#ff2a2a",
+        vol_ok     = "#c8d0dc",
+        vol_mute   = "#ff2a2a",
+        bat_ok     = "#c8d0dc",
+        bat_chg    = "#ff5500",
+        bat_warn   = "#ff5500",
+        bat_crit   = "#ff2a2a",
+        bat_badge  = "#8b95a5",
+        pill_bg1   = "#16191f",
+        pill_bg2   = "#111318",
+        pill_fg    = "#e2e8f0",
+        pill_bdr   = "#4a5260",
+        pill_bw    = 1,
+    }
+else
+    P = {
+        cpu        = "#d8eb34",
+        temp_ok    = "#d8eb34",
+        temp_hot   = "#ff4343",
+        gpu        = "#55ffaa",
+        sys        = "#c6f582",
+        net_ok     = "#74ff2e",
+        net_off    = "#ff4343",
+        vol_ok     = "#c6f582",
+        vol_mute   = "#ff4343",
+        bat_ok     = "#55f736",
+        bat_chg    = "#d8eb34",
+        bat_warn   = "#d8eb34",
+        bat_crit   = "#ff4343",
+        bat_badge  = "#36e385",
+        pill_bg1   = "#142417",
+        pill_bg2   = "#16281a",
+        pill_fg    = beautiful.fg_normal,
+        pill_bdr   = "#24492b",
+        pill_bw    = 1,
+    }
+end
 
 -- {{{ Wallpaper
 local function set_wallpaper(s)
@@ -72,7 +171,15 @@ local pill_seed = 1.1
 local function pill_container(widget, bg_color, fg_color)
     pill_seed = pill_seed + 1.37
     local shape_fn
-    if is_lab then
+    if is_origin then
+        shape_fn = slime_shapes.rocky_pill(6, pill_seed)
+    elseif is_shred then
+        shape_fn = slime_shapes.shred_pill(7, pill_seed)
+    elseif is_cyber then
+        shape_fn = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, 2)
+        end
+    elseif is_lab or is_space then
         shape_fn = function(cr, w, h)
             gears.shape.rounded_rect(cr, w, h, 4)
         end
@@ -88,7 +195,7 @@ local function pill_container(widget, bg_color, fg_color)
             bottom = 3,
             widget = wibox.container.margin,
         },
-        bg                 = is_lab and P.pill_bg1 or (bg_color or "#122015"),
+        bg                 = is_lab and P.pill_bg1 or (bg_color or P.pill_bg1),
         fg                 = fg_color or P.pill_fg,
         shape              = shape_fn,
         shape_border_width = P.pill_bw,
@@ -463,9 +570,22 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     -- Tasklist
-    local task_shape = is_lab and function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, 4)
-    end or slime_shapes.wobbly_pill(6, 4.2)
+    local task_shape
+    if is_origin then
+        task_shape = slime_shapes.rocky_pill(5, 4.2)
+    elseif is_shred then
+        task_shape = slime_shapes.shred_pill(6, 4.2)
+    elseif is_cyber then
+        task_shape = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, 2)
+        end
+    elseif is_lab or is_space then
+        task_shape = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, 4)
+        end
+    else
+        task_shape = slime_shapes.wobbly_pill(6, 4.2)
+    end
 
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
@@ -497,15 +617,36 @@ awful.screen.connect_for_each_screen(function(s)
             id                 = "background_role",
             widget             = wibox.container.background,
             shape              = task_shape,
-            shape_border_width = is_lab and 2 or 0,
-            shape_border_color = "#000000",
+            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred) and 1 or 0),
+            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or "#7928ca"))),
         },
     }
 
-    local bar_drip_height = is_lab and 0 or 22
-    local bar_height      = is_lab and 36 or 52
-    local bar_shape       = is_lab and nil or slime_shapes.dripping_bar(bar_drip_height, 3.7)
-    local bar_bgimage     = is_lab and slime_shapes.render_lab_bar_bg() or slime_shapes.render_bar_bg(bar_drip_height, 3.7)
+    local bar_drip_height = is_flat and 0 or (is_origin and 20 or 22)
+    local bar_height      = is_flat and 36 or 52
+    local bar_shape
+    if is_flat then
+        bar_shape = nil
+    elseif is_origin then
+        bar_shape = slime_shapes.rocky_bar(bar_drip_height, 4.1)
+    else
+        bar_shape = slime_shapes.dripping_bar(bar_drip_height, 3.7)
+    end
+
+    local bar_bgimage
+    if is_origin then
+        bar_bgimage = slime_shapes.render_origin_bar_bg(bar_drip_height, 4.1)
+    elseif is_shred then
+        bar_bgimage = slime_shapes.render_shred_bar_bg()
+    elseif is_cyber then
+        bar_bgimage = slime_shapes.render_cyber_bar_bg()
+    elseif is_space then
+        bar_bgimage = slime_shapes.render_space_bar_bg()
+    elseif is_lab then
+        bar_bgimage = slime_shapes.render_lab_bar_bg()
+    else
+        bar_bgimage = slime_shapes.render_bar_bg(bar_drip_height, 3.7)
+    end
 
     -- Create top wibar
     s.mywibox = awful.wibar({
@@ -518,10 +659,10 @@ awful.screen.connect_for_each_screen(function(s)
         shape    = bar_shape,
     })
 
-    s.mywibox:struts({ top = is_lab and 36 or 34, bottom = 0, left = 0, right = 0 })
+    s.mywibox:struts({ top = is_flat and 36 or 34, bottom = 0, left = 0, right = 0 })
 
     -- Add widgets to the wibar
-    s.mywibox:setup {
+    local bar_bg_widget = wibox.widget {
         {
             {
                 layout = wibox.layout.align.horizontal,
@@ -563,10 +704,78 @@ awful.screen.connect_for_each_screen(function(s)
                 },
             },
             top    = 3,
-            bottom = is_lab and 5 or (bar_drip_height + 1),
+            bottom = is_flat and 5 or (bar_drip_height + 1),
             widget = wibox.container.margin,
         },
         bgimage = bar_bgimage,
         widget  = wibox.container.background,
     }
+    s._bar_bg_widget = bar_bg_widget
+    s.mywibox:setup {
+        bar_bg_widget,
+        layout = wibox.layout.flex.horizontal,
+    }
 end)
+
+-- In Cyberpunk mode, animate the pulsing toxic-green light across the top Wibar
+-- and circling around the outside perimeter of the currently focused window.
+if is_cyber then
+    gears.timer {
+        timeout   = 0.033,
+        autostart = true,
+        callback  = function()
+            slime_shapes.cyber_pulse_time = (slime_shapes.cyber_pulse_time or 0) + 0.033
+            for s in screen do
+                if s._bar_bg_widget then
+                    s._bar_bg_widget:emit_signal("widget::redraw_needed")
+                end
+            end
+            local c = client.focus
+            if c and c.valid and c._cyber_edge_widgets then
+                for _, w in pairs(c._cyber_edge_widgets) do
+                    w:emit_signal("widget::redraw_needed")
+                end
+            end
+        end,
+    }
+elseif is_space then
+    -- In Orbital Containment (space) mode:
+    -- 1. Every 12s, sweep a high-speed angled solar glint across the Wibar and active window top lip (30 FPS during the ~2s sweep)
+    -- 2. Continuously modulate the passive cryo-breath fog on the active window's bottom border (~5 FPS when not in solar sweep)
+    local tick_count = 0
+    gears.timer {
+        timeout   = 0.033,
+        autostart = true,
+        callback  = function()
+            local prev_t = slime_shapes.space_time or 0
+            local next_t = prev_t + 0.033
+            slime_shapes.space_time = next_t
+            tick_count = tick_count + 1
+
+            local bar_cycle = next_t % 12.0
+            local prev_bar_cycle = prev_t % 12.0
+            if bar_cycle < 1.75 or (prev_bar_cycle < 1.75 and bar_cycle >= 1.75) then
+                for s in screen do
+                    if s._bar_bg_widget then
+                        s._bar_bg_widget:emit_signal("widget::redraw_needed")
+                    end
+                end
+            end
+
+            local c = client.focus
+            if c and c.valid and c._space_edge_widgets then
+                local win_cycle = (next_t - 0.35) % 12.0
+                local prev_win_cycle = (prev_t - 0.35) % 12.0
+                if win_cycle < 1.75 or (prev_win_cycle < 1.75 and win_cycle >= 1.75) then
+                    if c._space_edge_widgets["top"] then
+                        c._space_edge_widgets["top"]:emit_signal("widget::redraw_needed")
+                    end
+                end
+                if tick_count % 6 == 0 and c._space_edge_widgets["bottom"] then
+                    c._space_edge_widgets["bottom"]:emit_signal("widget::redraw_needed")
+                end
+            end
+        end,
+    }
+end
+

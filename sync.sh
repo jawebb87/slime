@@ -71,8 +71,13 @@ backup_live_to_repo() {
     mkdir -p "$SCRIPT_DIR/shell" "$SCRIPT_DIR/wallpaper"
     [ -f "$HOME/.zshrc" ] && cp -p "$HOME/.zshrc" "$SCRIPT_DIR/shell/.zshrc"
     [ -f "$HOME/.bashrc" ] && cp -p "$HOME/.bashrc" "$SCRIPT_DIR/shell/.bashrc"
+    [ -f "$HOME/.bash_aliases" ] && cp -p "$HOME/.bash_aliases" "$SCRIPT_DIR/shell/.bash_aliases"
+    [ -f "$HOME/Pictures/wallpaper/origin.jpg" ] && cp -p "$HOME/Pictures/wallpaper/origin.jpg" "$SCRIPT_DIR/wallpaper/"
     [ -f "$HOME/Pictures/wallpaper/slime.jpg" ] && cp -p "$HOME/Pictures/wallpaper/slime.jpg" "$SCRIPT_DIR/wallpaper/"
     [ -f "$HOME/Pictures/wallpaper/lab.jpg" ] && cp -p "$HOME/Pictures/wallpaper/lab.jpg" "$SCRIPT_DIR/wallpaper/"
+    [ -f "$HOME/Pictures/wallpaper/cyber.jpg" ] && cp -p "$HOME/Pictures/wallpaper/cyber.jpg" "$SCRIPT_DIR/wallpaper/"
+    [ -f "$HOME/Pictures/wallpaper/space.jpg" ] && cp -p "$HOME/Pictures/wallpaper/space.jpg" "$SCRIPT_DIR/wallpaper/"
+    [ -f "$HOME/Pictures/wallpaper/shred.jpg" ] && cp -p "$HOME/Pictures/wallpaper/shred.jpg" "$SCRIPT_DIR/wallpaper/"
     
     color green "✔ All configs refreshed into ~/Projects/slime."
     echo ""
@@ -131,8 +136,13 @@ restore_repo_to_live() {
     
     [ -f "$SCRIPT_DIR/shell/.zshrc" ] && cp -p "$SCRIPT_DIR/shell/.zshrc" "$HOME/.zshrc"
     [ -f "$SCRIPT_DIR/shell/.bashrc" ] && cp -p "$SCRIPT_DIR/shell/.bashrc" "$HOME/.bashrc"
+    [ -f "$SCRIPT_DIR/shell/.bash_aliases" ] && cp -p "$SCRIPT_DIR/shell/.bash_aliases" "$HOME/.bash_aliases"
+    [ -f "$SCRIPT_DIR/wallpaper/origin.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/origin.jpg" "$HOME/Pictures/wallpaper/"
     [ -f "$SCRIPT_DIR/wallpaper/slime.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/slime.jpg" "$HOME/Pictures/wallpaper/"
     [ -f "$SCRIPT_DIR/wallpaper/lab.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/lab.jpg" "$HOME/Pictures/wallpaper/"
+    [ -f "$SCRIPT_DIR/wallpaper/cyber.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/cyber.jpg" "$HOME/Pictures/wallpaper/"
+    [ -f "$SCRIPT_DIR/wallpaper/space.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/space.jpg" "$HOME/Pictures/wallpaper/"
+    [ -f "$SCRIPT_DIR/wallpaper/shred.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/shred.jpg" "$HOME/Pictures/wallpaper/"
     
     color green "✔ Restore complete! Live configs updated."
     color dim "Previous configs saved in: $backup_dir"

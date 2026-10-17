@@ -1,0 +1,92 @@
+# Starship Prompt Configuration - Act 0: The Specimen Origin / Deep Wood (Field Expedition Log)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'origin'
+
+format = """
+[\\[EXP//LOG\\]](bold fg:bio_spore) \
+[❯](bold fg:damp_moss) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🍄](bold fg:bio_spore)\
+$line_break\
+$character"""
+
+[palettes.origin]
+deep_soil       = "#141712"
+bark_timber     = "#241e17"
+bio_spore       = "#9ece6a"
+damp_moss       = "#5a784d"
+weathered_amber = "#d08770"
+spore_white     = "#d8dee9"
+rust_berry      = "#bf616a"
+
+[username]
+show_always = true
+style_user = "bold fg:spore_white"
+style_root = "bold fg:weathered_amber"
+format = '[$user]($style)[:](bold fg:damp_moss)'
+
+[directory]
+style = "bold fg:damp_moss"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:bio_spore"
+format = ' [\(git:](fg:damp_moss)[$branch]($style)[\)](fg:damp_moss)'
+
+[git_status]
+style = "bold fg:weathered_amber"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "fg:bio_spore"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:weathered_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:damp_moss"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:bio_spore"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:damp_moss"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:weathered_amber"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:weathered_amber"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:bio_spore)[❯](bold fg:damp_moss) "
+error_symbol = "[❯](bold fg:weathered_amber)[❯](bold fg:weathered_amber) "

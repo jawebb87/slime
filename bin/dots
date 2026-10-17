@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# dots: Global CLI wrapper for my_debian dotfiles & GNU Stow manager
+# dots: Global CLI wrapper for Slime Desktop dotfiles & sync manager
 # ==============================================================================
-exec /home/jaws/Projects/my_debian/manage.sh "$@"
+case "${1:-}" in
+    status|sync|backup)
+        shift
+        exec "$HOME/Projects/slime/sync.sh" --backup "$@"
+        ;;
+    diff)
+        shift
+        exec "$HOME/Projects/slime/sync.sh" --diff "$@"
+        ;;
+    restore|stow)
+        shift
+        exec "$HOME/Projects/slime/sync.sh" --restore "$@"
+        ;;
+    commit)
+        shift
+        exec "$HOME/Projects/slime/sync.sh" --commit "$@"
+        ;;
+    push)
+        shift
+        "$HOME/Projects/slime/sync.sh" --backup
+        if [ -n "${*:-}" ]; then
+            "$HOME/Projects/slime/sync.sh" --commit "$*"
+        fi
+        exec git -C "$HOME/Projects/slime" push
+        ;;
+    *)
+        exec "$HOME/Projects/slime/sync.sh" "$@"
+        ;;
+esac

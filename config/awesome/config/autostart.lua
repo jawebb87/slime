@@ -22,3 +22,6 @@ run_once({
 -- Run Downloads organizer once per session startup
 awful.spawn.with_shell("~/.local/bin/sorted --once")
 
+-- Ensure background clipboard history daemon is running
+awful.spawn.with_shell("pgrep -u $USER -f '^python3 .*/clip_pad\\.py --daemon' > /dev/null || python3 ~/Projects/qtile_bench/clip_pad.py --daemon")
+

@@ -448,7 +448,7 @@ class NetworkCard:
         self.lbl_badge = tk.Label(
             top_row,
             text=f" {badge_text} ",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=badge_color,
             bg=THEME["key_bg"],
             padx=6,
@@ -459,7 +459,7 @@ class NetworkCard:
         # SSID Label
         is_hidden = self.net.ssid == "<Hidden Network>"
         ssid_fg = THEME["fg_dim"] if is_hidden else THEME["fg_header"]
-        ssid_font = ("MartianMono Nerd Font", 11, "italic" if is_hidden else "bold")
+        ssid_font = ("OpenDyslexic Nerd Font", 11, "italic" if is_hidden else "bold")
 
         self.lbl_ssid = tk.Label(
             top_row,
@@ -485,7 +485,7 @@ class NetworkCard:
         self.lbl_signal = tk.Label(
             top_row,
             text=sig_text,
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=sig_color,
             bg=THEME["key_bg"],
             padx=8,
@@ -503,7 +503,7 @@ class NetworkCard:
         self.lbl_bssid = tk.Label(
             bot_row,
             text=f"BSSID: {self.net.bssid}",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
         )
@@ -514,7 +514,7 @@ class NetworkCard:
         self.lbl_channel = tk.Label(
             bot_row,
             text=ch_str,
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_blue"],
             bg=THEME["bg_card"],
             padx=12,
@@ -527,7 +527,7 @@ class NetworkCard:
         self.lbl_action = tk.Label(
             bot_row,
             text=action_text,
-            font=("MartianMono Nerd Font", 9, "bold" if self.net.is_connected else "normal"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold" if self.net.is_connected else "normal"),
             fg=action_fg,
             bg=THEME["bg_card"],
         )
@@ -598,7 +598,7 @@ class PassphraseModal:
         lbl_title = tk.Label(
             container,
             text=f"Connect to {net.ssid}",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -609,7 +609,7 @@ class PassphraseModal:
         lbl_info = tk.Label(
             container,
             text=info_str,
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_card"],
         )
@@ -628,7 +628,7 @@ class PassphraseModal:
         self.show_password = False
         self.entry_pass = tk.Entry(
             input_frame,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -641,7 +641,7 @@ class PassphraseModal:
         self.btn_toggle = tk.Button(
             input_frame,
             text="Show",
-            font=("MartianMono Nerd Font", 8),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 8),
             fg=THEME["key_fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -661,7 +661,7 @@ class PassphraseModal:
         btn_cancel = tk.Button(
             btn_row,
             text="Cancel [Esc]",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
             activebackground=THEME["bg_hover"],
@@ -677,7 +677,7 @@ class PassphraseModal:
         btn_connect = tk.Button(
             btn_row,
             text="Connect [Enter]",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_bg"],
             bg=THEME["status_running"],
             activebackground=THEME["accent_green"],
@@ -771,7 +771,7 @@ class WifiPadApp:
         lbl_title = tk.Label(
             title_box,
             text="WI-FI NETWORKS",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -780,7 +780,7 @@ class WifiPadApp:
         lbl_iface = tk.Label(
             title_box,
             text=f" [{self.wifi.iface}] ",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["accent_aqua"],
             bg=THEME["key_bg"],
             padx=4,
@@ -801,7 +801,7 @@ class WifiPadApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="Filter (/):",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_surface"],
         )
@@ -813,7 +813,7 @@ class WifiPadApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -826,7 +826,7 @@ class WifiPadApp:
         self.lbl_counts = tk.Label(
             header_bar,
             text="Scanning...",
-            font=("MartianMono Nerd Font", 10, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
             fg=THEME["fg"],
             bg=THEME["bg_card"],
             padx=12,
@@ -913,7 +913,7 @@ class WifiPadApp:
             k_lbl = tk.Label(
                 box,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=5,
@@ -924,7 +924,7 @@ class WifiPadApp:
             a_lbl = tk.Label(
                 box,
                 text=action,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
             )
@@ -934,7 +934,7 @@ class WifiPadApp:
         self.lbl_toast = tk.Label(
             footer,
             text="Ready",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["accent_aqua"],
             bg=THEME["bg_card"],
             padx=10,
@@ -1002,7 +1002,7 @@ class WifiPadApp:
             lbl_empty = tk.Label(
                 empty_frame,
                 text=msg,
-                font=("MartianMono Nerd Font", 12),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 12),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg"],
             )
@@ -1010,7 +1010,7 @@ class WifiPadApp:
             lbl_hint = tk.Label(
                 empty_frame,
                 text="Press 'r' to trigger an active RF rescan",
-                font=("MartianMono Nerd Font", 9),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 9),
                 fg=THEME["key_fg"],
                 bg=THEME["bg"],
                 pady=8,

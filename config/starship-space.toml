@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Act IV: Orbital Containment / Deep Space Vessel (Flight Deck Transponder)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'space'
+
+format = """
+[\\[ORB//DECK\\]](bold fg:solar_gold) \
+[❯](bold fg:thruster_cyan) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🛰️](bold fg:thruster_cyan)\
+$line_break\
+$character"""
+
+[palettes.space]
+hull_white    = "#f5f6f9"
+airframe_grey = "#e1e4ea"
+nav_slate     = "#1b2028"
+solar_gold    = "#e59500"
+thruster_cyan = "#0088cc"
+seal_amber    = "#c25d00"
+airlock_red   = "#d32f2f"
+cabin_muted   = "#5a6578"
+
+[username]
+show_always = true
+style_user = "bold fg:nav_slate"
+style_root = "bold fg:airlock_red"
+format = '[$user]($style)[:](bold fg:cabin_muted)'
+
+[directory]
+style = "bold fg:thruster_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:solar_gold"
+format = ' [\(git:](fg:cabin_muted)[$branch]($style)[\)](fg:cabin_muted)'
+
+[git_status]
+style = "bold fg:seal_amber"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "fg:thruster_cyan"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:seal_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:thruster_cyan"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:solar_gold"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:thruster_cyan"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:seal_amber"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:airlock_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:solar_gold)[❯](bold fg:thruster_cyan) "
+error_symbol = "[❯](bold fg:airlock_red)[❯](bold fg:airlock_red) "

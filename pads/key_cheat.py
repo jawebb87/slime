@@ -39,7 +39,7 @@ except Exception:
     }
 
 # ==============================================================================
-# Qtile Keybindings Dataset
+# AwesomeWM Keybindings Dataset
 # ==============================================================================
 KEYBINDINGS_DATA = [
     {
@@ -47,65 +47,75 @@ KEYBINDINGS_DATA = [
         "icon": "\uf135",  # fa-rocket
         "color": THEME["accent_yellow"],
         "items": [
-            ("Super + Return", "Kitty Terminal (raise existing or launch fresh)", "Launcher"),
             ("F12", "Toggle Quake Dropdown Terminal (term-scratch)", "Scratchpad"),
             ("Super + a", "Toggle Audio Mixer Dropdown (audio-pad / PipeWire wpctl)", "Scratchpad"),
-            ("Super + c", "Toggle IPython Calculator (calc-pad)", "Scratchpad"),
-            ("Super + d", "Toggle Docker Services Manager (docker-pad)", "Scratchpad"),
-            ("Super + e", "Toggle Columns layout split H/V or switch to Columns", "Layout"),
-            ("Super + f", "Toggle FZF Fast File Search dropdown (fzf-pad)", "Scratchpad"),
+            ("Super + Shift + d", "Toggle Docker Services Dashboard (docker-pad)", "Scratchpad"),
+            ("Super + Shift + f", "Toggle Desktop Font Selector & Config Populator (font-pad)", "Scratchpad"),
             ("Super + g", "Toggle Antigravity Autonomous Assistant (agy-pad)", "Scratchpad"),
             ("Super + i", "Toggle Wi-Fi Network Selector dropdown (wifi-pad)", "Scratchpad"),
             ("Super + m", "Toggle Emoji Picker dropdown with clipboard copy (emoji-pad)", "Scratchpad"),
             ("Super + n", "Toggle System Log Viewer & Searcher (log-pad)", "Scratchpad"),
-            ("Super + r", "Toggle Ranger File Manager dropdown (ranger-pad)", "Scratchpad"),
-            ("Super + s", "Toggle Quick Notes in Vim (notes-pad / ~/notes/)", "Scratchpad"),
-            ("Super + t", "Toggle btop System & Process Monitor (btop)", "Scratchpad"),
+            ("Super + s", "Toggle Quick Notes in Neovim (notes-pad / ~/notes/)", "Scratchpad"),
+            ("Super + t", "Toggle btop System & Process Monitor (btop-float)", "Scratchpad"),
             ("Super + v", "Toggle Vim Reference Cheatsheet dropdown (vim-cheat)", "Scratchpad"),
-            ("Super + w", "Toggle Denver Weather Forecast dropdown (weather-pad)", "Scratchpad"),
+            ("Super + w", "Toggle Weather Forecast dropdown (weather-pad)", "Scratchpad"),
             ("Super + x", "Toggle Clipboard History Manager (clip-pad)", "Scratchpad"),
+            ("Super + y", "Toggle Limusic YouTube Music desktop player (limusic-app)", "Scratchpad"),
             ("Super + z", "Toggle Zodiac Google Calendar & Agenda (zodiac-pad)", "Scratchpad"),
-            ("Super + F1", "Toggle this Qtile Keybindings Cheatsheet (key-cheat)", "Scratchpad"),
+            ("Super + /", "Toggle FZF Fast File Finder dropdown (fzf-pad)", "Scratchpad"),
+            ("Super + F1", "Toggle this Keybindings Cheatsheet (key-cheat)", "Scratchpad"),
         ],
     },
     {
-        "category": "Window Management & Navigation",
+        "category": "Window Management & Layout Controls",
         "icon": "\uf2d0",  # fa-window-maximize
         "color": THEME["accent_blue"],
         "items": [
-            ("Super + j / Alt + Tab", "Focus next window in current layout", "Focus"),
-            ("Super + k / Alt + Shift + Tab", "Focus previous window in current layout", "Focus"),
-            ("Super + Tab", "Toggle layout between Columns and Monocle (Full)", "Layout"),
-            ("Super + e", "Columns Split Toggle: Multi-column (H) ⟷ Stacked column (V)", "Layout"),
-            ("Super + q / Alt + F4", "Close / kill currently focused window", "Kill"),
-            ("Super + Shift + f / Alt + F11", "Toggle fullscreen mode for active window", "Window"),
-            ("Alt + Space", "Toggle floating mode for active window", "Window"),
+            ("Super + j / Super + k", "Focus next / previous window in current layout", "Focus"),
+            ("Super + Shift + j / k", "Swap focused window with next / previous window", "Swap"),
+            ("Super + Ctrl + j / k", "Focus next / previous screen", "Screen"),
+            ("Super + h / Super + l", "Decrease / increase master width factor", "Layout"),
+            ("Super + Shift + h / l", "Increase / decrease number of master windows", "Layout"),
+            ("Super + Ctrl + h / l", "Increase / decrease number of layout columns", "Layout"),
+            ("Super + Space / Shift + Space", "Cycle to next / previous tiling layout", "Layout"),
+            ("Super + Tab", "Focus previously active window in history", "Focus"),
+            ("Super + u", "Jump directly to urgent client", "Focus"),
+            ("Super + Ctrl + Return", "Move focused window to master area", "Master"),
+            ("Super + f", "Toggle fullscreen mode for active window", "Window"),
+            ("Super + Ctrl + Space", "Toggle floating mode for active window", "Window"),
+            ("Super + Shift + t", "Toggle keep window on top", "Window"),
+            ("Super + Shift + n / Ctrl + n", "Minimize active window / Restore minimized window", "Window"),
+            ("Super + Shift + o", "Move focused window to next screen", "Screen"),
+            ("Super + q / Super + Shift + c / Alt + F4", "Close / kill currently focused window", "Kill"),
         ],
     },
     {
-        "category": "Virtual Workspaces & Groups (1 - 9)",
+        "category": "Virtual Workspaces & Tags (1 - 9)",
         "icon": "\uf02c",  # fa-tags
         "color": THEME["accent_aqua"],
         "items": [
-            ("Super + [1-9]", "Switch active screen view to workspace 1 through 9", "Workspace"),
-            ("Super + Shift + [1-9]", "Move active window to workspace [1-9] and follow it", "Move"),
-            ("Ctrl + F[1-9]", "Alternate shortcut to switch directly to workspace [1-9]", "Workspace"),
-            ("Super + Left", "Switch to previous active virtual workspace", "Pager"),
-            ("Super + Right", "Switch to next active virtual workspace", "Pager"),
+            ("Super + [1-9]", "Switch active screen view to tag 1 through 9", "Workspace"),
+            ("Super + Ctrl + [1-9]", "Toggle multi-tag display for tag [1-9]", "Multi-Tag"),
+            ("Super + Shift + [1-9]", "Move focused window to tag [1-9]", "Move"),
+            ("Super + Ctrl + Shift + [1-9]", "Toggle focused window on tag [1-9]", "Pin Tag"),
+            ("Super + Left / Right", "Switch to previous / next workspace tag", "Pager"),
+            ("Super + Escape", "Restore previously viewed tag history", "History"),
         ],
     },
     {
-        "category": "Standalone Launchers & System Prompts",
+        "category": "Launchers, Prompts & System Shortcuts",
         "icon": "\uf0e7",  # fa-bolt
         "color": THEME["accent_purple"],
         "items": [
-            ("Super + Space", "Open Rofi application launcher (rofi -show drun)", "Launcher"),
-            ("Super + b", "Raise or run Firefox web browser", "Launcher"),
-            ("Super + y", "Raise or run Limusic YouTube Music desktop player", "Launcher"),
-            ("Super + Shift + Space", "Open Qtile interactive command prompt in top bar", "Bar Prompt"),
-            ("Alt + F2", "Alternate shortcut to open Qtile command prompt in bar", "Bar Prompt"),
-            ("Super + l", "Lock screen immediately (slock)", "Security"),
-            ("Ctrl + Alt + Escape", "Interactive cursor window killer (xkill)", "Utility"),
+            ("Super + Return", "Launch Kitty Terminal", "Launcher"),
+            ("Super + d", "Open Rofi application launcher (rofi -show drun)", "Launcher"),
+            ("Super + b", "Launch Firefox web browser", "Launcher"),
+            ("Super + p", "Show AwesomeWM application menubar", "Menubar"),
+            ("Super + r", "Open interactive run prompt in top bar", "Bar Prompt"),
+            ("Super + Shift + x", "Open interactive Lua evaluation prompt", "Lua Eval"),
+            ("Super + Shift + w", "Show AwesomeWM desktop main menu", "Menu"),
+            ("Super + Shift + s", "Show native AwesomeWM hotkeys popup", "Help"),
+            ("Ctrl + Alt + l", "Lock screen immediately (slock)", "Security"),
         ],
     },
     {
@@ -114,12 +124,12 @@ KEYBINDINGS_DATA = [
         "color": THEME["accent_green"],
         "items": [
             ("Print", "Screenshot entire screen (saved to Pictures + copied to clipboard)", "Screenshot"),
-            ("Alt + Print", "Screenshot active focused window (saved to Pictures + clipboard)", "Screenshot"),
+            ("Super + Print", "Screenshot active focused window (saved to Pictures + clipboard)", "Screenshot"),
             ("Shift + Print", "Interactively select rectangular region to capture", "Screenshot"),
         ],
     },
     {
-        "category": "Hardware & Audio Controls (PipeWire)",
+        "category": "Hardware Audio & Brightness Controls",
         "icon": "\uf028",  # fa-volume-up
         "color": THEME["key_fg"],
         "items": [
@@ -127,18 +137,17 @@ KEYBINDINGS_DATA = [
             ("XF86AudioLowerVolume", "Lower audio volume by -5% (PipeWire wpctl)", "Volume"),
             ("XF86AudioMute", "Toggle audio output mute on/off", "Audio"),
             ("XF86AudioMicMute", "Toggle microphone input mute on/off", "Audio"),
-            ("XF86WWW / HomePage", "Hardware web browser key (launches Firefox)", "Web"),
+            ("XF86MonBrightnessUp / Down", "Increase / decrease display brightness by 10%", "Brightness"),
         ],
     },
     {
-        "category": "Qtile Lifecycle & Session Controls",
+        "category": "AwesomeWM Lifecycle & Theme Controls",
         "icon": "\uf013",  # fa-cogs
         "color": THEME["accent_red"],
         "items": [
-            ("Super + o", "Toggle Gruvbox Dark / Light desktop theme opposite", "Theme"),
-            ("Super + Ctrl + r", "Hot-reload Qtile configuration in-place without closing apps", "Reload"),
-            ("Super + Ctrl + q", "Gracefully shut down and exit Qtile window manager", "Exit"),
-            ("Ctrl + Alt + Delete", "Alternate shortcut to exit Qtile session", "Exit"),
+            ("Super + o", "Cycle 5-Act Desktop Narrative (Origin ➔ Lab ➔ Slime ➔ Cyber ➔ Orbital Space)", "Theme"),
+            ("Super + Ctrl + r", "Hot-reload AwesomeWM configuration in-place", "Reload"),
+            ("Super + Shift + q", "Quit and exit AwesomeWM session", "Exit"),
         ],
     },
 ]
@@ -172,7 +181,7 @@ class AccordionSection:
         self.lbl_arrow = tk.Label(
             self.header,
             text="▼",
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
             width=2,
@@ -184,7 +193,7 @@ class AccordionSection:
         self.lbl_icon = tk.Label(
             self.header,
             text=data.get("icon", "\uf11c"),
-            font=("MartianMono Nerd Font", 12),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12),
             fg=data.get("color", THEME["accent_blue"]),
             bg=THEME["bg_card"],
             width=2,
@@ -196,7 +205,7 @@ class AccordionSection:
         self.lbl_title = tk.Label(
             self.header,
             text=data["category"],
-            font=("MartianMono Nerd Font", 11, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"),
             fg=data.get("color", THEME["accent_blue"]),
             bg=THEME["bg_card"],
             anchor="w",
@@ -207,7 +216,7 @@ class AccordionSection:
         self.lbl_count = tk.Label(
             self.header,
             text=f"{len(data['items'])} keys",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg_dim"],
             bg=THEME["bg_hover"],
             padx=8,
@@ -273,7 +282,7 @@ class AccordionSection:
             pill = tk.Label(
                 row,
                 text=f" {keys} ",
-                font=("MartianMono Nerd Font", 10, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=8,
@@ -287,7 +296,7 @@ class AccordionSection:
             desc_lbl = tk.Label(
                 row,
                 text=desc,
-                font=("MartianMono Nerd Font", 10),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 10),
                 fg=THEME["fg"],
                 bg=row_bg,
                 anchor="w",
@@ -299,7 +308,7 @@ class AccordionSection:
             tag_lbl = tk.Label(
                 row,
                 text=tag,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=row_bg,
                 padx=8,
@@ -335,7 +344,7 @@ class KeyCheatApp:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Qtile Keybindings Cheatsheet")
+        self.root.title("AwesomeWM Keybindings Cheatsheet")
 
         try:
             self.root.wm_attributes("-type", "dialog")
@@ -373,7 +382,7 @@ class KeyCheatApp:
         lbl_logo = tk.Label(
             title_box,
             text="\uf11c",  # FontAwesome keyboard icon
-            font=("MartianMono Nerd Font", 15),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 15),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
         )
@@ -381,8 +390,8 @@ class KeyCheatApp:
 
         lbl_title = tk.Label(
             title_box,
-            text="QTILE KEYBINDINGS",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            text="AWESOMEWM KEYBINDINGS",
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -401,7 +410,7 @@ class KeyCheatApp:
         lbl_search_icon = tk.Label(
             search_frame,
             text="\uf002",  # fa-search
-            font=("MartianMono Nerd Font", 10),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 10),
             fg=THEME["fg_dim"],
             bg=THEME["bg_surface"],
         )
@@ -413,7 +422,7 @@ class KeyCheatApp:
         self.search_entry = tk.Entry(
             search_frame,
             textvariable=self.search_var,
-            font=("MartianMono Nerd Font", 11),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 11),
             fg=THEME["fg"],
             bg=THEME["bg_surface"],
             insertbackground=THEME["key_fg"],
@@ -429,7 +438,7 @@ class KeyCheatApp:
         self.btn_expand_all = tk.Button(
             btn_box,
             text="▼ Expand All",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["bg_active"],
@@ -445,7 +454,7 @@ class KeyCheatApp:
         self.btn_collapse_all = tk.Button(
             btn_box,
             text="▶ Collapse All",
-            font=("MartianMono Nerd Font", 9),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9),
             fg=THEME["fg"],
             bg=THEME["bg_hover"],
             activebackground=THEME["bg_active"],
@@ -529,7 +538,7 @@ class KeyCheatApp:
             lbl_k = tk.Label(
                 pill,
                 text=key,
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=6,
@@ -540,7 +549,7 @@ class KeyCheatApp:
             lbl_d = tk.Label(
                 pill,
                 text=desc,
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_card"],
                 padx=4,
@@ -552,7 +561,7 @@ class KeyCheatApp:
         self.lbl_status = tk.Label(
             footer,
             text=f"Total: {total_keys} Shortcuts",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["bg_card"],
             padx=12,

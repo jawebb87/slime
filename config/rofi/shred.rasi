@@ -1,0 +1,92 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Standalone: The Shredder (Gunmetal & Razor Angles)
+ * ============================================================================ */
+
+* {
+    bg:          #0b0c0ef4;
+    bg-alt:      #14171c;
+    bg-selected: #222730;
+    fg:          #e2e8f0;
+    fg-muted:    #6e7785;
+    accent:      #c8d0dc;
+    spark:       #ff2a2a;
+    amber:       #ff5500;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    0px;
+    padding:          14px;
+}
+
+mainbox {
+    spacing:  10px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @spark;
+    border-radius:    0px;
+    padding:          10px 12px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @spark;
+}
+
+entry {
+    placeholder:       "SHRED // TARGET...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    lines:      8;
+    columns:    1;
+    fixed-height: false;
+    spacing:    4px;
+    scrollbar:  false;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 0px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element alternate.normal {
+    background-color: #101217;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       #ffffff;
+    border:           0px 0px 0px 3px;
+    border-color:     @spark;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color:     inherit;
+}

@@ -213,7 +213,7 @@ class AudioPadApp:
         lbl_logo = tk.Label(
             title_box,
             text="🔊",
-            font=("MartianMono Nerd Font", 14),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 14),
             fg=THEME["accent_blue"],
             bg=THEME["bg_card"],
         )
@@ -222,7 +222,7 @@ class AudioPadApp:
         lbl_title = tk.Label(
             title_box,
             text="PIPEWIRE AUDIO CONTROLLER",
-            font=("MartianMono Nerd Font", 12, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 12, "bold"),
             fg=THEME["fg_header"],
             bg=THEME["bg_card"],
         )
@@ -231,7 +231,7 @@ class AudioPadApp:
         btn_refresh = tk.Button(
             header_bar,
             text="⟳ Refresh",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["key_fg"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -286,7 +286,7 @@ class AudioPadApp:
             lbl_k = tk.Label(
                 box,
                 text=f" {key} ",
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["key_fg"],
                 bg=THEME["key_bg"],
                 padx=4,
@@ -297,7 +297,7 @@ class AudioPadApp:
             lbl_d = tk.Label(
                 box,
                 text=f" {desc}",
-                font=("MartianMono Nerd Font", 8),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                 fg=THEME["fg_dim"],
                 bg=THEME["bg_surface"],
             )
@@ -375,13 +375,13 @@ class AudioPadApp:
         status_text = "MUTED" if is_muted else "ACTIVE"
         status_color = THEME["status_stopped"] if is_muted else THEME["status_running"]
 
-        lbl_badge = tk.Label(row_top, text=f" {status_text} ", font=("MartianMono Nerd Font", 9, "bold"), fg=status_color, bg=THEME["key_bg"], padx=6, pady=2)
+        lbl_badge = tk.Label(row_top, text=f" {status_text} ", font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"), fg=status_color, bg=THEME["key_bg"], padx=6, pady=2)
         lbl_badge.pack(side="left")
 
-        lbl_name = tk.Label(row_top, text=f" Master Output: {name}", font=("MartianMono Nerd Font", 11, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
+        lbl_name = tk.Label(row_top, text=f" Master Output: {name}", font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
         lbl_name.pack(side="left", padx=8)
 
-        lbl_val = tk.Label(row_top, text=f"{vol_pct}%", font=("MartianMono Nerd Font", 11, "bold"), fg=THEME["accent_blue"], bg=THEME["bg_card"])
+        lbl_val = tk.Label(row_top, text=f"{vol_pct}%", font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"), fg=THEME["accent_blue"], bg=THEME["bg_card"])
         lbl_val.pack(side="right")
 
         # Controls row
@@ -415,7 +415,7 @@ class AudioPadApp:
         btn_mute = tk.Button(
             row_ctrl,
             text="Unmute" if is_muted else "Mute (m)",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["status_running"] if is_muted else THEME["status_stopped"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -445,13 +445,13 @@ class AudioPadApp:
         status_text = "MUTED" if is_muted else "ACTIVE"
         status_color = THEME["status_stopped"] if is_muted else THEME["status_running"]
 
-        lbl_badge = tk.Label(row_top, text=f" {status_text} ", font=("MartianMono Nerd Font", 9, "bold"), fg=status_color, bg=THEME["key_bg"], padx=6, pady=2)
+        lbl_badge = tk.Label(row_top, text=f" {status_text} ", font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"), fg=status_color, bg=THEME["key_bg"], padx=6, pady=2)
         lbl_badge.pack(side="left")
 
-        lbl_name = tk.Label(row_top, text=f" Microphone: {name}", font=("MartianMono Nerd Font", 11, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
+        lbl_name = tk.Label(row_top, text=f" Microphone: {name}", font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
         lbl_name.pack(side="left", padx=8)
 
-        lbl_val = tk.Label(row_top, text=f"{vol_pct}%", font=("MartianMono Nerd Font", 11, "bold"), fg=THEME["accent_aqua"], bg=THEME["bg_card"])
+        lbl_val = tk.Label(row_top, text=f"{vol_pct}%", font=(THEME.get("font", "MartianMono Nerd Font"), 11, "bold"), fg=THEME["accent_aqua"], bg=THEME["bg_card"])
         lbl_val.pack(side="right")
 
         row_ctrl = tk.Frame(inner, bg=THEME["bg_card"])
@@ -484,7 +484,7 @@ class AudioPadApp:
         btn_mute = tk.Button(
             row_ctrl,
             text="Unmute" if is_muted else "Mute (M)",
-            font=("MartianMono Nerd Font", 9, "bold"),
+            font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold"),
             fg=THEME["status_running"] if is_muted else THEME["status_stopped"],
             bg=THEME["key_bg"],
             activebackground=THEME["bg_hover"],
@@ -500,13 +500,13 @@ class AudioPadApp:
         sec_box = tk.Frame(self.scroll_frame, bg=THEME["bg"])
         sec_box.pack(fill="x", padx=8, pady=(12, 2))
 
-        lbl_sec = tk.Label(sec_box, text="ACTIVE APPLICATION STREAMS", font=("MartianMono Nerd Font", 10, "bold"), fg=THEME["key_fg"], bg=THEME["bg"])
+        lbl_sec = tk.Label(sec_box, text="ACTIVE APPLICATION STREAMS", font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"), fg=THEME["key_fg"], bg=THEME["bg"])
         lbl_sec.pack(side="left")
 
         if not self.streams:
             empty_card = tk.Frame(self.scroll_frame, bg=THEME["bg_card"], bd=0, highlightthickness=1, highlightbackground=THEME["border"])
             empty_card.pack(fill="x", padx=8, pady=4)
-            lbl_empty = tk.Label(empty_card, text="No application playback streams currently active.", font=("MartianMono Nerd Font", 9, "italic"), fg=THEME["fg_dim"], bg=THEME["bg_card"], pady=12)
+            lbl_empty = tk.Label(empty_card, text="No application playback streams currently active.", font=(THEME.get("font", "MartianMono Nerd Font"), 9, "italic"), fg=THEME["fg_dim"], bg=THEME["bg_card"], pady=12)
             lbl_empty.pack()
             return
 
@@ -525,13 +525,13 @@ class AudioPadApp:
             row_top = tk.Frame(inner, bg=THEME["bg_card"])
             row_top.pack(fill="x")
 
-            lbl_icon = tk.Label(row_top, text="▶", font=("MartianMono Nerd Font", 9), fg=THEME["accent_purple"], bg=THEME["bg_card"])
+            lbl_icon = tk.Label(row_top, text="▶", font=(THEME.get("font", "MartianMono Nerd Font"), 9), fg=THEME["accent_purple"], bg=THEME["bg_card"])
             lbl_icon.pack(side="left", padx=(0, 6))
 
-            lbl_st_name = tk.Label(row_top, text=f"{name} (Node #{nid})", font=("MartianMono Nerd Font", 10, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
+            lbl_st_name = tk.Label(row_top, text=f"{name} (Node #{nid})", font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"), fg=THEME["fg_header"], bg=THEME["bg_card"])
             lbl_st_name.pack(side="left")
 
-            lbl_st_val = tk.Label(row_top, text=f"{vol_pct}%", font=("MartianMono Nerd Font", 10, "bold"), fg=THEME["accent_purple"], bg=THEME["bg_card"])
+            lbl_st_val = tk.Label(row_top, text=f"{vol_pct}%", font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"), fg=THEME["accent_purple"], bg=THEME["bg_card"])
             lbl_st_val.pack(side="right")
 
             row_ctrl = tk.Frame(inner, bg=THEME["bg_card"])
@@ -572,7 +572,7 @@ class AudioPadApp:
             btn_mute = tk.Button(
                 row_ctrl,
                 text="Unmute" if is_muted else "Mute",
-                font=("MartianMono Nerd Font", 8, "bold"),
+                font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"),
                 fg=THEME["status_running"] if is_muted else THEME["status_stopped"],
                 bg=THEME["key_bg"],
                 activebackground=THEME["bg_hover"],
@@ -588,7 +588,7 @@ class AudioPadApp:
         sec_box = tk.Frame(self.scroll_frame, bg=THEME["bg"])
         sec_box.pack(fill="x", padx=8, pady=(12, 2))
 
-        lbl_sec = tk.Label(sec_box, text="AVAILABLE OUTPUT DEVICES", font=("MartianMono Nerd Font", 10, "bold"), fg=THEME["key_fg"], bg=THEME["bg"])
+        lbl_sec = tk.Label(sec_box, text="AVAILABLE OUTPUT DEVICES", font=(THEME.get("font", "MartianMono Nerd Font"), 10, "bold"), fg=THEME["key_fg"], bg=THEME["bg"])
         lbl_sec.pack(side="left")
 
         for s in self.sinks:
@@ -605,10 +605,10 @@ class AudioPadApp:
             star = "★ " if is_def else "☆ "
             star_color = THEME["key_fg"] if is_def else THEME["fg_dim"]
 
-            lbl_star = tk.Label(inner, text=star, font=("MartianMono Nerd Font", 11), fg=star_color, bg=THEME["bg_card"])
+            lbl_star = tk.Label(inner, text=star, font=(THEME.get("font", "MartianMono Nerd Font"), 11), fg=star_color, bg=THEME["bg_card"])
             lbl_star.pack(side="left")
 
-            lbl_name = tk.Label(inner, text=f"{name} (Node #{nid})", font=("MartianMono Nerd Font", 9, "bold" if is_def else "normal"), fg=THEME["fg_header"] if is_def else THEME["fg"], bg=THEME["bg_card"])
+            lbl_name = tk.Label(inner, text=f"{name} (Node #{nid})", font=(THEME.get("font", "MartianMono Nerd Font"), 9, "bold" if is_def else "normal"), fg=THEME["fg_header"] if is_def else THEME["fg"], bg=THEME["bg_card"])
             lbl_name.pack(side="left")
 
             if not is_def:
@@ -621,7 +621,7 @@ class AudioPadApp:
                 btn_set = tk.Button(
                     inner,
                     text="Set Default",
-                    font=("MartianMono Nerd Font", 8),
+                    font=(THEME.get("font", "MartianMono Nerd Font"), 8),
                     fg=THEME["key_fg"],
                     bg=THEME["key_bg"],
                     activebackground=THEME["bg_hover"],
@@ -633,7 +633,7 @@ class AudioPadApp:
                 )
                 btn_set.pack(side="right")
             else:
-                lbl_curr = tk.Label(inner, text="DEFAULT SINK", font=("MartianMono Nerd Font", 8, "bold"), fg=THEME["status_running"], bg=THEME["key_bg"], padx=6, pady=2)
+                lbl_curr = tk.Label(inner, text="DEFAULT SINK", font=(THEME.get("font", "MartianMono Nerd Font"), 8, "bold"), fg=THEME["status_running"], bg=THEME["key_bg"], padx=6, pady=2)
                 lbl_curr.pack(side="right")
 
 

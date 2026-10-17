@@ -1,0 +1,104 @@
+# ==============================================================================
+# Starship Prompt Configuration - Standalone: The Shredder (Gunmetal & Angles)
+# Prompt Vibe:
+# [SHRED//RPM] ❯ jaws:~ (git:main) ⚔
+# ❯❯ 
+# ==============================================================================
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'shred'
+
+format = """
+[\\[SHRED//RPM\\]](bold fg:honed_steel) \
+[❯](bold fg:spark_red) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$cmd_duration\
+$status\
+[ ⚔](bold fg:spark_red)\
+$line_break\
+$character"""
+
+[palettes.shred]
+abyssal_bg   = "#0b0c0e"
+gunmetal     = "#14171c"
+surface_card = "#1c2026"
+tungsten     = "#4a5260"
+titanium     = "#8b95a5"
+honed_steel  = "#e2e8f0"
+specular     = "#ffffff"
+spark_red    = "#ff2a2a"
+spark_orange = "#ff5500"
+
+[username]
+show_always = true
+style_user = "bold fg:honed_steel"
+style_root = "bold fg:spark_red"
+format = '[$user]($style)[:](bold fg:tungsten)'
+
+[directory]
+style = "bold fg:titanium"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:spark_orange"
+format = ' [\(git:](fg:tungsten)[$branch]($style)[\)](fg:tungsten)'
+
+[git_status]
+style = "bold fg:spark_red"
+format = ' [$all_status$ahead_behind]($style)'
+conflicted = "✖"
+ahead = "▲${count}"
+behind = "▼${count}"
+diverged = "◆"
+untracked = "?"
+stashed = "≡"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[python]
+symbol = " "
+style = "fg:honed_steel"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:spark_orange"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:titanium"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:honed_steel"
+format = ' [$symbol($version)]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:spark_orange"
+format = ' [◢ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:spark_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:honed_steel)[❯](bold fg:spark_red) "
+error_symbol = "[❯](bold fg:spark_red)[❯](bold fg:spark_red) "
+vimcmd_symbol = "[❮](bold fg:spark_orange)[❮](bold fg:spark_orange) "

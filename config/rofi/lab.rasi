@@ -1,6 +1,6 @@
 configuration {
     modi: "drun,run,window";
-    font: "MartianMono Nerd Font 10";
+    font: "ShureTechMono Nerd Font 11";
     show-icons: true;
     display-drun: "  ";
     display-run: "  ";

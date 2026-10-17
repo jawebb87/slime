@@ -22,8 +22,11 @@ local f = io.open(os.getenv("HOME") .. "/.config/awesome/theme_mode", "r")
 if f then
     local content = f:read("*all")
     f:close()
-    if content and content:gsub("%s+", "") == "lab" then
-        mode = "lab"
+    if content then
+        content = content:gsub("%s+", "")
+        if content == "origin" or content == "lab" or content == "slime" or content == "cyber" or content == "space" or content == "shred" then
+            mode = content
+        end
     end
 end
 vim.cmd.colorscheme(mode)
