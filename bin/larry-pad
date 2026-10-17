@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# larry-pad: Interactive Terminal Dropdown with Larry ASCII Banner & Shell
+# ==============================================================================
+set -e
+
+# Run Larry ASCII banner
+if [ -x "$HOME/.local/bin/larry-fetch" ]; then
+    "$HOME/.local/bin/larry-fetch"
+elif [ -x "$HOME/Projects/slime/bin/larry-fetch" ]; then
+    "$HOME/Projects/slime/bin/larry-fetch"
+fi
+
+# Keep interactive shell alive
+exec "${SHELL:-/bin/zsh}" -i

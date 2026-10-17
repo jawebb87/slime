@@ -231,6 +231,10 @@ keys.globalkeys = gears.table.join(
         scratchpad.toggle("python3 " .. python_bench .. "font_pad.py", "font-pad")
     end, {description = "toggle desktop font selector dropdown", group = "scratchpad"}),
 
+    awful.key({ modkey, "Shift" }, "l", function ()
+        scratchpad.toggle("kitty --class larry-pad " .. os.getenv("HOME") .. "/.local/bin/larry-pad", "larry-pad")
+    end, {description = "toggle larry the haxor console dropdown", group = "scratchpad"}),
+
     -- Lock Screen
     awful.key({ "Control", "Mod1" }, "l", function ()
         awful.spawn("slock")

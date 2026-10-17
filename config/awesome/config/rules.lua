@@ -73,7 +73,7 @@ awful.rules.rules = {
             "key-cheat", "log-pad", "vim-cheat", "weather-pad", "zodiac-pad",
             "btop-float", "term-scratch", "notes-pad", "fzf-pad", "lazygit-pad",
             "ranger-pad", "ipython-pad", "agy-pad", "limusic-app", "limusic",
-            "font-pad",
+            "font-pad", "larry-pad", "larry-fetch-pad",
         },
         class = {
             "Audio-pad", "Wifi-pad", "Clip-pad", "Docker-pad", "Emoji-pad",
@@ -81,12 +81,27 @@ awful.rules.rules = {
             "Btop-float", "Term-scratch", "Notes-pad", "Fzf-pad", "Lazygit-pad",
             "Ranger-pad", "Ipython-pad", "Agy-pad", "limusic-app", "Limusic-app",
             "limusic", "Limusic", "Font-pad", "font-pad",
+            "Larry-pad", "larry-pad", "Larry-fetch-pad", "larry-fetch-pad",
         },
       },
       properties = {
           floating = true,
           ontop = true,
           placement = awful.placement.centered,
+      }
+    },
+
+    -- Larry the Haxor Interactive Console Dropdown (custom dimensions)
+    { rule_any = {
+        instance = { "larry-pad", "larry-fetch-pad" },
+        class = { "larry-pad", "Larry-pad", "larry-fetch-pad", "Larry-fetch-pad" },
+      },
+      properties = {
+          floating = true,
+          ontop = true,
+          placement = awful.placement.centered,
+          width = 920,
+          height = 600,
       }
     },
 }

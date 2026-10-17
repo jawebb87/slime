@@ -784,7 +784,7 @@ awful.screen.connect_for_each_screen(function(s)
             widget             = wibox.container.background,
             buttons            = gears.table.join(
                 awful.button({}, 1, function()
-                    scratchpad.toggle("kitty --class larry-fetch-pad -e " .. os.getenv("HOME") .. "/.local/bin/larry-fetch", "larry-fetch-pad")
+                    scratchpad.toggle("kitty --class larry-pad " .. os.getenv("HOME") .. "/.local/bin/larry-pad", "larry-pad")
                 end)
             ),
         }
