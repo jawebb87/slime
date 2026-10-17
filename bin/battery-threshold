@@ -1,0 +1,47 @@
+#!/bin/bash
+# Toggle or set battery charge threshold (100% vs 80%) via UPower D-Bus interface
+
+UPOWER_DEV="/org/freedesktop/UPower/devices/battery_BAT0"
+IFACE="org.freedesktop.UPower.Device"
+
+get_threshold() {
+    cat /sys/class/power_supply/BAT0/charge_control_end_threshold 2>/dev/null || echo "100"
+}
+
+set_threshold() {
+    local val="$1"
+    if [ "$val" -le 80 ]; then
+        busctl call org.freedesktop.UPower "$UPOWER_DEV" "$IFACE" EnableChargeThreshold b true >/dev/null
+    else
+        busctl call org.freedesktop.UPower "$UPOWER_DEV" "$IFACE" EnableChargeThreshold b false >/dev/null
+    fi
+}
+
+toggle() {
+    local curr
+    curr=$(get_threshold)
+    if [ "$curr" -le 80 ]; then
+        set_threshold 100
+        echo "100"
+    else
+        set_threshold 80
+        echo "80"
+    fi
+}
+
+case "$1" in
+    get)
+        get_threshold
+        ;;
+    set)
+        set_threshold "$2"
+        get_threshold
+        ;;
+    toggle|"")
+        toggle
+        ;;
+    *)
+        echo "Usage: battery-threshold {get|set <80|100>|toggle}" >&2
+        exit 1
+        ;;
+esac

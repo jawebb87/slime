@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary / editor swap files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Backups
+*.bak
+*.orig

@@ -1,0 +1,92 @@
+# Slime theme for btop
+# Palette: Murky swamp darks, radioactive greens, toxic yellows, and hazard red ONLY for critical highs
+
+# Main background, empty for terminal default, need to be empty if you want transparent background
+theme[main_bg]="#0c140d"
+
+# Main text color
+theme[main_fg]="#c6f582"
+
+# Title color for boxes
+theme[title]="#74ff2e"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#d8eb34"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#1a331e"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#74ff2e"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#365c3b"
+
+# Color of text appearing on top of graphs, i.e uptime and current network graph scaling
+theme[graph_text]="#c6f582"
+
+# Background color of the percentage meters
+theme[meter_bg]="#122015"
+
+# Misc colors for processes box including mini cpu graphs, details memory graph and details status text
+theme[proc_misc]="#36e385"
+
+# Cpu box outline color
+theme[cpu_box]="#24492b"
+
+# Memory/disks box outline color
+theme[mem_box]="#24492b"
+
+# Net up/down box outline color
+theme[net_box]="#24492b"
+
+# Processes box outline color
+theme[proc_box]="#24492b"
+
+# Box divider line and small boxes line color
+theme[div_line]="#1a331e"
+
+# Temperature graph colors (Green -> Toxic Yellow -> Hazard Red)
+theme[temp_start]="#36e385"
+theme[temp_mid]="#d8eb34"
+theme[temp_end]="#ff4343"
+
+# CPU graph colors (Seafoam -> Slime Green -> Toxic Yellow)
+theme[cpu_start]="#36e385"
+theme[cpu_mid]="#55f736"
+theme[cpu_end]="#d8eb34"
+
+# Mem/Disk free meter (Dark green -> Bright slime)
+theme[free_start]="#24492b"
+theme[free_mid]="#36e385"
+theme[free_end]="#55f736"
+
+# Mem/Disk cached meter
+theme[cached_start]="#1a331e"
+theme[cached_mid]="#36e385"
+theme[cached_end]="#74ff2e"
+
+# Mem/Disk available meter
+theme[available_start]="#24492b"
+theme[available_mid]="#55f736"
+theme[available_end]="#c6f582"
+
+# Mem/Disk used meter (Slime green -> Toxic yellow -> Red at critical)
+theme[used_start]="#36e385"
+theme[used_mid]="#d8eb34"
+theme[used_end]="#ff4343"
+
+# Download graph colors
+theme[download_start]="#24492b"
+theme[download_mid]="#36e385"
+theme[download_end]="#55f736"
+
+# Upload graph colors
+theme[upload_start]="#365c3b"
+theme[upload_mid]="#a8e62e"
+theme[upload_end]="#d8eb34"
+
+# Process box color gradient for threads, mem and cpu usage
+theme[process_start]="#36e385"
+theme[process_mid]="#55f736"
+theme[process_end]="#d8eb34"

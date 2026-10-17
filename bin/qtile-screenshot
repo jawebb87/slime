@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -e
+
+TARGET_DIR="${HOME}/Pictures/Screenshots"
+mkdir -p "${TARGET_DIR}"
+
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+FILENAME="${TARGET_DIR}/${TIMESTAMP}.png"
+MODE="${1:-full}"
+
+if command -v scrot >/dev/null 2>&1; then
+    case "${MODE}" in
+        window) scrot -u -b "${FILENAME}" ;;
+        region) scrot -s -f "${FILENAME}" ;;
+        *)      scrot "${FILENAME}" ;;
+    esac
+elif command -v maim >/dev/null 2>&1; then
+    case "${MODE}" in
+        window) maim -i "$(xdotool getactivewindow)" "${FILENAME}" ;;
+        region) maim -s "${FILENAME}" ;;
+        *)      maim "${FILENAME}" ;;
+    esac
+else
+    # Fallback to ffmpeg x11grab
+    RES=$(xrandr | grep '\*' | head -n 1 | awk '{print $1}')
+    ffmpeg -loglevel quiet -f x11grab -video_size "${RES:-1920x1080}" -i "${DISPLAY:-:0}" -vframes 1 "${FILENAME}"
+fi
+
+if [ -f "${FILENAME}" ]; then
+    xclip -selection clipboard -target image/png -i "${FILENAME}"
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send -i camera-photo "Screenshot Taken" "Saved to ${FILENAME} & copied to clipboard"
+    else
+        dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Remote.Eval \
+            string:"require('naughty').notify({ title = 'Screenshot Taken', text = 'Saved to ${FILENAME} & copied to clipboard' })" 2>/dev/null || true
+    fi
+fi

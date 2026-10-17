@@ -1,0 +1,56 @@
+#!/bin/bash
+# Drop-in busctl-based wrapper for powerprofilesctl (works without python-gobject)
+
+SERVICE="net.hadess.PowerProfiles"
+PATH_OBJ="/net/hadess/PowerProfiles"
+IFACE="net.hadess.PowerProfiles"
+
+get_active() {
+    busctl get-property "$SERVICE" "$PATH_OBJ" "$IFACE" ActiveProfile 2>/dev/null | awk '{print $2}' | tr -d '"'
+}
+
+set_profile() {
+    local target="$1"
+    if [ -z "$target" ]; then
+        echo "Error: Profile name required (e.g. power-saver, balanced, performance)" >&2
+        exit 1
+    fi
+    busctl set-property "$SERVICE" "$PATH_OBJ" "$IFACE" ActiveProfile s "$target"
+}
+
+list_profiles() {
+    local active
+    active=$(get_active)
+    echo "  performance:"
+    echo "    Driver: platform_profile"
+    [ "$active" = "performance" ] && echo "    * active"
+    echo ""
+    echo "  balanced:"
+    echo "    Driver: platform_profile"
+    [ "$active" = "balanced" ] && echo "    * active"
+    echo ""
+    echo "  power-saver:"
+    echo "    Driver: platform_profile"
+    [ "$active" = "power-saver" ] && echo "    * active"
+}
+
+case "$1" in
+    get)
+        get_active
+        ;;
+    set)
+        set_profile "$2"
+        ;;
+    list|"")
+        list_profiles
+        ;;
+    *)
+        # If user passes profile name directly like `powerprofilesctl power-saver`
+        if [[ "$1" == "power-saver" || "$1" == "balanced" || "$1" == "performance" ]]; then
+            set_profile "$1"
+        else
+            echo "Usage: powerprofilesctl {get|set <profile>|list}" >&2
+            exit 1
+        fi
+        ;;
+esac
