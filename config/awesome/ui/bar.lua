@@ -199,7 +199,7 @@ gears.timer {
                 if net_type == "wifi" and conn and conn ~= "" then
                     wifi_textbox.markup = string.format("<span foreground='#74ff2e'> %s</span>", gears.string.xml_escape(conn))
                 elseif net_type == "ethernet" then
-                    wifi_textbox.markup = "<span foreground='#74ff2e'> Wired</span>"
+                    wifi_textbox.markup = "<span foreground='#74ff2e'>󰈀 Wired</span>"
                 else
                     wifi_textbox.markup = "<span foreground='#ff4343'> Offline</span>"
                 end
