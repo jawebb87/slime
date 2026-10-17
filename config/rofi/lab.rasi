@@ -1,0 +1,117 @@
+configuration {
+    modi: "drun,run,window";
+    font: "MartianMono Nerd Font 10";
+    show-icons: true;
+    display-drun: "  ";
+    display-run: "  ";
+    display-window: "  ";
+    drun-display-format: "{name}";
+}
+
+@theme "/dev/null"
+
+* {
+    bg-col:  #f8fafcf8;
+    bg-col-light: #e2e8f0;
+    border-col: #000000;
+    selected-col: #0a0c0e;
+    toxic-yellow: #ffffff;
+    fg-col: #0a0c0e;
+    fg-col-bright: #ffffff;
+    grey: #475569;
+
+    width: 600;
+    margin: 0;
+    padding: 0;
+}
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 380px;
+    border: 0px;
+    border-radius: 0px;
+    background-color: @bg-col;
+    padding: 15px;
+}
+
+mainbox {
+    background-color: transparent;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @bg-col-light;
+    border: 2px;
+    border-color: @border-col;
+    border-radius: 4px;
+    padding: 2px;
+    margin: 0 0 10px 0;
+}
+
+prompt {
+    background-color: @border-col;
+    padding: 8px 12px;
+    text-color: #ffffff;
+    border-radius: 3px;
+    margin: 4px;
+}
+
+entry {
+    padding: 8px;
+    margin: 4px;
+    text-color: @fg-col;
+    background-color: transparent;
+}
+
+listview {
+    border: 0px;
+    padding: 6px 0px;
+    margin: 10px 0px 0px 20px;
+    columns: 1;
+    lines: 6;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 12px;
+    background-color: transparent;
+    text-color: @fg-col;
+    border-radius: 4px;
+}
+
+element-icon {
+    size: 22px;
+    margin: 0 10px 0 0;
+}
+
+element selected {
+    background-color:  @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+button {
+    padding: 8px;
+    background-color: @bg-col-light;
+    text-color: @grey;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+button selected {
+    background-color: @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
+}

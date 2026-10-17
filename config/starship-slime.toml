@@ -1,0 +1,120 @@
+# Starship Prompt Configuration - Slime Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'slime'
+
+format = """
+[](fg:neon_lime)\
+$os\
+$username\
+[](bg:swamp_mid fg:neon_lime)\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$time\
+$cmd_duration\
+$status\
+$line_break\
+$character"""
+
+[palettes.slime]
+neon_lime     = "#55f736"
+swamp_deep    = "#0c140d"
+swamp_dark    = "#122015"
+swamp_mid     = "#1a331e"
+swamp_accent  = "#24492b"
+toxic_yellow  = "#d8eb34"
+pale_lichen   = "#c6f582"
+hazard_red    = "#ff4343"
+bright_text   = "#f0ffcd"
+dim_text      = "#709677"
+
+[os]
+disabled = false
+style = "bg:neon_lime fg:swamp_deep bold"
+format = '[$symbol]($style)'
+
+[os.symbols]
+Arch = " "
+Debian = " "
+Ubuntu = " "
+Linux = " "
+
+[username]
+show_always = true
+style_user = "bg:neon_lime fg:swamp_deep bold"
+style_root = "bg:hazard_red fg:bright_text bold"
+format = '[$user ]($style)'
+
+[directory]
+style = "bg:swamp_mid fg:pale_lichen"
+format = "[  $path ]($style)[](fg:swamp_mid)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music"     = ""
+"Pictures"  = ""
+"Projects"  = "󰲋"
+
+[git_branch]
+symbol = " "
+style = "bg:swamp_accent fg:toxic_yellow bold"
+format = '[](fg:swamp_mid bg:swamp_accent)[ $symbol$branch]($style)'
+
+[git_status]
+style = "bg:swamp_accent fg:toxic_yellow"
+format = '[$all_status$ahead_behind ]($style)[](fg:swamp_accent)'
+
+[python]
+symbol = " "
+style = "bg:swamp_dark fg:pale_lichen"
+format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+
+[rust]
+symbol = " "
+style = "bg:swamp_dark fg:toxic_yellow"
+format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+
+[golang]
+symbol = " "
+style = "bg:swamp_dark fg:pale_lichen"
+format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+
+[nodejs]
+symbol = " "
+style = "bg:swamp_dark fg:pale_lichen"
+format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol($version) ]($style)[](fg:swamp_dark)'
+
+[docker_context]
+symbol = " "
+style = "bg:swamp_dark fg:toxic_yellow"
+format = '[](fg:swamp_mid bg:swamp_dark)[ $symbol$context ]($style)[](fg:swamp_dark)'
+
+[time]
+disabled = false
+time_format = "%R"
+style = "fg:dim_text"
+format = ' [ $time]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:toxic_yellow"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:hazard_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[└─](bold fg:toxic_yellow)[❯](bold fg:neon_lime) "
+error_symbol = "[└─](bold fg:hazard_red)[❯](bold fg:hazard_red) "

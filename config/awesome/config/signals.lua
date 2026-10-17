@@ -11,10 +11,16 @@ local function get_client_seed(c)
     return ((c.window or 1) % 23) * 0.67 + 1.1
 end
 
--- Apply modern straight-sided + bottom-dripping Cairo shape mask to a client window
-local function apply_slime_shape(c)
+-- Apply mode-appropriate shape mask to a client window
+local function apply_window_shape(c)
     if c.fullscreen then
         c.shape = nil
+        awful.titlebar.hide(c, "bottom")
+    elseif beautiful.mode == "lab" then
+        -- Sterile pre-contamination laboratory geometry: crisp rectangular/chamfered window, no slime drips
+        c.shape = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, 4)
+        end
         awful.titlebar.hide(c, "bottom")
     else
         local seed = get_client_seed(c)
@@ -30,7 +36,7 @@ client.connect_signal("manage", function (c)
     c.maximized_horizontal = false
     c.maximized_vertical = false
 
-    apply_slime_shape(c)
+    apply_window_shape(c)
 
     if awesome.startup
       and not c.size_hints.user_position
@@ -40,7 +46,7 @@ client.connect_signal("manage", function (c)
     end
 end)
 
-client.connect_signal("property::fullscreen", apply_slime_shape)
+client.connect_signal("property::fullscreen", apply_window_shape)
 
 -- Prevent applications (e.g. Firefox) from forcing X11 maximized state and breaking tiling
 client.connect_signal("property::maximized", function(c)
@@ -53,9 +59,13 @@ client.connect_signal("property::maximized_vertical", function(c)
     if c.maximized_vertical then c.maximized_vertical = false end
 end)
 
--- Add a bottom slime-drip margin bar (no top titlebar) rendered with Cairo gradients & toxic glow
+-- Add a bottom slime-drip margin bar (only visible in slime mode)
 client.connect_signal("request::titlebars", function(c)
     awful.titlebar.hide(c, "top")
+    if beautiful.mode == "lab" then
+        awful.titlebar.hide(c, "bottom")
+        return
+    end
     local seed = get_client_seed(c)
     local bottom_bar = awful.titlebar(c, {
         position = "bottom",

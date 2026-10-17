@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-Slime Theme Provider for Desktop GUI Dropdown Pads
-==================================================
-Supplies the Slime color palette to all Python Tkinter scratchpad dropdowns.
+Dual Theme Provider for Desktop GUI Dropdown Pads
+=================================================
+Supplies either the Biohazard Slime (Post-Contamination) palette or the
+Laboratory White (Pre-Contamination) palette to all Python Tkinter scratchpads.
 """
+
+import os
 
 SLIME_THEME = {
     "bg": "#0c140d",             # Deep swamp dark green background
@@ -32,6 +35,41 @@ SLIME_THEME = {
     "accent_red": "#ff4343",     # Stand-out alert red
 }
 
+LAB_THEME = {
+    "bg": "#f4f6f8",             # Sterile laboratory white background
+    "bg_surface": "#ffffff",     # Pure ceramic white surface frame
+    "bg_card": "#e8edf2",        # Brushed clinical panel card
+    "bg_hover": "#dde4ec",       # Hover state
+    "bg_active": "#cbd5e1",      # Active selection
+    "bg_selected": "#dbe4ee",    # Selected card surface
+    "border": "#000000",         # Stark jet-black architectural border
+    "border_focus": "#000000",   # Stark jet-black active border
+    "border_today": "#0284c7",   # Clinical blueprint blue
+    "fg": "#0a0c0e",             # Stark jet-black readable text
+    "fg_dim": "#475569",         # Surgical slate grey text
+    "fg_header": "#000000",      # Pure black header text
+    "key_bg": "#0a0c0e",         # High-contrast black key badge
+    "key_fg": "#ffffff",         # Pure white key badge text
+    "status_running": "#0f766e", # Clinical teal-green
+    "status_stopped": "#dc2626", # Hazard red
+    "status_paused": "#b45309",  # Caution amber
+    "accent_blue": "#0284c7",    # Cryo / clinical blue
+    "accent_aqua": "#0f766e",    # Sterile teal
+    "accent_green": "#047857",   # Cleanroom emerald
+    "accent_yellow": "#b45309",  # Caution amber
+    "accent_orange": "#c2410c",  # Industrial orange
+    "accent_purple": "#334155",  # Surgical steel
+    "accent_red": "#dc2626",     # Stand-out hazard red
+}
+
+
 def get_theme():
-    """Return the active Slime palette for dropdown applications."""
+    """Return the active palette based on ~/.config/awesome/theme_mode."""
+    mode_file = os.path.expanduser("~/.config/awesome/theme_mode")
+    try:
+        with open(mode_file, "r", encoding="utf-8") as f:
+            if f.read().strip() == "lab":
+                return LAB_THEME
+    except OSError:
+        pass
     return SLIME_THEME

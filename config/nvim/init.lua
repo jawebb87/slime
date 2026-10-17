@@ -1,4 +1,4 @@
--- Neovim Configuration - Slime Rice
+-- Neovim Configuration - Dual Theme (Slime / Laboratory White)
 
 -- General Settings
 vim.opt.number = true
@@ -16,5 +16,14 @@ vim.opt.scrolloff = 8
 vim.opt.updatetime = 250
 vim.opt.clipboard = "unnamedplus"
 
--- Apply Slime Colorscheme
-vim.cmd.colorscheme("slime")
+-- Apply active theme based on ~/.config/awesome/theme_mode
+local mode = "slime"
+local f = io.open(os.getenv("HOME") .. "/.config/awesome/theme_mode", "r")
+if f then
+    local content = f:read("*all")
+    f:close()
+    if content and content:gsub("%s+", "") == "lab" then
+        mode = "lab"
+    end
+end
+vim.cmd.colorscheme(mode)

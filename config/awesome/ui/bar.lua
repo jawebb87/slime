@@ -8,6 +8,50 @@ local slime_shapes = require("theme.slime_shapes")
 
 local modkey = apps.modkey
 local python_bench = os.getenv("HOME") .. "/Projects/qtile_bench/"
+local is_lab = (beautiful.mode == "lab")
+
+-- Mode-aware telemetry color palette
+local P = is_lab and {
+    cpu        = "#0a0c0e",
+    temp_ok    = "#0284c7",
+    temp_hot   = "#dc2626",
+    gpu        = "#0369a1",
+    sys        = "#0a0c0e",
+    net_ok     = "#0a0c0e",
+    net_off    = "#dc2626",
+    vol_ok     = "#0a0c0e",
+    vol_mute   = "#dc2626",
+    bat_ok     = "#0a0c0e",
+    bat_chg    = "#0284c7",
+    bat_warn   = "#b45309",
+    bat_crit   = "#dc2626",
+    bat_badge  = "#0284c7",
+    pill_bg1   = "#ffffff",
+    pill_bg2   = "#f8fafc",
+    pill_fg    = "#0a0c0e",
+    pill_bdr   = "#000000",
+    pill_bw    = 2,
+} or {
+    cpu        = "#d8eb34",
+    temp_ok    = "#d8eb34",
+    temp_hot   = "#ff4343",
+    gpu        = "#55ffaa",
+    sys        = "#c6f582",
+    net_ok     = "#74ff2e",
+    net_off    = "#ff4343",
+    vol_ok     = "#c6f582",
+    vol_mute   = "#ff4343",
+    bat_ok     = "#55f736",
+    bat_chg    = "#d8eb34",
+    bat_warn   = "#d8eb34",
+    bat_crit   = "#ff4343",
+    bat_badge  = "#36e385",
+    pill_bg1   = "#142417",
+    pill_bg2   = "#16281a",
+    pill_fg    = beautiful.fg_normal,
+    pill_bdr   = "#24492b",
+    pill_bw    = 1,
+}
 
 -- {{{ Wallpaper
 local function set_wallpaper(s)
@@ -23,10 +67,18 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 -- }}}
 
--- {{{ Helper: Wobbly slime pill widget wrapper
+-- {{{ Helper: Mode-aware pill widget wrapper
 local pill_seed = 1.1
 local function pill_container(widget, bg_color, fg_color)
     pill_seed = pill_seed + 1.37
+    local shape_fn
+    if is_lab then
+        shape_fn = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, 4)
+        end
+    else
+        shape_fn = slime_shapes.wobbly_pill(7, pill_seed)
+    end
     return wibox.widget {
         {
             widget,
@@ -36,11 +88,11 @@ local function pill_container(widget, bg_color, fg_color)
             bottom = 3,
             widget = wibox.container.margin,
         },
-        bg                 = bg_color or "#122015",
-        fg                 = fg_color or beautiful.fg_normal,
-        shape              = slime_shapes.wobbly_pill(7, pill_seed),
-        shape_border_width = 1,
-        shape_border_color = "#24492b",
+        bg                 = is_lab and P.pill_bg1 or (bg_color or "#122015"),
+        fg                 = fg_color or P.pill_fg,
+        shape              = shape_fn,
+        shape_border_width = P.pill_bw,
+        shape_border_color = P.pill_bdr,
         widget             = wibox.container.background,
     }
 end
@@ -77,7 +129,7 @@ end
 
 -- 1. CPU Usage + Temperature Pill (click -> btop)
 local cpu_textbox = wibox.widget {
-    markup = "<span foreground='#d8eb34'> 0%</span>",
+    markup = string.format("<span foreground='%s'> 0%%</span>", P.cpu),
     widget = wibox.widget.textbox,
 }
 local prev_total, prev_idle = 0, 0
@@ -103,24 +155,24 @@ gears.timer {
         end
 
         local temp_str = ""
-        local temp_color = "#d8eb34"
+        local temp_color = P.temp_ok
         if cpu_temp_path then
             local raw = tonumber(read_file(cpu_temp_path) or "")
             if raw then
                 local c = math.floor(raw / 1000 + 0.5)
                 temp_str = string.format("   %d°C", c)
                 if c >= 75 then
-                    temp_color = "#ff4343"
+                    temp_color = P.temp_hot
                 end
             end
         end
         cpu_textbox.markup = string.format(
-            "<span foreground='#d8eb34'> %d%%</span><span foreground='%s'>%s</span>",
-            usage, temp_color, temp_str
+            "<span foreground='%s'> %d%%</span><span foreground='%s'>%s</span>",
+            P.cpu, usage, temp_color, temp_str
         )
     end,
 }
-local cpu_pill = pill_container(cpu_textbox, "#142417")
+local cpu_pill = pill_container(cpu_textbox, P.pill_bg1)
 cpu_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("kitty --class btop-float -e btop", "btop-float")
@@ -129,7 +181,7 @@ cpu_pill:buttons(gears.table.join(
 
 -- 2. GPU Temp + RAM + Disk Pill (click -> btop)
 local sys_textbox = wibox.widget {
-    markup = "<span foreground='#c6f582'> --G</span>",
+    markup = string.format("<span foreground='%s'> --G</span>", P.sys),
     widget = wibox.widget.textbox,
 }
 local disk_free_str = ""
@@ -170,12 +222,12 @@ gears.timer {
             end
         end
         sys_textbox.markup = string.format(
-            "<span foreground='#55ffaa'>%s</span><span foreground='#c6f582'>%s%s</span>",
-            gpu_str, ram_str, disk_free_str
+            "<span foreground='%s'>%s</span><span foreground='%s'>%s%s</span>",
+            P.gpu, gpu_str, P.sys, ram_str, disk_free_str
         )
     end,
 }
-local sys_pill = pill_container(sys_textbox, "#122015")
+local sys_pill = pill_container(sys_textbox, P.pill_bg2)
 sys_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("kitty --class btop-float -e btop", "btop-float")
@@ -184,7 +236,7 @@ sys_pill:buttons(gears.table.join(
 
 -- 3. Network Status Pill (Wi-Fi or Wired Ethernet, click -> wifi_pad.py)
 local wifi_textbox = wibox.widget {
-    markup = "<span foreground='#74ff2e'> Net</span>",
+    markup = string.format("<span foreground='%s'> Net</span>", P.net_ok),
     widget = wibox.widget.textbox,
 }
 gears.timer {
@@ -197,17 +249,17 @@ gears.timer {
             function(stdout)
                 local net_type, _, conn = stdout:match("^([^:]+):([^:]+):([^\r\n]+)")
                 if net_type == "wifi" and conn and conn ~= "" then
-                    wifi_textbox.markup = string.format("<span foreground='#74ff2e'> %s</span>", gears.string.xml_escape(conn))
+                    wifi_textbox.markup = string.format("<span foreground='%s'> %s</span>", P.net_ok, gears.string.xml_escape(conn))
                 elseif net_type == "ethernet" then
-                    wifi_textbox.markup = "<span foreground='#74ff2e'>󰈀 Wired</span>"
+                    wifi_textbox.markup = string.format("<span foreground='%s'>󰈀 Wired</span>", P.net_ok)
                 else
-                    wifi_textbox.markup = "<span foreground='#ff4343'> Offline</span>"
+                    wifi_textbox.markup = string.format("<span foreground='%s'> Offline</span>", P.net_off)
                 end
             end
         )
     end,
 }
-local wifi_pill = pill_container(wifi_textbox, "#142417")
+local wifi_pill = pill_container(wifi_textbox, P.pill_bg1)
 wifi_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("python3 " .. python_bench .. "wifi_pad.py", "wifi-pad")
@@ -216,7 +268,7 @@ wifi_pill:buttons(gears.table.join(
 
 -- 4. PipeWire / WirePlumber Volume Pill (click -> audio_pad.py, right-click -> mute, scroll -> +/-5%)
 local vol_textbox = wibox.widget {
-    markup = "<span foreground='#c6f582'> --%</span>",
+    markup = string.format("<span foreground='%s'> --%%</span>", P.vol_ok),
     widget = wibox.widget.textbox,
 }
 local function update_volume()
@@ -226,9 +278,9 @@ local function update_volume()
         if vol_num then
             local pct = math.floor(vol_num * 100 + 0.5)
             if muted then
-                vol_textbox.markup = string.format("<span foreground='#ff4343' weight='bold'> %d%%</span>", pct)
+                vol_textbox.markup = string.format("<span foreground='%s' weight='bold'> %d%%</span>", P.vol_mute, pct)
             else
-                vol_textbox.markup = string.format("<span foreground='#c6f582'> %d%%</span>", pct)
+                vol_textbox.markup = string.format("<span foreground='%s'> %d%%</span>", P.vol_ok, pct)
             end
         end
     end)
@@ -241,7 +293,7 @@ gears.timer {
 }
 awesome.connect_signal("volume::update", update_volume)
 
-local vol_pill = pill_container(vol_textbox, "#16281a")
+local vol_pill = pill_container(vol_textbox, P.pill_bg2)
 vol_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("python3 " .. python_bench .. "audio_pad.py", "audio-pad")
@@ -265,7 +317,7 @@ vol_pill:buttons(gears.table.join(
 
 -- 5. Battery Pill
 local bat_textbox = wibox.widget {
-    markup = "<span foreground='#55f736'> 100%</span>",
+    markup = string.format("<span foreground='%s'> 100%%</span>", P.bat_ok),
     widget = wibox.widget.textbox,
 }
 local function update_battery()
@@ -273,22 +325,22 @@ local function update_battery()
     local status = read_file("/sys/class/power_supply/BAT0/status") or "Full"
     local ac = read_file("/sys/class/power_supply/AC0/online")
     local icon = ""
-    local color = "#55f736"
+    local color = P.bat_ok
 
     if status == "Charging" or ac == "1" then
         icon = ""
-        color = "#d8eb34"
+        color = P.bat_chg
     elseif cap <= 20 then
         icon = ""
-        color = "#ff4343"
+        color = P.bat_crit
     elseif cap <= 50 then
         icon = ""
-        color = "#d8eb34"
+        color = P.bat_warn
     end
     local thresh = tonumber(read_file("/sys/class/power_supply/BAT0/charge_control_end_threshold") or "100") or 100
     local thresh_badge = ""
     if thresh < 100 then
-        thresh_badge = string.format(" <span foreground='#36e385' size='small'>[%d%%]</span>", thresh)
+        thresh_badge = string.format(" <span foreground='%s' size='small'>[%d%%]</span>", P.bat_badge, thresh)
     end
     bat_textbox.markup = string.format("<span foreground='%s'>%s %d%%</span>%s", color, icon, cap, thresh_badge)
 end
@@ -298,7 +350,7 @@ gears.timer {
     autostart = true,
     callback  = update_battery,
 }
-local bat_pill = pill_container(bat_textbox, "#142417")
+local bat_pill = pill_container(bat_textbox, P.pill_bg1)
 bat_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         awful.spawn.easy_async_with_shell("~/.local/bin/powerprofilesctl get", function(stdout)
@@ -331,7 +383,7 @@ bat_pill:buttons(gears.table.join(
 
 -- 6. Clock Pill (left-click -> weather_pad.py, right-click -> zodiac_pad.py)
 local mytextclock = wibox.widget.textclock("  %a %b %d   %I:%M %p ")
-local clock_pill = pill_container(mytextclock, "#16281a")
+local clock_pill = pill_container(mytextclock, P.pill_bg2)
 clock_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("python3 " .. python_bench .. "weather_pad.py", "weather-pad")
@@ -411,6 +463,10 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     -- Tasklist
+    local task_shape = is_lab and function(cr, w, h)
+        gears.shape.rounded_rect(cr, w, h, 4)
+    end or slime_shapes.wobbly_pill(6, 4.2)
+
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
@@ -438,30 +494,33 @@ awful.screen.connect_for_each_screen(function(s)
                 },
                 layout = wibox.layout.fixed.horizontal,
             },
-            id     = "background_role",
-            widget = wibox.container.background,
-            shape  = slime_shapes.wobbly_pill(6, 4.2),
+            id                 = "background_role",
+            widget             = wibox.container.background,
+            shape              = task_shape,
+            shape_border_width = is_lab and 2 or 0,
+            shape_border_color = "#000000",
         },
     }
 
-    local bar_drip_height = 22
-    local bar_drip_shape = slime_shapes.dripping_bar(bar_drip_height, 3.7)
+    local bar_drip_height = is_lab and 0 or 22
+    local bar_height      = is_lab and 36 or 52
+    local bar_shape       = is_lab and nil or slime_shapes.dripping_bar(bar_drip_height, 3.7)
+    local bar_bgimage     = is_lab and slime_shapes.render_lab_bar_bg() or slime_shapes.render_bar_bg(bar_drip_height, 3.7)
 
-    -- Create top wibar with Cairo dripping shape mask
+    -- Create top wibar
     s.mywibox = awful.wibar({
         position = "top",
         screen   = s,
-        height   = 52,
+        height   = bar_height,
         ontop    = true,
         bg       = "#00000000",
         fg       = beautiful.fg_normal,
-        shape    = bar_drip_shape,
+        shape    = bar_shape,
     })
 
-    -- Reserve 34px at the top so the longest slime drips hang organically over the top gap
-    s.mywibox:struts({ top = 34, bottom = 0, left = 0, right = 0 })
+    s.mywibox:struts({ top = is_lab and 36 or 34, bottom = 0, left = 0, right = 0 })
 
-    -- Add widgets to the wibar inside the Cairo-rendered slime container
+    -- Add widgets to the wibar
     s.mywibox:setup {
         {
             {
@@ -504,10 +563,10 @@ awful.screen.connect_for_each_screen(function(s)
                 },
             },
             top    = 3,
-            bottom = bar_drip_height + 1,
+            bottom = is_lab and 5 or (bar_drip_height + 1),
             widget = wibox.container.margin,
         },
-        bgimage = slime_shapes.render_bar_bg(bar_drip_height, 3.7),
+        bgimage = bar_bgimage,
         widget  = wibox.container.background,
     }
 end)

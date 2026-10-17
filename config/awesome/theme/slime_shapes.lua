@@ -317,4 +317,29 @@ function slime_shapes.wobbly_pill(radius, seed)
     end
 end
 
+-- 4. Sterile Laboratory Bar Background Renderer (Pre-Contamination):
+-- Draws a crisp clinical white ceramic surface with a stark 2px solid black bottom border.
+function slime_shapes.render_lab_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- Clinical white -> subtle brushed light grey gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.0, 0.985, 0.990, 0.996, 0.97) -- #fbfcfe
+        pat:add_color_stop_rgba(1.0, 0.941, 0.957, 0.973, 0.98) -- #f0f4f8
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- Stark 2px jet-black bottom border line
+        cr:rectangle(0, h - 2, w, 2)
+        cr:set_source_rgba(0.0, 0.0, 0.0, 1.0)
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
 return slime_shapes
+

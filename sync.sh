@@ -13,7 +13,7 @@
 set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BIN_LIST=(apply-power-limits.sh battery-threshold dots play powerprofilesctl qtile-fzf qtile-notes qtile-screenshot sorted termplay)
+BIN_LIST=(apply-power-limits.sh battery-threshold dots play powerprofilesctl qtile-fzf qtile-notes qtile-screenshot sorted termplay theme-toggle)
 
 color() {
     local c="$1"; shift
@@ -34,11 +34,11 @@ backup_live_to_repo() {
     mkdir -p "$SCRIPT_DIR/config/awesome"
     cp -rp "$HOME/.config/awesome"/* "$SCRIPT_DIR/config/awesome/"
     
-    # Picom, Kitty, Rofi
+    # Picom, Kitty, Rofi (including slime & lab variants)
     mkdir -p "$SCRIPT_DIR/config/picom" "$SCRIPT_DIR/config/kitty" "$SCRIPT_DIR/config/rofi"
-    [ -f "$HOME/.config/picom/picom.conf" ] && cp -p "$HOME/.config/picom/picom.conf" "$SCRIPT_DIR/config/picom/"
-    [ -f "$HOME/.config/kitty/kitty.conf" ] && cp -p "$HOME/.config/kitty/kitty.conf" "$SCRIPT_DIR/config/kitty/"
-    [ -f "$HOME/.config/rofi/config.rasi" ] && cp -p "$HOME/.config/rofi/config.rasi" "$SCRIPT_DIR/config/rofi/"
+    cp -p "$HOME/.config/picom"/*.conf "$SCRIPT_DIR/config/picom/" 2>/dev/null || true
+    cp -p "$HOME/.config/kitty"/*.conf "$SCRIPT_DIR/config/kitty/" 2>/dev/null || true
+    cp -p "$HOME/.config/rofi"/*.rasi "$SCRIPT_DIR/config/rofi/" 2>/dev/null || true
     
     # Neovim & Btop
     mkdir -p "$SCRIPT_DIR/config/nvim" "$SCRIPT_DIR/config/btop"
@@ -51,7 +51,7 @@ backup_live_to_repo() {
     [ -f "$HOME/.config/gtk-4.0/settings.ini" ] && cp -p "$HOME/.config/gtk-4.0/settings.ini" "$SCRIPT_DIR/config/gtk-4.0/"
     [ -f "$HOME/.config/mpv/mpv.conf" ] && cp -p "$HOME/.config/mpv/mpv.conf" "$SCRIPT_DIR/config/mpv/"
     [ -f "$HOME/.config/yt-dlp/config" ] && cp -p "$HOME/.config/yt-dlp/config" "$SCRIPT_DIR/config/yt-dlp/"
-    [ -f "$HOME/.config/starship.toml" ] && cp -p "$HOME/.config/starship.toml" "$SCRIPT_DIR/config/"
+    cp -p "$HOME/.config"/starship*.toml "$SCRIPT_DIR/config/" 2>/dev/null || true
     
     # User scripts
     mkdir -p "$SCRIPT_DIR/bin"
@@ -72,6 +72,7 @@ backup_live_to_repo() {
     [ -f "$HOME/.zshrc" ] && cp -p "$HOME/.zshrc" "$SCRIPT_DIR/shell/.zshrc"
     [ -f "$HOME/.bashrc" ] && cp -p "$HOME/.bashrc" "$SCRIPT_DIR/shell/.bashrc"
     [ -f "$HOME/Pictures/wallpaper/slime.jpg" ] && cp -p "$HOME/Pictures/wallpaper/slime.jpg" "$SCRIPT_DIR/wallpaper/"
+    [ -f "$HOME/Pictures/wallpaper/lab.jpg" ] && cp -p "$HOME/Pictures/wallpaper/lab.jpg" "$SCRIPT_DIR/wallpaper/"
     
     color green "✔ All configs refreshed into ~/Projects/slime."
     echo ""
@@ -111,16 +112,16 @@ restore_repo_to_live() {
     mkdir -p "$HOME/Pictures/wallpaper"
     
     cp -rp "$SCRIPT_DIR/config/awesome"/* "$HOME/.config/awesome/"
-    cp -p "$SCRIPT_DIR/config/picom/picom.conf" "$HOME/.config/picom/"
-    cp -p "$SCRIPT_DIR/config/kitty/kitty.conf" "$HOME/.config/kitty/"
-    cp -p "$SCRIPT_DIR/config/rofi/config.rasi" "$HOME/.config/rofi/"
+    cp -p "$SCRIPT_DIR/config/picom"/*.conf "$HOME/.config/picom/"
+    cp -p "$SCRIPT_DIR/config/kitty"/*.conf "$HOME/.config/kitty/"
+    cp -p "$SCRIPT_DIR/config/rofi"/*.rasi "$HOME/.config/rofi/"
     cp -rp "$SCRIPT_DIR/config/nvim"/* "$HOME/.config/nvim/"
     cp -rp "$SCRIPT_DIR/config/btop"/* "$HOME/.config/btop/"
     cp -p "$SCRIPT_DIR/config/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/"
     cp -p "$SCRIPT_DIR/config/gtk-4.0/settings.ini" "$HOME/.config/gtk-4.0/"
     cp -p "$SCRIPT_DIR/config/mpv/mpv.conf" "$HOME/.config/mpv/"
     cp -p "$SCRIPT_DIR/config/yt-dlp/config" "$HOME/.config/yt-dlp/"
-    cp -p "$SCRIPT_DIR/config/starship.toml" "$HOME/.config/"
+    cp -p "$SCRIPT_DIR/config"/starship*.toml "$HOME/.config/"
     
     cp -a "$SCRIPT_DIR/bin"/* "$HOME/.local/bin/"
     chmod +x "$HOME/.local/bin"/*
@@ -131,6 +132,7 @@ restore_repo_to_live() {
     [ -f "$SCRIPT_DIR/shell/.zshrc" ] && cp -p "$SCRIPT_DIR/shell/.zshrc" "$HOME/.zshrc"
     [ -f "$SCRIPT_DIR/shell/.bashrc" ] && cp -p "$SCRIPT_DIR/shell/.bashrc" "$HOME/.bashrc"
     [ -f "$SCRIPT_DIR/wallpaper/slime.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/slime.jpg" "$HOME/Pictures/wallpaper/"
+    [ -f "$SCRIPT_DIR/wallpaper/lab.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/lab.jpg" "$HOME/Pictures/wallpaper/"
     
     color green "✔ Restore complete! Live configs updated."
     color dim "Previous configs saved in: $backup_dir"
