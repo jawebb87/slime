@@ -1,0 +1,44 @@
+# ==============================================================================
+# btop++ Theme - Clay Tablet
+# ==============================================================================
+
+theme[main_bg]="#352f30"
+theme[main_fg]="#d1c4af"
+theme[title]="#e4dccf"
+theme[hi_fg]="#d49b52"
+theme[selected_bg]="#585153"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#8b817e"
+theme[graph_text]="#b6a994"
+theme[meter_bg]="#413a3b"
+theme[proc_misc]="#d1c4af"
+
+# Box outlines
+theme[cpu_box]="#d49b52"
+theme[mem_box]="#b6a994"
+theme[net_box]="#889c6d"
+theme[proc_box]="#d1c4af"
+theme[div_line]="#413a3b"
+
+# Temperature gradient (Sage -> Ochre -> Terracotta)
+theme[temp_start]="#889c6d"
+theme[temp_mid]="#d49b52"
+theme[temp_end]="#c26d55"
+
+# CPU graph
+theme[cpu_start]="#585153"
+theme[cpu_mid]="#d49b52"
+theme[cpu_end]="#e0af68"
+
+# Memory meters
+theme[free_start]="#413a3b"
+theme[free_mid]="#8b817e"
+theme[free_end]="#d1c4af"
+
+theme[cached_start]="#413a3b"
+theme[cached_mid]="#768a96"
+theme[cached_end]="#8ba2af"
+
+theme[available_start]="#585153"
+theme[available_mid]="#889c6d"
+theme[available_end]="#9db57e"

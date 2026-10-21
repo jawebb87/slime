@@ -11,63 +11,70 @@ local function get_client_seed(c)
     return ((c.window or 1) % 23) * 0.67 + 1.1
 end
 
--- Apply mode-appropriate shape mask to a client window
+-- Apply mode-appropriate shape mask to a client window (Theme-Agnostic)
 local function apply_window_shape(c)
     if c.fullscreen then
         c.shape = nil
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             awful.titlebar.hide(c, side)
         end
-    elseif beautiful.mode == "cyber" or beautiful.mode == "space" then
-        -- 4-sided perimeter titlebars (Cyber circling bio-pulse / Space Double-Pencil HUD & corner brackets)
+        return
+    end
+
+    if beautiful.perimeter_titlebars then
         c.shape = nil
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             awful.titlebar.show(c, side)
         end
-    elseif beautiful.mode == "lab" then
-        -- Sterile laboratory geometry: crisp 4px corners, no slime drips
-        c.shape = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, 4)
-        end
-        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
-            awful.titlebar.hide(c, side)
-        end
-    elseif beautiful.mode == "origin" then
-        -- Act 0 Deep Wood: chiseled stone top bevels + craggy rocky outcroppings along the bottom
-        local seed = get_client_seed(c)
-        c.shape = slime_shapes.rocky_window(10, WIN_DRIP_HEIGHT, seed)
-        awful.titlebar.hide(c, "top")
-        awful.titlebar.hide(c, "left")
-        awful.titlebar.hide(c, "right")
-        awful.titlebar.show(c, "bottom")
-    elseif beautiful.mode == "shred" then
-        -- Standalone Shredder: clean planar edges + sharp 45° precision stealth chamfers, zero jagged teeth
-        c.shape = slime_shapes.shred_window(12)
-        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
-            awful.titlebar.hide(c, side)
-        end
-    elseif beautiful.mode == "chomp" or beautiful.mode == "larry" then
-        -- Standalone "Chomp the Haxor": Monolithic chamfers, zero rounded corners
-        c.shape = slime_shapes.chomp_window(6)
-        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
-            awful.titlebar.hide(c, side)
-        end
     else
-        local seed = get_client_seed(c)
-        c.shape = slime_shapes.dripping_window(WIN_CORNER_RADIUS, WIN_DRIP_HEIGHT, seed)
-        awful.titlebar.hide(c, "top")
-        awful.titlebar.hide(c, "left")
-        awful.titlebar.hide(c, "right")
-        awful.titlebar.show(c, "bottom")
+        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+            awful.titlebar.hide(c, side)
+        end
+
+        local shape_fn = beautiful.window_shape_fn
+        if type(shape_fn) == "function" then
+            local seed = get_client_seed(c)
+            local ok, s = pcall(shape_fn, c, seed)
+            if ok and s then
+                c.shape = s
+            else
+                -- Might be a direct shape function (cr, w, h)
+                c.shape = shape_fn
+            end
+        else
+            c.shape = shape_fn
+        end
+
+        if (beautiful.window_style == "bottom_rocks" or beautiful.window_style == "bottom_drips" or beautiful.window_style == "bottom_gears") then
+            awful.titlebar.show(c, "bottom")
+        end
     end
+end
+
+-- Legacy bars follow fullscreen visibility; autohide owns its own visibility.
+local function update_screen_wibar(s, ignoring_c)
+    if not s or not s.mywibox or s._bar_autohide then return end
+    local has_fullscreen = false
+    for _, cl in ipairs(s.clients) do
+        if cl ~= ignoring_c and cl.valid and cl.fullscreen and cl:isvisible() then
+            has_fullscreen = true
+            break
+        end
+    end
+    s.mywibox.visible = not has_fullscreen
 end
 
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c)
-    -- Prevent X11 maximized state from overriding tiling layouts
-    c.maximized = false
-    c.maximized_horizontal = false
-    c.maximized_vertical = false
+    if c.fullscreen then
+        c.border_width = 0
+        update_screen_wibar(c.screen)
+    else
+        -- Prevent X11 maximized state from overriding tiling layouts
+        c.maximized = false
+        c.maximized_horizontal = false
+        c.maximized_vertical = false
+    end
 
     apply_window_shape(c)
 
@@ -79,43 +86,69 @@ client.connect_signal("manage", function (c)
     end
 end)
 
-client.connect_signal("property::fullscreen", apply_window_shape)
+-- Awesome implicitly floats fullscreen clients; leave their explicit floating state alone.
+-- Hide borders, remove titlebar/shapes, and hide the wibar.
+client.connect_signal("property::fullscreen", function(c)
+    apply_window_shape(c)
+    if c.fullscreen then
+        c.border_width = 0
+        c:raise()
+    else
+        c.border_width = (client.focus == c)
+            and (beautiful.border_width_focus or beautiful.border_width or 2)
+            or (beautiful.border_width or 2)
+    end
+    update_screen_wibar(c.screen)
+end)
 
--- Prevent applications (e.g. Firefox) from forcing X11 maximized state and breaking tiling
+-- Restore wibar when client unmanages (closes / quits / killed)
+client.connect_signal("unmanage", function(c)
+    update_screen_wibar(c.screen, c)
+    gears.timer.delayed_call(function()
+        if c.screen and c.screen.valid then
+            update_screen_wibar(c.screen)
+        end
+    end)
+end)
+
+-- Update wibar on client minimize/unminimize
+client.connect_signal("property::minimized", function(c)
+    update_screen_wibar(c.screen)
+end)
+
+-- Update wibar on tag change
+tag.connect_signal("property::selected", function(t)
+    update_screen_wibar(t.screen)
+end)
+
+-- Update wibar when a client moves between screens
+client.connect_signal("property::screen", function(c, old_screen)
+    if old_screen then update_screen_wibar(old_screen) end
+    if c.screen then update_screen_wibar(c.screen) end
+end)
+
+-- Prevent non-floating applications (e.g. Firefox) from forcing X11 maximized state and breaking tiling
 client.connect_signal("property::maximized", function(c)
-    if c.maximized then c.maximized = false end
+    if c.maximized and not c.floating and not c.fullscreen then
+        c.maximized = false
+    end
 end)
 client.connect_signal("property::maximized_horizontal", function(c)
-    if c.maximized_horizontal then c.maximized_horizontal = false end
+    if c.maximized_horizontal and not c.floating and not c.fullscreen then
+        c.maximized_horizontal = false
+    end
 end)
 client.connect_signal("property::maximized_vertical", function(c)
-    if c.maximized_vertical then c.maximized_vertical = false end
+    if c.maximized_vertical and not c.floating and not c.fullscreen then
+        c.maximized_vertical = false
+    end
 end)
 
--- Add perimeter bars (cyber / space modes) or bottom overhang bar (slime drips / origin rocks / shredder teeth)
+-- Add perimeter bars (space/cyber) or bottom overhang bar (slime drips / origin rocks)
 client.connect_signal("request::titlebars", function(c)
-    if beautiful.mode == "cyber" then
-        c._cyber_edge_widgets = {}
-        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
-            local edge_bar = awful.titlebar(c, {
-                position = side,
-                size     = 3,
-                bg       = "#00000000",
-            })
-            local edge_bg = wibox.widget {
-                wibox.widget.base.make_widget(),
-                bgimage = slime_shapes.render_cyber_window_edge(c, side),
-                widget  = wibox.container.background,
-            }
-            c._cyber_edge_widgets[side] = edge_bg
-            edge_bar:setup {
-                edge_bg,
-                layout = wibox.layout.flex.horizontal,
-            }
-        end
-        return
-    elseif beautiful.mode == "space" then
-        c._space_edge_widgets = {}
+    if beautiful.perimeter_titlebars and beautiful.window_edge_fn then
+        local store = {}
+        c._edge_widgets = store
         for _, side in ipairs({ "top", "right", "bottom", "left" }) do
             local edge_bar = awful.titlebar(c, {
                 position = side,
@@ -124,10 +157,10 @@ client.connect_signal("request::titlebars", function(c)
             })
             local edge_bg = wibox.widget {
                 wibox.widget.base.make_widget(),
-                bgimage = slime_shapes.render_space_window_edge(c, side),
+                bgimage = beautiful.window_edge_fn(c, side),
                 widget  = wibox.container.background,
             }
-            c._space_edge_widgets[side] = edge_bg
+            store[side] = edge_bg
             edge_bar:setup {
                 edge_bg,
                 layout = wibox.layout.flex.horizontal,
@@ -139,32 +172,28 @@ client.connect_signal("request::titlebars", function(c)
     awful.titlebar.hide(c, "top")
     awful.titlebar.hide(c, "left")
     awful.titlebar.hide(c, "right")
-    if beautiful.mode == "lab" or beautiful.mode == "shred" then
-        awful.titlebar.hide(c, "bottom")
+
+    if (beautiful.window_style == "bottom_rocks" or beautiful.window_style == "bottom_drips" or beautiful.window_style == "bottom_gears") and beautiful.window_edge_fn then
+        local seed = get_client_seed(c)
+        local bottom_bar = awful.titlebar(c, {
+            position = "bottom",
+            size     = beautiful.window_titlebar_height or ((beautiful.window_edge_height or WIN_DRIP_HEIGHT) + 1),
+            bg       = "#00000000",
+        })
+        local drip_bg = wibox.widget {
+            wibox.widget.base.make_widget(),
+            bgimage = beautiful.window_edge_fn(c, seed),
+            widget  = wibox.container.background,
+        }
+        c._bottom_drip_bg = drip_bg
+        bottom_bar:setup {
+            drip_bg,
+            layout = wibox.layout.flex.horizontal,
+        }
         return
     end
-    local seed = get_client_seed(c)
-    local bottom_bar = awful.titlebar(c, {
-        position = "bottom",
-        size     = WIN_DRIP_HEIGHT + 1,
-        bg       = "#00000000",
-    })
-    local bg_renderer
-    if beautiful.mode == "origin" then
-        bg_renderer = slime_shapes.render_window_bottom_rocks(c, 10, WIN_DRIP_HEIGHT, seed)
-    else
-        bg_renderer = slime_shapes.render_window_bottom_drips(c, WIN_CORNER_RADIUS, WIN_DRIP_HEIGHT, seed)
-    end
-    local drip_bg = wibox.widget {
-        wibox.widget.base.make_widget(),
-        bgimage = bg_renderer,
-        widget  = wibox.container.background,
-    }
-    c._bottom_drip_bg = drip_bg
-    bottom_bar:setup {
-        drip_bg,
-        layout = wibox.layout.flex.horizontal,
-    }
+
+    awful.titlebar.hide(c, "bottom")
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
@@ -172,41 +201,36 @@ client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
 
--- Border styling & lightweight redraw of bottom drip / cyber / space perimeter glow on focus/unfocus
+-- Border styling & redraw on focus/unfocus
 client.connect_signal("focus", function(c)
-    if beautiful.mode == "chomp" or beautiful.mode == "larry" then
-        c.border_width = beautiful.border_width_focus or 3
+    if c.fullscreen then
+        c.border_width = 0
+        return
     end
-    c.border_color = beautiful.border_focus
+    c.border_width = beautiful.border_width_focus or beautiful.border_width or 2
+    c.border_color = beautiful.border_focus or "#55f736"
     if c._bottom_drip_bg then
         c._bottom_drip_bg:emit_signal("widget::redraw_needed")
     end
-    if c._cyber_edge_widgets then
-        for _, w in pairs(c._cyber_edge_widgets) do
-            w:emit_signal("widget::redraw_needed")
-        end
-    end
-    if c._space_edge_widgets then
-        for _, w in pairs(c._space_edge_widgets) do
+    if c._edge_widgets then
+        for _, w in pairs(c._edge_widgets) do
             w:emit_signal("widget::redraw_needed")
         end
     end
 end)
+
 client.connect_signal("unfocus", function(c)
-    if beautiful.mode == "chomp" or beautiful.mode == "larry" then
-        c.border_width = beautiful.border_width or 2
+    if c.fullscreen then
+        c.border_width = 0
+        return
     end
-    c.border_color = beautiful.border_normal
+    c.border_width = beautiful.border_width or 2
+    c.border_color = beautiful.border_normal or "#222222"
     if c._bottom_drip_bg then
         c._bottom_drip_bg:emit_signal("widget::redraw_needed")
     end
-    if c._cyber_edge_widgets then
-        for _, w in pairs(c._cyber_edge_widgets) do
-            w:emit_signal("widget::redraw_needed")
-        end
-    end
-    if c._space_edge_widgets then
-        for _, w in pairs(c._space_edge_widgets) do
+    if c._edge_widgets then
+        for _, w in pairs(c._edge_widgets) do
             w:emit_signal("widget::redraw_needed")
         end
     end

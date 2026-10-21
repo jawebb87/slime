@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Mystery Machine (Scooby-Doo Spooky Night & Flower Power)
+# ==============================================================================
+
+theme[main_bg]="#10151d"
+theme[main_fg]="#d4e5ea"
+theme[title]="#1cd1be"
+theme[hi_fg]="#ff7700"
+theme[selected_bg]="#17232e"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#6b8594"
+theme[graph_text]="#88e22c"
+theme[meter_bg]="#151d28"
+theme[proc_misc]="#1cd1be"
+
+# Box outlines
+theme[cpu_box]="#1cd1be"
+theme[mem_box]="#88e22c"
+theme[net_box]="#ff7700"
+theme[proc_box]="#b062ff"
+theme[div_line]="#1d2c3a"
+
+# Temperature gradient (Turquoise -> Gold -> Alert Red)
+theme[temp_start]="#1cd1be"
+theme[temp_mid]="#ffd000"
+theme[temp_end]="#ff3864"
+
+# CPU graph
+theme[cpu_start]="#1cd1be"
+theme[cpu_mid]="#88e22c"
+theme[cpu_end]="#ff7700"
+
+# Memory meters
+theme[free_start]="#151d28"
+theme[free_mid]="#1cd1be"
+theme[free_end]="#d4e5ea"
+
+theme[cached_start]="#151d28"
+theme[cached_mid]="#88e22c"
+theme[cached_end]="#a4f553"
+
+theme[available_start]="#151d28"
+theme[available_mid]="#ffd000"
+theme[available_end]="#ff7700"
+
+theme[used_start]="#1cd1be"
+theme[used_mid]="#ff7700"
+theme[used_end]="#ff3864"
+
+# Download / Upload network graph
+theme[download_start]="#1cd1be"
+theme[download_mid]="#88e22c"
+theme[download_end]="#a4f553"
+
+theme[upload_start]="#ff7700"
+theme[upload_mid]="#ffd000"
+theme[upload_end]="#ff3864"

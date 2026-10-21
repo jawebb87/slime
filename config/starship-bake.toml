@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Wake & Bake (420 Special)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'bake'
+
+format = """
+[\\[420//WAKE//BAKE\\]](bold fg:weed_green) \
+[󰌪](bold fg:trichome_lime) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🌿](bold fg:bong_cyan)\
+$line_break\
+$character"""
+
+[palettes.bake]
+den_dark        = "#111618"
+weed_green      = "#48b852"
+trichome_lime   = "#76e080"
+bong_cyan       = "#4ee2ec"
+doritos_amber   = "#f4a226"
+crisps_red      = "#e63946"
+rolling_cream   = "#e5dfd5"
+smoke_dim       = "#70857b"
+
+[username]
+show_always = true
+style_user = "bold fg:weed_green"
+style_root = "bold fg:crisps_red"
+format = '[$user]($style)[:](bold fg:smoke_dim)'
+
+[directory]
+style = "bold fg:doritos_amber"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:bong_cyan"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:weed_green"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:doritos_amber"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:weed_green"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:bong_cyan"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:weed_green"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:weed_green"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:bong_cyan"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:crisps_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[🌲](bold fg:weed_green) "
+error_symbol = "[🌲](bold fg:crisps_red) "

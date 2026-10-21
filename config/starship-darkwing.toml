@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Darkwing Duck Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'darkwing'
+
+format = """
+[\\[LET'S//GET//DANGEROUS\\]](bold fg:cyan) \
+[⚡](bold fg:gold) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🦆](bold fg:cyan)\
+$line_break\
+$character"""
+
+[palettes.darkwing]
+midnight_dark  = "#120c1f"
+purple         = "#9d4edd"
+cyan           = "#00e5ff"
+teal           = "#1de9b6"
+gold           = "#ffd700"
+orange         = "#ff6b00"
+alert_red      = "#ff2a6d"
+spectral_white = "#ffffff"
+slate_dim      = "#7c6a99"
+
+[username]
+show_always = true
+style_user = "bold fg:cyan"
+style_root = "bold fg:alert_red"
+format = '[$user]($style)[:](bold fg:slate_dim)'
+
+[directory]
+style = "bold fg:purple"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:gold"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:orange"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:teal"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:cyan"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:gold"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:orange"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:cyan"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:gold"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:alert_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:cyan)"
+error_symbol = "[❯](bold fg:alert_red)"

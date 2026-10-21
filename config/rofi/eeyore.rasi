@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Eeyore — Watercolor Sky (Watercolor Sky)
+ * ============================================================================ */
+
+* {
+    bg:          #f3f6f3f4;
+    bg-alt:      #e7efee;
+    bg-selected: #326d8b;
+    fg:          #34444e;
+    fg-selected: #f3f6f3;
+    fg-muted:    #697d85;
+    border-col:  #326d8b;
+    accent:      #a34f69;
+    gold:        #866a2e;
+    neon-blue:   #477666;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "SKY // FIND SOMETHING...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @accent;
+    text-color:       #253540;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @neon-blue;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @accent;
+    text-color:       #253540;
+}
+
+element selected.active {
+    background-color: @neon-blue;
+    text-color:       @fg-selected;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

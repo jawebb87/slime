@@ -66,4 +66,14 @@ require("config.signals")
 
 -- Autostart background processes
 require("config.autostart")
+
+-- Periodic Lua garbage collection to purge cached Cairo surfaces and bound memory
+gears.timer {
+    timeout   = 180,
+    autostart = true,
+    callback  = function()
+        collectgarbage("collect")
+    end,
+}
 -- }}}
+

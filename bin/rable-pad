@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Interactive theme console; use a theme banner when one is installed.
+set -e
+
+if [ -x "$HOME/.local/bin/rable-fetch" ]; then
+    "$HOME/.local/bin/rable-fetch"
+else
+    printf '\n%s\n\n' 'Miss Rable console'
+fi
+exec "${SHELL:-/bin/zsh}" -i

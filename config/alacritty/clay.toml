@@ -1,0 +1,39 @@
+[window]
+opacity = 0.94
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "IosevkaTermSlab Nerd Font" }
+
+[colors.primary]
+background = "#352f30"
+foreground = "#d1c4af"
+
+[colors.cursor]
+cursor = "#e4dccf"
+text   = "#2b2526"
+
+[colors.selection]
+background = "#585153"
+text       = "#ffffff"
+
+[colors.normal]
+black   = "#2b2526"
+red     = "#c26d55"
+green   = "#889c6d"
+yellow  = "#d49b52"
+blue    = "#768a96"
+magenta = "#a37c86"
+cyan    = "#7e9994"
+white   = "#d1c4af"
+
+[colors.bright]
+black   = "#6e6563"
+red     = "#d97d58"
+green   = "#9db57e"
+yellow  = "#e0af68"
+blue    = "#8ba2af"
+magenta = "#b88e99"
+cyan    = "#93b3ad"
+white   = "#e4dccf"

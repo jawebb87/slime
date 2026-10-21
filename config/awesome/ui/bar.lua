@@ -8,173 +8,8 @@ local slime_shapes = require("theme.slime_shapes")
 
 local modkey = apps.modkey
 local python_bench = os.getenv("HOME") .. "/Projects/qtile_bench/"
-local mode = beautiful.mode or "slime"
-local is_origin = (mode == "origin")
-local is_lab = (mode == "lab")
-local is_cyber = (mode == "cyber")
-local is_space = (mode == "space")
-local is_shred = (mode == "shred")
-local is_chomp = (mode == "chomp" or mode == "larry")
-local is_larry = is_chomp
-local is_flat = (is_lab or is_cyber or is_space or is_shred or is_chomp)
-
--- Mode-aware telemetry color palette
-local P
-if is_origin then
-    P = {
-        cpu        = "#9ece6a",
-        temp_ok    = "#5a784d",
-        temp_hot   = "#d08770",
-        gpu        = "#8fbcbb",
-        sys        = "#d8dee9",
-        net_ok     = "#9ece6a",
-        net_off    = "#d08770",
-        vol_ok     = "#d8dee9",
-        vol_mute   = "#d08770",
-        bat_ok     = "#9ece6a",
-        bat_chg    = "#ebcb8b",
-        bat_warn   = "#d08770",
-        bat_crit   = "#bf616a",
-        bat_badge  = "#5a784d",
-        pill_bg1   = "#241e17",
-        pill_bg2   = "#1c1914",
-        pill_fg    = "#d8dee9",
-        pill_bdr   = "#5a784d",
-        pill_bw    = 1,
-    }
-elseif is_lab then
-    P = {
-        cpu        = "#0a0c0e",
-        temp_ok    = "#0284c7",
-        temp_hot   = "#dc2626",
-        gpu        = "#0369a1",
-        sys        = "#0a0c0e",
-        net_ok     = "#0a0c0e",
-        net_off    = "#dc2626",
-        vol_ok     = "#0a0c0e",
-        vol_mute   = "#dc2626",
-        bat_ok     = "#0a0c0e",
-        bat_chg    = "#0284c7",
-        bat_warn   = "#b45309",
-        bat_crit   = "#dc2626",
-        bat_badge  = "#0284c7",
-        pill_bg1   = "#ffffff",
-        pill_bg2   = "#f8fafc",
-        pill_fg    = "#0a0c0e",
-        pill_bdr   = "#000000",
-        pill_bw    = 2,
-    }
-elseif is_cyber then
-    P = {
-        cpu        = "#00f0ff",
-        temp_ok    = "#a855f7",
-        temp_hot   = "#ff007f",
-        gpu        = "#55f736",
-        sys        = "#e0d8f6",
-        net_ok     = "#00f0ff",
-        net_off    = "#ff007f",
-        vol_ok     = "#a855f7",
-        vol_mute   = "#ff007f",
-        bat_ok     = "#55f736",
-        bat_chg    = "#74ff2e",
-        bat_warn   = "#ff007f",
-        bat_crit   = "#ff007f",
-        bat_badge  = "#00f0ff",
-        pill_bg1   = "#161326",
-        pill_bg2   = "#120f24",
-        pill_fg    = "#e0d8f6",
-        pill_bdr   = "#a855f7",
-        pill_bw    = 1,
-    }
-elseif is_space then
-    P = {
-        cpu        = "#1b2028",
-        temp_ok    = "#0088cc",
-        temp_hot   = "#d32f2f",
-        gpu        = "#0088cc",
-        sys        = "#1b2028",
-        net_ok     = "#0088cc",
-        net_off    = "#d32f2f",
-        vol_ok     = "#1b2028",
-        vol_mute   = "#d32f2f",
-        bat_ok     = "#0d8a52",
-        bat_chg    = "#e59500",
-        bat_warn   = "#c25d00",
-        bat_crit   = "#d32f2f",
-        bat_badge  = "#0088cc",
-        pill_bg1   = "#f5f6f9",
-        pill_bg2   = "#e1e4ea",
-        pill_fg    = "#1b2028",
-        pill_bdr   = "#e59500",
-        pill_bw    = 1,
-    }
-elseif is_shred then
-    P = {
-        cpu        = "#e2e8f0",
-        temp_ok    = "#8b95a5",
-        temp_hot   = "#ff2a2a",
-        gpu        = "#ff5500",
-        sys        = "#c8d0dc",
-        net_ok     = "#e2e8f0",
-        net_off    = "#ff2a2a",
-        vol_ok     = "#c8d0dc",
-        vol_mute   = "#ff2a2a",
-        bat_ok     = "#c8d0dc",
-        bat_chg    = "#ff5500",
-        bat_warn   = "#ff5500",
-        bat_crit   = "#ff2a2a",
-        bat_badge  = "#8b95a5",
-        pill_bg1   = "#16191f",
-        pill_bg2   = "#111318",
-        pill_fg    = "#e2e8f0",
-        pill_bdr   = "#4a5260",
-        pill_bw    = 1,
-    }
-elseif is_chomp then
-    P = {
-        cpu        = "#39ff14",
-        temp_ok    = "#39ff14",
-        temp_hot   = "#ffb000",
-        gpu        = "#39ff14",
-        sys        = "#6ee7b7",
-        net_ok     = "#39ff14",
-        net_off    = "#ffb000",
-        vol_ok     = "#39ff14",
-        vol_mute   = "#ffb000",
-        bat_ok     = "#39ff14",
-        bat_chg    = "#39ff14",
-        bat_warn   = "#ffb000",
-        bat_crit   = "#ff3b5c",
-        bat_badge  = "#0d2822",
-        pill_bg1   = "#111415",
-        pill_bg2   = "#111415",
-        pill_fg    = "#e2f5ec",
-        pill_bdr   = "#39ff14",
-        pill_bw    = 1,
-    }
-else
-    P = {
-        cpu        = "#d8eb34",
-        temp_ok    = "#d8eb34",
-        temp_hot   = "#ff4343",
-        gpu        = "#55ffaa",
-        sys        = "#c6f582",
-        net_ok     = "#74ff2e",
-        net_off    = "#ff4343",
-        vol_ok     = "#c6f582",
-        vol_mute   = "#ff4343",
-        bat_ok     = "#55f736",
-        bat_chg    = "#d8eb34",
-        bat_warn   = "#d8eb34",
-        bat_crit   = "#ff4343",
-        bat_badge  = "#36e385",
-        pill_bg1   = "#142417",
-        pill_bg2   = "#16281a",
-        pill_fg    = beautiful.fg_normal,
-        pill_bdr   = "#24492b",
-        pill_bw    = 1,
-    }
-end
+local P = beautiful.palette or {}
+local use_label_telemetry = (beautiful.telemetry_style == "label")
 
 -- {{{ Wallpaper
 local function set_wallpaper(s)
@@ -184,6 +19,8 @@ local function set_wallpaper(s)
             wallpaper = wallpaper(s)
         end
         gears.wallpaper.maximized(wallpaper, s, true)
+    else
+        gears.wallpaper.set(beautiful.bg_normal or "#0c140d", s)
     end
 end
 
@@ -192,26 +29,24 @@ screen.connect_signal("property::geometry", set_wallpaper)
 
 -- {{{ Helper: Mode-aware pill widget wrapper
 local pill_seed = 1.1
-local function pill_container(widget, bg_color, fg_color)
-    pill_seed = pill_seed + 1.37
-    local shape_fn
-    if is_origin then
-        shape_fn = slime_shapes.rocky_pill(6, pill_seed)
-    elseif is_shred then
-        shape_fn = slime_shapes.shred_pill(7, pill_seed)
-    elseif is_larry then
-        shape_fn = slime_shapes.larry_widget_pod(6)
-    elseif is_cyber then
-        shape_fn = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, 2)
-        end
-    elseif is_lab or is_space then
-        shape_fn = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, 4)
-        end
-    else
-        shape_fn = slime_shapes.wobbly_pill(7, pill_seed)
+
+local function resolve_pill_shape(seed)
+    local fn = beautiful.pill_shape_fn
+    if type(fn) ~= "function" then
+        return function(cr, w, h) gears.shape.rounded_rect(cr, w, h, 4) end
     end
+    local ok, res = pcall(fn, seed)
+    if ok and type(res) == "function" then
+        return res
+    end
+    return fn
+end
+
+local function pill_container(widget, bg_color, fg_color)
+    if beautiful.pill_wrapper then
+        return beautiful.pill_wrapper(widget, bg_color, fg_color, P)
+    end
+    pill_seed = pill_seed + 1.37
     return wibox.widget {
         {
             widget,
@@ -221,11 +56,11 @@ local function pill_container(widget, bg_color, fg_color)
             bottom = 3,
             widget = wibox.container.margin,
         },
-        bg                 = is_lab and P.pill_bg1 or (bg_color or P.pill_bg1),
+        bg                 = bg_color or P.pill_bg1,
         fg                 = fg_color or P.pill_fg,
-        shape              = shape_fn,
-        shape_border_width = P.pill_bw,
-        shape_border_color = P.pill_bdr,
+        shape              = resolve_pill_shape(pill_seed),
+        shape_border_width = P.pill_bw or 1,
+        shape_border_color = P.pill_bdr or beautiful.border_focus or "#55f736",
         widget             = wibox.container.background,
     }
 end
@@ -261,10 +96,11 @@ end
 -- {{{ Live Telemetry Widgets
 
 -- 1. CPU Usage + Temperature Pill (click -> btop)
-local cpu_textbox = wibox.widget {
+local cpu_textbox = beautiful.cpu_meter_widget and beautiful.cpu_meter_widget() or wibox.widget {
     markup = string.format("<span foreground='%s'> 0%%</span>", P.cpu),
     widget = wibox.widget.textbox,
 }
+local cpu_detail = "CPU: waiting for telemetry"
 local prev_total, prev_idle = 0, 0
 gears.timer {
     timeout   = 2,
@@ -299,10 +135,12 @@ gears.timer {
                 end
             end
         end
-        if is_larry then
+        cpu_detail = string.format("CPU: %d%%%s", usage, temp_str)
+        if cpu_textbox.set_value then cpu_textbox:set_value(usage) end
+        if use_label_telemetry or beautiful.bar_compact then
             cpu_textbox.markup = string.format(
-                "<span foreground='#39ff14' weight='bold'>CPU</span>  <span foreground='#f0f4f8'>%d%%</span>",
-                usage
+                "<span foreground='%s' weight='bold'>CPU</span>  <span foreground='%s'>%d%%</span>",
+                P.cpu or "#39ff14", P.pill_fg or "#f0f4f8", usage
             )
         else
             cpu_textbox.markup = string.format(
@@ -315,15 +153,18 @@ gears.timer {
 local cpu_pill = pill_container(cpu_textbox, P.pill_bg1)
 cpu_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
-        scratchpad.toggle("kitty --class btop-float -e btop", "btop-float")
+        scratchpad.toggle("alacritty --class btop-float,btop-float -T btop-float -e btop", "btop-float", true)
     end)
 ))
 
+awful.tooltip { objects = {cpu_pill}, timer_function = function() return cpu_detail end }
+
 -- 2. GPU Temp + RAM + Disk Pill (click -> btop)
-local sys_textbox = wibox.widget {
+local sys_textbox = beautiful.memory_meter_widget and beautiful.memory_meter_widget() or wibox.widget {
     markup = string.format("<span foreground='%s'> --G</span>", P.sys),
     widget = wibox.widget.textbox,
 }
+local sys_detail = "System: waiting for telemetry"
 local disk_free_str = ""
 gears.timer {
     timeout   = 30,
@@ -351,6 +192,9 @@ gears.timer {
             local avail = tonumber(meminfo:match("MemAvailable:%s+(%d+)"))
             if total and avail then
                 used_gb = (total - avail) / (1024 * 1024)
+                if sys_textbox.set_value and total > 0 then
+                    sys_textbox:set_value((total - avail) / total * 100)
+                end
                 ram_str = string.format(" %.1fG", used_gb)
             end
         end
@@ -362,10 +206,11 @@ gears.timer {
                 gpu_str = string.format(" %d°C  ", math.floor(raw / 1000 + 0.5))
             end
         end
-        if is_larry then
+        sys_detail = gpu_str .. ram_str .. disk_free_str
+        if use_label_telemetry or beautiful.bar_compact then
             sys_textbox.markup = string.format(
-                "<span foreground='#39ff14' weight='bold'>MEM</span>  <span foreground='#f0f4f8'>%.1fG</span>",
-                used_gb
+                "<span foreground='%s' weight='bold'>MEM</span>  <span foreground='%s'>%.1fG</span>",
+                P.cpu or "#39ff14", P.pill_fg or "#f0f4f8", used_gb
             )
         else
             sys_textbox.markup = string.format(
@@ -378,7 +223,7 @@ gears.timer {
 local sys_pill = pill_container(sys_textbox, P.pill_bg2)
 sys_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
-        scratchpad.toggle("kitty --class btop-float -e btop", "btop-float")
+        scratchpad.toggle("alacritty --class btop-float,btop-float -T btop-float -e btop", "btop-float", true)
     end)
 ))
 
@@ -396,10 +241,10 @@ gears.timer {
             "nmcli -t -f TYPE,STATE,CONNECTION dev status 2>/dev/null | grep ':connected:' | head -n 1",
             function(stdout)
                 local net_type, _, conn = stdout:match("^([^:]+):([^:]+):([^\r\n]+)")
-                if is_larry then
+                if use_label_telemetry or beautiful.bar_compact then
                     local net_str = (net_type == "wifi" and conn and conn ~= "") and "ONLINE" or (net_type == "ethernet" and "ETH" or "OFFLINE")
-                    local col = (net_str == "OFFLINE") and "#ffb000" or "#39ff14"
-                    wifi_textbox.markup = string.format("<span foreground='%s' weight='bold'>NET</span>  <span foreground='#f0f4f8'>%s</span>", col, net_str)
+                    local col = (net_str == "OFFLINE") and (P.net_off or "#ffb000") or (P.net_ok or "#39ff14")
+                    wifi_textbox.markup = string.format("<span foreground='%s' weight='bold'>NET</span>  <span foreground='%s'>%s</span>", col, P.pill_fg or "#f0f4f8", net_str)
                 elseif net_type == "wifi" and conn and conn ~= "" then
                     wifi_textbox.markup = string.format("<span foreground='%s'> %s</span>", P.net_ok, gears.string.xml_escape(conn))
                 elseif net_type == "ethernet" then
@@ -429,10 +274,10 @@ local function update_volume()
         local muted = stdout:find("MUTED", 1, true) ~= nil
         if vol_num then
             local pct = math.floor(vol_num * 100 + 0.5)
-            if is_larry then
-                local col = muted and "#ffb000" or "#39ff14"
+            if use_label_telemetry or beautiful.bar_compact then
+                local col = muted and (P.vol_mute or "#ffb000") or (P.vol_ok or "#39ff14")
                 local txt = muted and "MUTE" or string.format("%d%%", pct)
-                vol_textbox.markup = string.format("<span foreground='%s' weight='bold'>VOL</span>  <span foreground='#f0f4f8'>%s</span>", col, txt)
+                vol_textbox.markup = string.format("<span foreground='%s' weight='bold'>VOL</span>  <span foreground='%s'>%s</span>", col, P.pill_fg or "#f0f4f8", txt)
             elseif muted then
                 vol_textbox.markup = string.format("<span foreground='%s' weight='bold'> %d%%</span>", P.vol_mute, pct)
             else
@@ -498,9 +343,9 @@ local function update_battery()
     if thresh < 100 then
         thresh_badge = string.format(" <span foreground='%s' size='small'>[%d%%]</span>", P.bat_badge, thresh)
     end
-    if is_larry then
-        local col = (cap <= 20) and "#ff0055" or ((cap <= 50) and "#ffb000" or "#39ff14")
-        bat_textbox.markup = string.format("<span foreground='%s' weight='bold'>BAT</span>  <span foreground='#f0f4f8'>%d%%%s</span>", col, cap, (status == "Charging" or ac == "1") and " " or "")
+    if use_label_telemetry or beautiful.bar_compact then
+        local col = (cap <= 20) and (P.bat_crit or "#ff0055") or ((cap <= 50) and (P.bat_warn or "#ffb000") or (P.bat_ok or "#39ff14"))
+        bat_textbox.markup = string.format("<span foreground='%s' weight='bold'>BAT</span>  <span foreground='%s'>%d%%%s</span>", col, P.pill_fg or "#f0f4f8", cap, (status == "Charging" or ac == "1") and " " or "")
     else
         bat_textbox.markup = string.format("<span foreground='%s'>%s %d%%</span>%s", color, icon, cap, thresh_badge)
     end
@@ -542,9 +387,26 @@ bat_pill:buttons(gears.table.join(
     end)
 ))
 
+awful.tooltip { objects = {sys_pill}, timer_function = function() return sys_detail end }
+
 -- 6. Clock Pill (left-click -> weather_pad.py, right-click -> zodiac_pad.py)
-local mytextclock = wibox.widget.textclock(is_larry and "  %H:%M " or "  %a %b %d   %I:%M %p ")
+local mytextclock = beautiful.clock_widget and beautiful.clock_widget() or
+    wibox.widget.textclock(beautiful.clock_format or "  %a %b %d   %I:%M %p ")
+if beautiful.clock_font then mytextclock.font = beautiful.clock_font end
 local clock_pill = pill_container(mytextclock, P.pill_bg2)
+awful.tooltip { objects = {clock_pill}, timer_function = function() return os.date("%A, %B %d, %Y") end }
+if beautiful.telemetry_font then
+    for _, textbox in ipairs({cpu_textbox, sys_textbox, wifi_textbox,
+                               vol_textbox, bat_textbox}) do
+        textbox.font = beautiful.telemetry_font
+    end
+end
+if beautiful.clock_scoreboard then
+    clock_pill.bg = "#101613"
+    clock_pill.fg = "#9cdb45"
+    clock_pill.shape_border_width = 1
+    clock_pill.shape_border_color = "#617568"
+end
 clock_pill:buttons(gears.table.join(
     awful.button({}, 1, function()
         scratchpad.toggle("python3 " .. python_bench .. "weather_pad.py", "weather-pad")
@@ -598,9 +460,12 @@ awful.screen.connect_for_each_screen(function(s)
     -- Set screen wallpaper
     set_wallpaper(s)
 
-    -- Tags (strictly SYS, DEV, SWAMP, ROOT, LOGS for Chomp theme)
-    local tag_names = is_chomp and { "SYS", "DEV", "SWAMP", "ROOT", "LOGS" } or { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+    -- Tags
+    local tag_names = beautiful.tag_names or { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
     awful.tag(tag_names, s, awful.layout.layouts[1])
+    for _, t in ipairs(s.tags) do
+        t.gap = beautiful.useless_gap or 6
+    end
 
     -- Dedicated Special Scratchpad Tag (hidden from pager & tag switcher)
     s.scratch_tag = scratchpad.get_scratch_tag(s)
@@ -617,61 +482,16 @@ awful.screen.connect_for_each_screen(function(s)
         awful.button({ }, 5, function () awful.layout.inc(-1) end)
     ))
 
-    -- Taglist widget template for Chomp theme:
-    local taglist_template = nil
-    if is_chomp then
-        taglist_template = {
-            {
-                {
-                    id     = "text_role",
-                    widget = wibox.widget.textbox,
-                },
-                left   = 10,
-                right  = 10,
-                top    = 3,
-                bottom = 3,
-                widget = wibox.container.margin,
-            },
-            id                 = "background_role",
-            widget             = wibox.container.background,
-            shape              = slime_shapes.chomp_tag_wedge(8, 4),
-            shape_border_width = 1,
-            shape_border_color = "#39ff1444",
-        }
-    end
-
     -- Taglist (strictly excludes hidden scratchpad tags)
     s.mytaglist = awful.widget.taglist {
         screen          = s,
         filter          = function(t) return not t.hide and t.name ~= "scratchpad" end,
         buttons         = taglist_buttons,
-        widget_template = taglist_template,
-        layout          = is_chomp and {
-            spacing = 4,
-            layout  = wibox.layout.fixed.horizontal,
-        } or nil,
+        widget_template = beautiful.taglist_template,
+        layout          = beautiful.taglist_layout,
     }
 
     -- Tasklist
-    local task_shape
-    if is_origin then
-        task_shape = slime_shapes.rocky_pill(5, 4.2)
-    elseif is_shred then
-        task_shape = slime_shapes.shred_pill(6, 4.2)
-    elseif is_chomp then
-        task_shape = slime_shapes.chomp_widget_pod(6)
-    elseif is_cyber then
-        task_shape = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, 2)
-        end
-    elseif is_lab or is_space then
-        task_shape = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, 4)
-        end
-    else
-        task_shape = slime_shapes.wobbly_pill(6, 4.2)
-    end
-
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
@@ -680,7 +500,7 @@ awful.screen.connect_for_each_screen(function(s)
             spacing = 4,
             layout  = wibox.layout.flex.horizontal
         },
-        widget_template = {
+        widget_template = beautiful.tasklist_template or {
             {
                 {
                     {
@@ -701,116 +521,259 @@ awful.screen.connect_for_each_screen(function(s)
             },
             id                 = "background_role",
             widget             = wibox.container.background,
-            shape              = task_shape,
-            shape_border_width = is_lab and 2 or ((is_cyber or is_origin or is_space or is_shred or is_chomp) and 1 or 0),
-            shape_border_color = is_lab and "#000000" or (is_origin and "#5a784d" or (is_shred and "#4a5260" or (is_space and "#e59500" or (is_chomp and "#39ff14" or "#7928ca")))),
+            shape              = beautiful.task_shape,
+            shape_border_width = beautiful.task_border_w or 0,
+            shape_border_color = beautiful.task_border_col or beautiful.border_focus or "#55f736",
         },
     }
 
-    local bar_drip_height = is_flat and 0 or (is_origin and 20 or 22)
-    local bar_height      = is_flat and 36 or 52
-    local bar_shape
-    if is_flat then
-        bar_shape = nil
-    elseif is_origin then
-        bar_shape = slime_shapes.rocky_bar(bar_drip_height, 4.1)
-    else
-        bar_shape = slime_shapes.dripping_bar(bar_drip_height, 3.7)
-    end
+    -- {{{ Modular Companion Widgets (Launcher Prompt Button & Mascot Pod)
+    local function resolve_companion_widgets()
+        local mode = beautiful.mode or "slime"
+        local font = beautiful.font_family or "JetBrainsMono Nerd Font"
 
-    local bar_bgimage
-    if is_origin then
-        bar_bgimage = slime_shapes.render_origin_bar_bg(bar_drip_height, 4.1)
-    elseif is_shred then
-        bar_bgimage = slime_shapes.render_shred_bar_bg()
-    elseif is_cyber then
-        bar_bgimage = slime_shapes.render_cyber_bar_bg()
-    elseif is_space then
-        bar_bgimage = slime_shapes.render_space_bar_bg()
-    elseif is_lab then
-        bar_bgimage = slime_shapes.render_lab_bar_bg()
-    elseif is_chomp then
-        bar_bgimage = slime_shapes.render_chomp_bar_bg()
-    else
-        bar_bgimage = slime_shapes.render_bar_bg(bar_drip_height, 3.7)
-    end
-
-    -- Standalone Chomp widgets (Launcher Prompt >_ and Center Mascot Pod)
-    local chomp_prompt_btn = nil
-    local chomp_mascot_widget = nil
-    if is_chomp then
-        chomp_prompt_btn = wibox.widget {
-            {
-                {
-                    markup = "<span foreground='#39ff14' weight='bold'>&gt;_</span>",
-                    font   = "IosevkaTerm Nerd Font Bold 11",
-                    align  = "center",
-                    widget = wibox.widget.textbox,
-                },
-                left   = 10,
-                right  = 10,
-                top    = 3,
-                bottom = 3,
-                widget = wibox.container.margin,
+        local COMPANION_PROFILES = {
+            chomp = {
+                prompt_markup = "<span foreground='#39ff14' weight='bold'>&gt;_</span>",
+                prompt_font   = (beautiful.font_family or "BigBlueTermPlus Nerd Font") .. " Bold 11",
+                prompt_bg     = "#111415",
+                prompt_border = "#39ff14",
+                prompt_shape  = slime_shapes.chomp_widget_pod(5),
+                mascot_image  = "chomp_head.png",
+                mascot_bg     = "#0d2822",
+                mascot_border = "#39ff14",
+                mascot_shape  = slime_shapes.chomp_mascot_pod(12),
+                mascot_margins = { top = 2, bottom = 2, left = 16, right = 16 },
+                console       = "chomp-pad",
             },
-            bg                 = "#111415",
-            shape              = slime_shapes.chomp_widget_pod(5),
-            shape_border_width = 1,
-            shape_border_color = "#39ff14",
-            widget             = wibox.container.background,
-            buttons            = gears.table.join(
-                awful.button({}, 1, function()
-                    awful.spawn("rofi -show drun")
-                end)
-            ),
+            clay = {
+                custom_prompt = function()
+                    return wibox.widget {
+                        {
+                            {
+                                {
+                                    markup = "<span foreground='#2b2526' weight='bold'> 󰏚 CLAY </span>",
+                                    font   = font .. " Bold 9",
+                                    align  = "center",
+                                    widget = wibox.widget.textbox,
+                                },
+                                left   = 8, right  = 8, top = 3, bottom = 3,
+                                widget = wibox.container.margin,
+                            },
+                            bg                 = "#d1c4af",
+                            shape              = function(cr, w, h) gears.shape.rounded_rect(cr, w, h, 4) end,
+                            shape_border_width = 1,
+                            shape_border_color = "#e4dccf",
+                            widget             = wibox.container.background,
+                        },
+                        bottom = 3,
+                        widget = wibox.container.margin,
+                        bg     = "#383233",
+                        shape  = function(cr, w, h) gears.shape.rounded_rect(cr, w, h, 4) end,
+                        widget = wibox.container.background,
+                        buttons = gears.table.join(
+                            awful.button({}, 1, function() awful.spawn("rofi -show drun") end)
+                        ),
+                    }
+                end,
+            },
+            gill = {
+                label = "GILL", icon = "󰈹 ", accent = "#00f5d4", bg = "#0c1520",
+                image = "gill_head.png", console = "gill-pad",
+            },
+            rable = {
+                label = "RABLE", icon = "󰊠 ", accent = "#ff2a85", bg = "#12101b",
+                image = "rable_head.png", console = "rable-pad",
+            },
+            tov = {
+                label = "TOV", icon = "󰈸 ", accent = "#f77f00", bg = "#1e1a1c",
+                image = "tov_head.png", console = "tov-pad",
+            },
+            dino = {
+                label = "DINO", icon = "󰈸 ", accent = "#76ff03", bg = "#16161a",
+                image = "dino_head.png", console = "dino-pad",
+            },
+            crust = {
+                label = "CRUST", icon = "󰈸 ", accent = "#f4d06f", bg = "#1a1716",
+                image = "crust_head.png", console = "crust-pad",
+            },
+            tunes = {
+                label = "TUNES", icon = "🥕 ", accent = "#d91424", bg = "#faf5eb",
+                image = "tunes_head.png", console = "tunes-pad",
+                mascot_bg = "#ffffffdd", mascot_border = "#d91424aa",
+            },
+            mystery = {
+                label = "MYSTERY", icon = "🌸 ", accent = "#1cd1be", bg = "#151d28",
+                image = "mystery_head.png", console = "mystery-pad",
+            },
+            darkwing = {
+                label = "DANGEROUS", icon = "⚡ ", accent = "#00e5ff", bg = "#181029",
+                image = "darkwing_head.png", console = "darkwing-pad",
+            },
+            tmnt = {
+                label = "COWABUNGA", icon = "🐢 ", accent = "#39ff14", bg = "#131d14",
+                image = "tmnt_head.png", console = "tmnt-pad",
+            },
+            muppet = {
+                label = "DREAMS", icon = "✨ ", accent = "#ff70a6", bg = "#1f1830",
+                image = "muppet_head.png", console = "muppet-pad",
+            },
+            jon = {
+                prompt_markup = "<span foreground='#e0562e' weight='bold'>👁 [ IM//SORRY//JON ]</span>",
+                accent = "#e0562e", bg = "#181211", image = "jon_head.png", console = "jon-pad",
+            },
+            bake = {
+                prompt_markup = "<span foreground='#48b852' weight='bold'>󰌪 420 SPECIAL</span>",
+                accent = "#48b852", bg = "#131a18", image = "bake_head.png", console = "bake-pad",
+            },
+            mothgomery = {
+                label = "MOTH", icon = "󰈹 ", accent = "#e0a96d", bg = "#1c140d",
+                image = "mothgomery_head.svg", console = "mothgomery-pad",
+            },
         }
 
-        chomp_mascot_widget = wibox.widget {
-            {
-                {
-                    image  = os.getenv("HOME") .. "/.config/awesome/theme/chomp_head.png",
-                    resize = true,
-                    widget = wibox.widget.imagebox,
-                },
-                top    = 2,
-                bottom = 2,
-                left   = 16,
-                right  = 16,
-                widget = wibox.container.margin,
-            },
-            shape              = slime_shapes.chomp_mascot_pod(12),
-            bg                 = "#0d2822",
-            shape_border_width = 1,
-            shape_border_color = "#39ff14",
-            widget             = wibox.container.background,
-            buttons            = gears.table.join(
-                awful.button({}, 1, function()
-                    scratchpad.toggle("kitty --class chomp-pad " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
-                end)
-            ),
-        }
-    end
+        local profile = COMPANION_PROFILES[mode] or {}
+        local label = beautiful.companion_label or profile.label or mode:upper()
+        local icon = beautiful.companion_icon or profile.icon or "󰈹 "
+        local accent = beautiful.companion_accent or profile.accent or beautiful.border_focus or "#55f736"
+        local bg = beautiful.companion_bg or profile.bg or beautiful.bg_normal or "#12101b"
+        local image = beautiful.companion_image or profile.image
+        local console = beautiful.companion_console or profile.console or (mode .. "-pad")
 
-    -- Create top wibar
-    s.mywibox = awful.wibar({
-        position = "top",
+        -- Discover if prompt and mascot are requested
+        local has_prompt = false
+        if beautiful.has_prompt ~= nil then
+            has_prompt = beautiful.has_prompt
+        elseif beautiful["has_" .. mode .. "_prompt"] ~= nil then
+            has_prompt = beautiful["has_" .. mode .. "_prompt"]
+        elseif mode == "clay" and beautiful.has_clay_prompt then
+            has_prompt = true
+        elseif beautiful.has_gill_prompt then
+            has_prompt = true
+        elseif profile.prompt_markup or profile.custom_prompt or profile.label then
+            has_prompt = (beautiful["has_" .. mode .. "_prompt"] ~= false)
+        end
+        if mode == "gill" and not beautiful.has_gill_prompt then has_prompt = false end
+
+        local has_mascot = false
+        if beautiful.has_mascot ~= nil then
+            has_mascot = beautiful.has_mascot
+        elseif beautiful["has_" .. mode .. "_mascot"] ~= nil then
+            has_mascot = beautiful["has_" .. mode .. "_mascot"]
+        elseif mode == "mothgomery" and beautiful.has_gill_mascot then
+            has_mascot = true
+        elseif beautiful.has_gill_mascot and beautiful.companion_image then
+            has_mascot = true
+        elseif profile.image then
+            has_mascot = (beautiful["has_" .. mode .. "_mascot"] ~= false)
+        end
+        if mode == "gill" and not beautiful.has_gill_mascot then has_mascot = false end
+
+        local prompt_btn = nil
+        if has_prompt then
+            if profile.custom_prompt then
+                prompt_btn = profile.custom_prompt()
+            else
+                local markup = profile.prompt_markup or
+                               ("<span foreground='" .. accent .. "' weight='bold'>" .. icon .. label .. "</span>")
+                local p_font = profile.prompt_font or (font .. " Bold 10")
+                local p_shape = profile.prompt_shape or function(cr, w, h) gears.shape.rounded_rect(cr, w, h, 6) end
+                local p_bg = profile.prompt_bg or bg
+                local p_border = profile.prompt_border or accent
+
+                prompt_btn = wibox.widget {
+                    {
+                        {
+                            markup = markup,
+                            font   = p_font,
+                            align  = "center",
+                            widget = wibox.widget.textbox,
+                        },
+                        left   = 10,
+                        right  = 10,
+                        top    = 3,
+                        bottom = 3,
+                        widget = wibox.container.margin,
+                    },
+                    bg                 = p_bg,
+                    shape              = p_shape,
+                    shape_border_width = 1,
+                    shape_border_color = p_border,
+                    widget             = wibox.container.background,
+                    buttons            = gears.table.join(
+                        awful.button({}, 1, function()
+                            awful.spawn("rofi -show drun")
+                        end)
+                    ),
+                }
+            end
+        end
+
+        local mascot_widget = nil
+        if has_mascot and image then
+            local m_shape = profile.mascot_shape or function(cr, w, h) gears.shape.rounded_rect(cr, w, h, 8) end
+            local m_bg = profile.mascot_bg or (bg .. (bg:len() <= 7 and "dd" or ""))
+            local m_border = profile.mascot_border or (accent .. (accent:len() <= 7 and "aa" or ""))
+            local margins = profile.mascot_margins or { top = 1, bottom = 1, left = 12, right = 12 }
+            local img_path = os.getenv("HOME") .. "/.config/awesome/theme/" .. image
+
+            mascot_widget = wibox.widget {
+                {
+                    {
+                        image  = img_path,
+                        resize = true,
+                        widget = wibox.widget.imagebox,
+                    },
+                    top    = margins.top,
+                    bottom = margins.bottom,
+                    left   = margins.left,
+                    right  = margins.right,
+                    widget = wibox.container.margin,
+                },
+                shape              = m_shape,
+                bg                 = m_bg,
+                shape_border_width = 1,
+                shape_border_color = m_border,
+                widget             = wibox.container.background,
+                buttons            = gears.table.join(
+                    awful.button({}, 1, function()
+                        scratchpad.toggle("alacritty --class " .. console .. "," .. console .. " -T " .. console .. " -e " .. os.getenv("HOME") .. "/.local/bin/" .. console, console)
+                    end)
+                ),
+            }
+        end
+
+        return prompt_btn, mascot_widget
+    end
+    -- }}}
+
+    local prompt_btn, mascot_widget = resolve_companion_widgets()
+
+    -- Plain wibox overlays avoid awful.wibar reserving space for hidden bars.
+    s.mywibox = wibox({
         screen   = s,
-        height   = bar_height,
+        height   = beautiful.bar_height or 36,
         ontop    = true,
-        bg       = "#00000000",
+        visible  = false,
+        bg       = beautiful.bar_background or "#00000000",
         fg       = beautiful.fg_normal,
-        shape    = bar_shape,
+        shape    = beautiful.bar_shape,
     })
 
-    s.mywibox:struts({ top = is_flat and 36 or 34, bottom = 0, left = 0, right = 0 })
-
     local left_widgets
-    if is_chomp then
+    if beautiful.bar_deck_tags then
         left_widgets = {
             layout = wibox.layout.fixed.horizontal,
             spacing = 6,
+            s.mytaglist,
+            s.mypromptbox,
+        }
+    elseif prompt_btn then
+        left_widgets = {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 8,
             wibox.widget {
-                chomp_prompt_btn,
+                prompt_btn,
                 left = 6,
                 widget = wibox.container.margin,
             },
@@ -831,11 +794,11 @@ awful.screen.connect_for_each_screen(function(s)
     end
 
     local middle_widget
-    if is_chomp then
+    if mascot_widget then
         middle_widget = {
             layout = wibox.layout.align.horizontal,
             s.mytasklist,
-            chomp_mascot_widget,
+            mascot_widget,
             nil,
         }
     else
@@ -844,9 +807,45 @@ awful.screen.connect_for_each_screen(function(s)
             left = 12,
             right = 12,
             top = 2,
-            bottom = 2,
+            bottom = beautiful.tasklist_margin_bottom or 2,
             widget = wibox.container.margin,
         }
+    end
+
+    local systray_container
+    if beautiful.bar_invisible then
+        systray_container = pill_container(wibox.widget.systray(), P.pill_bg1)
+    else
+        systray_container = wibox.widget.systray()
+    end
+
+    local layoutbox_container
+    if beautiful.bar_invisible then
+        layoutbox_container = wibox.widget {
+            pill_container(s.mylayoutbox, P.pill_bg2),
+            right = 8,
+            widget = wibox.container.margin,
+        }
+    else
+        layoutbox_container = wibox.widget {
+            s.mylayoutbox,
+            top = 2,
+            bottom = 2,
+            right = 8,
+            widget = wibox.container.margin,
+        }
+    end
+
+    local right_widgets = {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 6,
+    }
+    -- Compact themes use short labels, but retain the same status and actions.
+    table.insert(right_widgets, cpu_pill)
+    table.insert(right_widgets, sys_pill)
+    for _, widget in ipairs({wifi_pill, vol_pill, bat_pill, systray_container,
+                              clock_pill, layoutbox_container}) do
+        table.insert(right_widgets, widget)
     end
 
     -- Add widgets to the wibar
@@ -856,30 +855,15 @@ awful.screen.connect_for_each_screen(function(s)
                 layout = wibox.layout.align.horizontal,
                 left_widgets,
                 middle_widget,
-                { -- Right widgets
-                    layout = wibox.layout.fixed.horizontal,
-                    spacing = 6,
-                    cpu_pill,
-                    sys_pill,
-                    wifi_pill,
-                    vol_pill,
-                    bat_pill,
-                    wibox.widget.systray(),
-                    clock_pill,
-                    wibox.widget {
-                        s.mylayoutbox,
-                        top = 2,
-                        bottom = 2,
-                        right = 8,
-                        widget = wibox.container.margin,
-                    },
-                },
+                right_widgets,
             },
-            top    = 3,
-            bottom = is_flat and 5 or (bar_drip_height + 1),
+            top    = beautiful.bar_margin_top or 3,
+            bottom = beautiful.bar_margin_bottom or (beautiful.is_flat and 5 or ((beautiful.bar_drip_height or 22) + 1)),
+            left   = beautiful.bar_padding_horizontal or 0,
+            right  = beautiful.bar_padding_horizontal or 0,
             widget = wibox.container.margin,
         },
-        bgimage = bar_bgimage,
+        bgimage = beautiful.bar_bgimage,
         widget  = wibox.container.background,
     }
     s._bar_bg_widget = bar_bg_widget
@@ -887,67 +871,14 @@ awful.screen.connect_for_each_screen(function(s)
         bar_bg_widget,
         layout = wibox.layout.flex.horizontal,
     }
+    s._bar_autohide = require("ui.bar_autohide").attach(s, s.mywibox, {
+        floating = beautiful.bar_floating,
+        height = beautiful.bar_height or 36,
+        inset = beautiful.bar_inset or 20,
+        offset = beautiful.bar_offset or 12,
+        strip_height = require("beautiful.xresources").apply_dpi(2, s),
+    })
 end)
 
--- In Cyberpunk mode, animate the pulsing toxic-green light across the top Wibar
--- and circling around the outside perimeter of the currently focused window.
-if is_cyber then
-    gears.timer {
-        timeout   = 0.033,
-        autostart = true,
-        callback  = function()
-            slime_shapes.cyber_pulse_time = (slime_shapes.cyber_pulse_time or 0) + 0.033
-            for s in screen do
-                if s._bar_bg_widget then
-                    s._bar_bg_widget:emit_signal("widget::redraw_needed")
-                end
-            end
-            local c = client.focus
-            if c and c.valid and c._cyber_edge_widgets then
-                for _, w in pairs(c._cyber_edge_widgets) do
-                    w:emit_signal("widget::redraw_needed")
-                end
-            end
-        end,
-    }
-elseif is_space then
-    -- In Orbital Containment (space) mode:
-    -- 1. Every 12s, sweep a high-speed angled solar glint across the Wibar and active window top lip (30 FPS during the ~2s sweep)
-    -- 2. Continuously modulate the passive cryo-breath fog on the active window's bottom border (~5 FPS when not in solar sweep)
-    local tick_count = 0
-    gears.timer {
-        timeout   = 0.033,
-        autostart = true,
-        callback  = function()
-            local prev_t = slime_shapes.space_time or 0
-            local next_t = prev_t + 0.033
-            slime_shapes.space_time = next_t
-            tick_count = tick_count + 1
 
-            local bar_cycle = next_t % 12.0
-            local prev_bar_cycle = prev_t % 12.0
-            if bar_cycle < 1.75 or (prev_bar_cycle < 1.75 and bar_cycle >= 1.75) then
-                for s in screen do
-                    if s._bar_bg_widget then
-                        s._bar_bg_widget:emit_signal("widget::redraw_needed")
-                    end
-                end
-            end
-
-            local c = client.focus
-            if c and c.valid and c._space_edge_widgets then
-                local win_cycle = (next_t - 0.35) % 12.0
-                local prev_win_cycle = (prev_t - 0.35) % 12.0
-                if win_cycle < 1.75 or (prev_win_cycle < 1.75 and win_cycle >= 1.75) then
-                    if c._space_edge_widgets["top"] then
-                        c._space_edge_widgets["top"]:emit_signal("widget::redraw_needed")
-                    end
-                end
-                if tick_count % 6 == 0 and c._space_edge_widgets["bottom"] then
-                    c._space_edge_widgets["bottom"]:emit_signal("widget::redraw_needed")
-                end
-            end
-        end,
-    }
-end
 

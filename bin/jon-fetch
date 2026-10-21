@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# jon-fetch: I'm Sorry Jon Terminal Fetch
+# ==============================================================================
+# "Bullets don't work, Jon."
+# ==============================================================================
+import os
+import platform
+import re
+import subprocess
+import sys
+
+# High-Readability TrueColor ANSI Escapes based on 'I'm Sorry Jon' Cosmic Palette
+ORANGE  = "\033[38;2;224;86;46m"    # Burnt Lasagna Orange (#e0562e)
+AMBER   = "\033[38;2;229;169;60m"   # Pendant Lamp Amber (#e5a93c)
+TEAL    = "\033[38;2;92;127;135m"   # Jon's Slate Teal (#5c7f87)
+CRIMSON = "\033[38;2;209;56;36m"    # Monday / Enemy Red (#d13824)
+CREAM   = "\033[38;2;232;220;196m"  # Kitchen Parchment Cream (#e8dcc4)
+WHITE   = "\033[38;2;255;255;255m"  # Bleached Bones White (#ffffff)
+DIM     = "\033[38;2;138;123;109m"  # Kitchen Shadow Charcoal (#8a7b6d)
+DIVIDER = "\033[38;2;61;43;39m"     # Dark Rim (#3d2b27)
+R       = "\033[0m"
+BOLD    = "\033[1m"
+
+def get_uptime():
+    try:
+        with open("/proc/uptime", "r") as f:
+            seconds = float(f.readline().split()[0])
+        hrs = int(seconds // 3600)
+        mins = int((seconds % 3600) // 60)
+        return f"{hrs}h {mins}m"
+    except Exception:
+        return "unknown"
+
+def get_memory():
+    try:
+        mem_total, mem_avail = 0, 0
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_avail = int(line.split()[1])
+        used = (mem_total - mem_avail) / 1024 / 1024
+        total = mem_total / 1024 / 1024
+        pct = (used / total) * 100 if total > 0 else 0
+        bars = int(pct / 10)
+        bar_str = "[" + "=" * bars + "-" * (10 - bars) + "]"
+        return f"{used:.1f}G / {total:.1f}G {bar_str}"
+    except Exception:
+        return "unknown"
+
+def get_packages():
+    try:
+        out = subprocess.check_output("pacman -Qq 2>/dev/null | wc -l", shell=True).decode().strip()
+        return f"{out} (pacman)"
+    except Exception:
+        return "N/A"
+
+def main():
+    user = os.getenv("USER", "jaws")
+    hostname = platform.node()
+    os_name = "Arch Linux x86_64"
+    kernel = platform.release()
+    uptime = get_uptime()
+    memory = get_memory()
+    packages = get_packages()
+    shell = os.path.basename(os.getenv("SHELL", "zsh"))
+    term = os.getenv("TERM", "alacritty")
+
+    ans_paths = [
+        os.path.expanduser("~/.config/fastfetch/jon.ans"),
+        os.path.expanduser("~/.config/fastfetch/jon_big.ans"),
+    ]
+    ans_path = next((p for p in ans_paths if os.path.exists(p)), None)
+    mascot_lines = []
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+
+    if ans_path and os.path.exists(ans_path):
+        try:
+            with open(ans_path, "r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    clean = line.replace("\x1b[?25l", "").replace("\x1b[?25h", "").rstrip("\r\n")
+                    if ansi_escape.sub("", clean).strip():
+                        mascot_lines.append(clean)
+        except Exception:
+            pass
+
+    if not mascot_lines:
+        mascot_lines = [
+            rf"      {ORANGE}.-'\"'-.{R}      ",
+            rf"    {ORANGE}/  {WHITE}o   o{ORANGE}  \    {R}",
+            rf"   {ORANGE}|    {AMBER}___{ORANGE}    |   {R}",
+            rf"   {ORANGE}|  {CRIMSON}/vvv\{ORANGE}   |   {R}",
+            rf"    {ORANGE}\  {CRIMSON}\^^^/{ORANGE}  /    {R}",
+            rf"     {ORANGE}'-----'     {R}",
+            rf" {ORANGE}I'M SORRY JON{R}",
+        ]
+
+    mascot_width = max(len(ansi_escape.sub("", line)) for line in mascot_lines) if mascot_lines else 40
+
+    div_len = 50
+    div_line = f"{DIVIDER}" + "─" * div_len + f"{R}"
+
+    # Inspo layout matching uploaded screenshot perfectly
+    info_lines = [
+        f"{BOLD}{ORANGE}{user}:{R}",
+        f"{ORANGE}" + "----------" + f"{R}",
+        f"{ORANGE}[ ORIGIN    ]{R} > {CREAM}JON{R}",
+        f"{ORANGE}[ HUNGER    ]{R} > {AMBER}LASAGNA{R}",
+        f"{ORANGE}[ ENEMY     ]{R} > {CRIMSON}MONDAYS{R}",
+        f"{ORANGE}[ MONSTROUS ]{R} > {WHITE}TRUE{R}",
+        div_line,
+        f"{ORANGE}[ OS        ]{R} > {CREAM}{os_name}{R} {DIM}// AwesomeWM 4.3{R}",
+        f"{ORANGE}[ HOST      ]{R} > {CREAM}{hostname}{R}",
+        f"{ORANGE}[ KERNEL    ]{R} > {CREAM}{kernel}{R}",
+        f"{ORANGE}[ UPTIME    ]{R} > {AMBER}{uptime}{R}",
+        f"{ORANGE}[ PACKAGES  ]{R} > {CREAM}{packages}{R}",
+        f"{ORANGE}[ SHELL     ]{R} > {CREAM}{shell}{R} {DIM}// starship [ELDRITCH//LASAGNA]{R}",
+        f"{ORANGE}[ TERMINAL  ]{R} > {CREAM}{term}{R} {DIM}// ComicShannsMono Nerd Font{R}",
+        f"{ORANGE}[ MEMORY    ]{R} > {TEAL}{memory}{R}",
+        div_line,
+        f"{ORANGE}████{AMBER}████{TEAL}████{CRIMSON}████{CREAM}████{WHITE}████{DIM}████{DIVIDER}████{R}",
+    ]
+
+    try:
+        term_cols = int(os.getenv("COLUMNS", "0")) or os.get_terminal_size().columns
+    except Exception:
+        term_cols = 120
+
+    print()
+    if term_cols >= mascot_width + 45:
+        offset = max(0, (len(mascot_lines) - len(info_lines)) // 2)
+        max_rows = max(len(mascot_lines), len(info_lines) + offset)
+        for i in range(max_rows):
+            left = ""
+            if i < len(mascot_lines):
+                line = mascot_lines[i]
+                vis_len = len(ansi_escape.sub("", line))
+                pad = " " * max(0, mascot_width - vis_len)
+                left = line + pad + "   "
+            else:
+                left = " " * (mascot_width + 3)
+
+            info_idx = i - offset
+            right = ""
+            if 0 <= info_idx < len(info_lines):
+                right = info_lines[info_idx]
+
+            print(f" {left}{right}")
+    else:
+        for line in mascot_lines:
+            print(f" {line}")
+        print()
+        for line in info_lines:
+            print(f" {line}")
+    print()
+
+if __name__ == "__main__":
+    main()

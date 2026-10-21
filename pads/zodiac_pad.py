@@ -31,6 +31,7 @@ import time
 import calendar
 import datetime
 import urllib.request
+import urllib.parse
 import threading
 import tkinter as tk
 from tkinter import font as tkfont
@@ -109,8 +110,11 @@ class CalendarManager:
 
     def _save_cached_events(self, events):
         try:
-            with open(CACHE_FILE, "w") as f:
+            tmp_path = f"{CACHE_FILE}.tmp"
+            fd = os.open(tmp_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+            with open(fd, "w", encoding="utf-8") as f:
                 json.dump(events, f, indent=2)
+            os.replace(tmp_path, CACHE_FILE)
             self.last_sync_time = time.time()
         except Exception:
             pass
@@ -122,6 +126,13 @@ class CalendarManager:
             self.sync_status = "NO_URL"
             if callback:
                 callback(False, "No iCal URL configured")
+            return
+
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme.lower() not in ("http", "https"):
+            self.sync_status = "ERROR"
+            if callback:
+                callback(False, "Invalid URL scheme: only HTTP and HTTPS are permitted")
             return
 
         def _worker():

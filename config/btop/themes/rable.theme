@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Miss Rable (Neon Punk Alleyway)
+# ==============================================================================
+
+theme[main_bg]="#0a0812"
+theme[main_fg]="#cbd5e1"
+theme[title]="#ff2a85"
+theme[hi_fg]="#00f0ff"
+theme[selected_bg]="#2a1638"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#5a5261"
+theme[graph_text]="#00f0ff"
+theme[meter_bg]="#181424"
+theme[proc_misc]="#ff2a85"
+
+# Box outlines
+theme[cpu_box]="#ff2a85"
+theme[mem_box]="#00f0ff"
+theme[net_box]="#39ff14"
+theme[proc_box]="#ffb000"
+theme[div_line]="#181424"
+
+# Temperature gradient (Neon Cyan -> Hot Pink -> Torn Crimson)
+theme[temp_start]="#00f0ff"
+theme[temp_mid]="#ff2a85"
+theme[temp_end]="#e11d48"
+
+# CPU graph
+theme[cpu_start]="#00f0ff"
+theme[cpu_mid]="#ff2a85"
+theme[cpu_end]="#ff0055"
+
+# Memory meters
+theme[free_start]="#181424"
+theme[free_mid]="#0284c7"
+theme[free_end]="#00f0ff"
+
+theme[cached_start]="#181424"
+theme[cached_mid]="#10b981"
+theme[cached_end]="#39ff14"
+
+theme[available_start]="#181424"
+theme[available_mid]="#ff2a85"
+theme[available_end]="#f43f5e"
+
+theme[used_start]="#0284c7"
+theme[used_mid]="#ffb000"
+theme[used_end]="#ff2a85"
+
+# Download / Upload network graph
+theme[download_start]="#0284c7"
+theme[download_mid]="#00f0ff"
+theme[download_end]="#22d3ee"
+
+theme[upload_start]="#e11d48"
+theme[upload_mid]="#ffb000"
+theme[upload_end]="#ff2a85"

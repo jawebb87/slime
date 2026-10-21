@@ -98,6 +98,12 @@ symbol = " ✘"
 style = "bold fg:spark_red"
 format = '[$symbol $status]($style)'
 
+
+[docker_context]
+symbol = " "
+style = "fg:spark_orange"
+format = ' [$symbol$context]($style)'
+
 [character]
 success_symbol = "[❯](bold fg:honed_steel)[❯](bold fg:spark_red) "
 error_symbol = "[❯](bold fg:spark_red)[❯](bold fg:spark_red) "

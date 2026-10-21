@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Mothgomery (Lamplit Workshop)
+# ==============================================================================
+
+theme[main_bg]="#0d1c21"
+theme[main_fg]="#efdfbf"
+theme[title]="#e8bb76"
+theme[hi_fg]="#df9774"
+theme[selected_bg]="#354d48"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#9b9e8c"
+theme[graph_text]="#75c9c7"
+theme[meter_bg]="#142a30"
+theme[proc_misc]="#e8bb76"
+
+# Box outlines
+theme[cpu_box]="#e8bb76"
+theme[mem_box]="#75c9c7"
+theme[net_box]="#a9c593"
+theme[proc_box]="#df9774"
+theme[div_line]="#142a30"
+
+# Temperature gradient (Moss Emerald -> Bioluminescent Cyan -> Coral Mothgomerys)
+theme[temp_start]="#a9c593"
+theme[temp_mid]="#e8bb76"
+theme[temp_end]="#df9774"
+
+# CPU graph
+theme[cpu_start]="#4f969f"
+theme[cpu_mid]="#e8bb76"
+theme[cpu_end]="#df9774"
+
+# Memory meters
+theme[free_start]="#142a30"
+theme[free_mid]="#4f969f"
+theme[free_end]="#75c9c7"
+
+theme[cached_start]="#142a30"
+theme[cached_mid]="#7eab85"
+theme[cached_end]="#a9c593"
+
+theme[available_start]="#142a30"
+theme[available_mid]="#e8bb76"
+theme[available_end]="#a0e3d0"
+
+theme[used_start]="#4f969f"
+theme[used_mid]="#f3d395"
+theme[used_end]="#df9774"
+
+# Download / Upload network graph
+theme[download_start]="#4f969f"
+theme[download_mid]="#e8bb76"
+theme[download_end]="#a0e3d0"
+
+theme[upload_start]="#7eab85"
+theme[upload_mid]="#f3d395"
+theme[upload_end]="#df9774"

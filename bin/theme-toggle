@@ -1,92 +1,326 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# theme-toggle: Cycle across the 5-Act Desktop Narrative:
-#   Act 0   (origin) : The Specimen Origin / Deep Wood (Forest Soil & Spores)
-#   Act I   (lab)    : Pre-Contamination (Laboratory White)
-#   Act II  (slime)  : Biological Contamination (Biohazard Slime)
-#   Act III (cyber)  : Cyberpunk Future (Obsidian UV + Slime Bio-Reactor)
-#   Act IV  (space)  : Orbital Containment / Deep Space Vessel (Hull White & Solar Gold)
+# theme-toggle: Dynamic Modular Theme Switcher & Desktop Narrative Engine
+# ==============================================================================
+# Discovers modular themes dynamically in `~/.config/awesome/themes/*.lua`.
+# Usage:
+#   theme-toggle             - Cycle forward to next theme
+#   theme-toggle prev        - Cycle backward to previous theme
+#   theme-toggle random      - Switch to a random theme
+#   theme-toggle list        - List all installed themes and active theme
+#   theme-toggle <theme>     - Switch directly to <theme> (e.g. origin, lab, slime...)
 # ==============================================================================
 
 set -eo pipefail
 
+THEMES_DIR="$HOME/.config/awesome/themes"
 MODE_FILE="$HOME/.config/awesome/theme_mode"
+CANONICAL=("origin" "lab" "slime" "cyber" "space" "shred" "chomp" "red" "windbreaker" "clay" "void" "gill" "mothgomery" "rable" "tov" "dino" "crust" "tunes" "mystery" "darkwing" "tmnt" "muppet" "jon" "bake" "foundry" "sketchbook" "jaws" "bamboo-corsair" "eeyore" "halfpipe" "punk-show" "sugar-rush" "crayon-chomp" "satanic-panic" "vaporwave-schizoid" "moonlit-well" "scp-facility")
+
+# 1. Discover all themes in ~/.config/awesome/themes/
+DISCOVERED=()
+if [ -d "$THEMES_DIR" ]; then
+    while IFS= read -r theme_path; do
+        [ -f "$theme_path" ] || continue
+        base="$(basename "$theme_path" .lua)"
+        if [ "$base" != "template" ] && [[ ! "$base" =~ ^_ ]]; then
+            DISCOVERED+=("$base")
+        fi
+    done < <(find "$THEMES_DIR" -maxdepth 1 -name '*.lua' | sort)
+fi
+
+# Build AVAILABLE ordered by canonical narrative list first, then custom themes
+AVAILABLE=()
+declare -A SEEN
+for t in "${CANONICAL[@]}"; do
+    for d in "${DISCOVERED[@]}"; do
+        if [ "$d" = "$t" ]; then
+            AVAILABLE+=("$d")
+            SEEN["$d"]=1
+            break
+        fi
+    done
+done
+for d in "${DISCOVERED[@]}"; do
+    if [ -z "${SEEN[$d]:-}" ]; then
+        AVAILABLE+=("$d")
+        SEEN["$d"]=1
+    fi
+done
+
+if [ ${#AVAILABLE[@]} -eq 0 ]; then
+    AVAILABLE=("origin" "lab" "slime" "cyber" "space" "shred" "chomp")
+fi
+
+theme_exists() {
+    local query="$1"
+    for t in "${AVAILABLE[@]}"; do
+        if [ "$t" = "$query" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 CURRENT="slime"
 if [ -f "$MODE_FILE" ]; then
     CURRENT="$(tr -d '[:space:]' < "$MODE_FILE")"
 fi
 
-case "${1:-toggle}" in
-    origin|wood|forest|spore|0)
-        NEXT="origin"
-        ;;
-    lab|white|pre|1)
-        NEXT="lab"
-        ;;
-    slime|green|post|2)
-        NEXT="slime"
-        ;;
-    cyber|cyberpunk|future|uv|3)
-        NEXT="cyber"
-        ;;
-    space|orbit|orbital|vessel|4)
-        NEXT="space"
-        ;;
-    shred|shredder|gunmetal|blade|5)
-        NEXT="shred"
-        ;;
-    chomp|larry|muskrat|haxor|couchlock|6)
-        NEXT="chomp"
-        ;;
-    *)
-        if [ "$CURRENT" = "origin" ]; then
-            NEXT="lab"
-        elif [ "$CURRENT" = "lab" ]; then
-            NEXT="slime"
-        elif [ "$CURRENT" = "slime" ]; then
-            NEXT="cyber"
-        elif [ "$CURRENT" = "cyber" ]; then
-            NEXT="space"
-        elif [ "$CURRENT" = "space" ]; then
-            NEXT="shred"
-        elif [ "$CURRENT" = "shred" ]; then
-            NEXT="chomp"
-        else
-            NEXT="origin"
+# 2. Handle 'list' command
+if [ "$1" = "list" ] || [ "$1" = "--list" ] || [ "$1" = "-l" ]; then
+    echo "Current active theme: $CURRENT"
+    echo "Available desktop themes (${#AVAILABLE[@]} registered):"
+    for t in "${AVAILABLE[@]}"; do
+        title=""
+        if [ -f "$THEMES_DIR/${t}.lua" ]; then
+            title="$(sed -n -E 's/^[[:space:]]*display_name[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${t}.lua" | head -n 1)"
+            [ -z "$title" ] && title="$(sed -n -E 's/^[[:space:]]*narrative_title[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${t}.lua" | head -n 1)"
         fi
+        marker="  "
+        suffix=""
+        if [ "$t" = "$CURRENT" ]; then
+            marker="* "
+            suffix=" [ACTIVE]"
+        fi
+        if [ -n "$title" ]; then
+            printf "  %s%-12s - %s%s\n" "$marker" "$t" "$title" "$suffix"
+        else
+            printf "  %s%s%s\n" "$marker" "$t" "$suffix"
+        fi
+    done
+    exit 0
+fi
+
+# 3. Resolve target theme
+TARGET="${1:-toggle}"
+
+case "$TARGET" in
+    scp-facility|scp|containment|facility)
+        TARGET="scp-facility"
+        ;;
+    moonlit-well|moonlit|well|eldritch)
+        TARGET="moonlit-well"
+        ;;
+    vaporwave-schizoid|vaporwave|schizoid|neon-pyramid)
+        TARGET="vaporwave-schizoid"
+        ;;
+    satanic-panic|panic|satanic)
+        TARGET="satanic-panic"
+        ;;
+    crayon-chomp|crayon|crayons)
+        TARGET="crayon-chomp"
+        ;;
+    sugar-rush|sugar|candy|pew-pew)
+        TARGET="sugar-rush"
+        ;;
+    punk-show|punk|punkshow|soundcheck)
+        TARGET="punk-show"
+        ;;
+    halfpipe|skate|skatepark|ramp)
+        TARGET="halfpipe"
+        ;;
+    eeyore|watercolor|watercolor-sky)
+        TARGET="eeyore"
+        ;;
+    bamboo|corsair|bamboo-corsair|the-bamboo-corsair)
+        TARGET="bamboo-corsair"
+        ;;
+    jaws|grindhouse|grindhouse-jaws|shark)
+        TARGET="jaws"
+        ;;
+    victorian|industrial|engine|engine-room|brass)
+        TARGET="foundry"
+        ;;
+    wood|forest|spore|0)
+        TARGET="origin"
+        ;;
+    white|pre|1)
+        TARGET="lab"
+        ;;
+    green|post|2)
+        TARGET="slime"
+        ;;
+    cyberpunk|future|uv|3)
+        TARGET="cyber"
+        ;;
+    orbit|orbital|vessel|4)
+        TARGET="space"
+        ;;
+    shredder|gunmetal|blade|5)
+        TARGET="shred"
+        ;;
+    larry|muskrat|haxor|couchlock|6)
+        TARGET="chomp"
+        ;;
+    doom|hell|slayer|bfg|7)
+        TARGET="red"
+        ;;
+    windbreaker|90s|neon90s|retro90s|fresh|rad|jazz|8)
+        TARGET="windbreaker"
+        ;;
+    clay|tablet|terracotta|cuneiform|stone|9)
+        TARGET="clay"
+        ;;
+    void|abyss|glitch|slick|oil|chroma|liquid|nebula|10)
+        TARGET="void"
+        ;;
+    gill|baron|von_gill|baronvongill|axolotl|grotto|cave|underwater|11)
+        TARGET="gill"
+        ;;
+    mothgomery|moth|workshop|lamplight)
+        TARGET="mothgomery"
+        ;;
+    rable|missrable|miss_rable|miserable|punk|riot|12)
+        TARGET="rable"
+        ;;
+    tov|molly|mollytov|molly_tov|anarchy|fire|flame|molotov|13)
+        TARGET="tov"
+        ;;
+    dino|might|dinomight|dino_might|riot_dino|heavy|14)
+        TARGET="dino"
+        ;;
+    crust|crustpunk|crusty|dumpster|alley|bum|drifter|15)
+        TARGET="crust"
+        ;;
+    tunes|looney|cartoon|acme|bugs|thatsallfolks|folks|16)
+        TARGET="tunes"
+        ;;
+    mystery|scooby|mysterymachine|van|shaggy|doo|spooky|17)
+        TARGET="mystery"
+        ;;
+    darkwing|duck|drake|dangerous|terror|dw|18)
+        TARGET="darkwing"
+        ;;
+    tmnt|turtles|turtle|cowabunga|ooze|mutant|pizza|19)
+        TARGET="tmnt"
+        ;;
+    muppet|babies|muppetbabies|muppets|kermit|nursery|dreams|20)
+        TARGET="muppet"
+        ;;
+    jon|garfield|imsorryjon|im_sorry_jon|gorefield|lasagna|mondays|eldritch|horror|21)
+        TARGET="jon"
+        ;;
+    bake|wake|wakeandbake|wake_and_bake|420|fourtwenty|weed|weeds|kush|sloth|pot|stoner|blunt|herb|chronic|sesh|22)
+        TARGET="bake"
         ;;
 esac
 
+if theme_exists "$TARGET"; then
+    NEXT="$TARGET"
+elif [ "$TARGET" = "toggle" ] || [ "$TARGET" = "next" ]; then
+    NEXT=""
+    for i in "${!AVAILABLE[@]}"; do
+        if [ "${AVAILABLE[$i]}" = "$CURRENT" ]; then
+            next_idx=$(( (i + 1) % ${#AVAILABLE[@]} ))
+            NEXT="${AVAILABLE[$next_idx]}"
+            break
+        fi
+    done
+    if [ -z "$NEXT" ]; then
+        NEXT="${AVAILABLE[0]}"
+    fi
+elif [ "$TARGET" = "prev" ] || [ "$TARGET" = "previous" ]; then
+    NEXT=""
+    for i in "${!AVAILABLE[@]}"; do
+        if [ "${AVAILABLE[$i]}" = "$CURRENT" ]; then
+            prev_idx=$(( (i - 1 + ${#AVAILABLE[@]}) % ${#AVAILABLE[@]} ))
+            NEXT="${AVAILABLE[$prev_idx]}"
+            break
+        fi
+    done
+    if [ -z "$NEXT" ]; then
+        NEXT="${AVAILABLE[0]}"
+    fi
+elif [ "$TARGET" = "rand" ] || [ "$TARGET" = "random" ] || [ "$TARGET" = "shuffle" ] || [ "$TARGET" = "roll" ]; then
+    CANDIDATES=()
+    for t in "${AVAILABLE[@]}"; do
+        if [ "$t" != "$CURRENT" ]; then
+            CANDIDATES+=("$t")
+        fi
+    done
+    if [ ${#CANDIDATES[@]} -gt 0 ]; then
+        rand_idx=$(( RANDOM % ${#CANDIDATES[@]} ))
+        NEXT="${CANDIDATES[$rand_idx]}"
+    else
+        NEXT="${AVAILABLE[0]}"
+    fi
+else
+    echo "Unknown theme: '$TARGET'" >&2
+    echo "Run 'theme-toggle list' to inspect available themes." >&2
+    exit 1
+fi
+
 echo "$NEXT" > "$MODE_FILE"
 
-# 1. Kitty Terminal (update config & live-reload all open terminals via SIGUSR1)
+# 4. Terminal (Alacritty + Kitty + LXTerminal + TMUX live reload)
+if [ -f "$HOME/.config/alacritty/${NEXT}.toml" ]; then
+    cp -p "$HOME/.config/alacritty/${NEXT}.toml" "$HOME/.config/alacritty/alacritty.toml"
+fi
 if [ -f "$HOME/.config/kitty/${NEXT}.conf" ]; then
     cp -p "$HOME/.config/kitty/${NEXT}.conf" "$HOME/.config/kitty/kitty.conf"
     pkill -USR1 -x kitty 2>/dev/null || true
 fi
+if [ -f "$HOME/.config/lxterminal/${NEXT}.conf" ]; then
+    cp -p "$HOME/.config/lxterminal/${NEXT}.conf" "$HOME/.config/lxterminal/lxterminal.conf"
+fi
+if [ -f "$HOME/.config/tmux/themes/${NEXT}.conf" ]; then
+    cp -p "$HOME/.config/tmux/themes/${NEXT}.conf" "$HOME/.config/tmux/theme.conf"
+    if command -v tmux >/dev/null 2>&1 && tmux ls >/dev/null 2>&1; then
+        tmux source-file "$HOME/.config/tmux/theme.conf" 2>/dev/null || true
+    fi
+fi
 
-# 2. Rofi Launcher
+# 5. Rofi Launcher
 if [ -f "$HOME/.config/rofi/${NEXT}.rasi" ]; then
     cp -p "$HOME/.config/rofi/${NEXT}.rasi" "$HOME/.config/rofi/config.rasi"
 fi
 
-# 3. Picom Compositor (auto-reloads via inotify)
+# 6. Picom Compositor (auto-reloads via inotify)
 if [ -f "$HOME/.config/picom/${NEXT}.conf" ]; then
     cp -p "$HOME/.config/picom/${NEXT}.conf" "$HOME/.config/picom/picom.conf"
 fi
 
-# 4. Starship Prompt
+# 7. Starship Prompt
 if [ -f "$HOME/.config/starship-${NEXT}.toml" ]; then
     cp -p "$HOME/.config/starship-${NEXT}.toml" "$HOME/.config/starship.toml"
 fi
 
-# 5. Btop System Monitor
-if [ -f "$HOME/.config/btop/btop.conf" ]; then
-    sed -i "s|^color_theme = .*|color_theme = \"${NEXT}\"|" "$HOME/.config/btop/btop.conf"
+# 7.8 Fastfetch Logo Synchronization
+FASTFETCH_CONF="$HOME/.config/fastfetch/config.jsonc"
+if [ -f "$FASTFETCH_CONF" ]; then
+    ANS_SOURCE=""
+    if [ -f "$HOME/.config/fastfetch/${NEXT}_big.ans" ]; then
+        ANS_SOURCE="~/.config/fastfetch/${NEXT}_big.ans"
+    elif [ -f "$HOME/.config/fastfetch/${NEXT}.ans" ]; then
+        ANS_SOURCE="~/.config/fastfetch/${NEXT}.ans"
+    fi
+    if [ -n "$ANS_SOURCE" ]; then
+        sed -i -E 's|"source": "[^"]*"|"source": "'"${ANS_SOURCE}"'"|' "$FASTFETCH_CONF" 2>/dev/null || true
+    fi
 fi
 
-# 6. GTK-3.0 / GTK-4.0 & GSettings color-scheme and per-theme font preference
-if [ "$NEXT" = "lab" ] || [ "$NEXT" = "space" ]; then
+# 7.5 Wallpaper synchronization for feh / external tools
+WP=""
+if [ -f "$HOME/Pictures/wallpaper/${NEXT}.jpg" ]; then
+    WP="$HOME/Pictures/wallpaper/${NEXT}.jpg"
+elif [ -f "$HOME/Pictures/wallpaper/${NEXT}.png" ]; then
+    WP="$HOME/Pictures/wallpaper/${NEXT}.png"
+fi
+if [ -n "$WP" ]; then
+    printf '#!/bin/sh\nfeh --no-fehbg --bg-fill '\''%s'\''\n' "$WP" > "$HOME/.fehbg"
+    chmod +x "$HOME/.fehbg"
+    feh --no-fehbg --bg-fill "$WP" 2>/dev/null || true
+fi
+
+# 8. Btop System Monitor
+if [ -f "$HOME/.config/btop/btop.conf" ]; then
+    sed -i "s|^color_theme = .*|color_theme = \"${NEXT}\"|" "$HOME/.config/btop/btop.conf" 2>/dev/null || true
+fi
+
+# 9. GTK-3.0 / GTK-4.0 & GSettings color-scheme and per-theme font preference
+IS_LIGHT="$(grep -E '^[[:space:]]*is_light[[:space:]]*=[[:space:]]*true' "$THEMES_DIR/${NEXT}.lua" 2>/dev/null || true)"
+if [ "$NEXT" = "lab" ] || [ "$NEXT" = "space" ] || [ "$NEXT" = "windbreaker" ] || [ "$NEXT" = "tunes" ] || [ -n "$IS_LIGHT" ]; then
     DARK_PREF="0"
     GTK_THEME="Adwaita"
     COLOR_SCHEME="prefer-light"
@@ -97,7 +331,14 @@ else
 fi
 
 THEME_FONT=""
-if [ -f "$HOME/.config/rofi/${NEXT}.rasi" ]; then
+if [ -f "$THEMES_DIR/${NEXT}.lua" ]; then
+    THEME_FONT="$(sed -n -E 's/^[[:space:]]*font_family[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${NEXT}.lua" | head -n 1)"
+    THEME_FONT_SIZE="$(sed -n -E 's/^[[:space:]]*font_size[[:space:]]*=[[:space:]]*"([0-9.]+)".*$/\1/p' "$THEMES_DIR/${NEXT}.lua" | head -n 1)"
+    if [ -n "$THEME_FONT" ]; then
+        THEME_FONT="$THEME_FONT ${THEME_FONT_SIZE:-10}"
+    fi
+fi
+if [ -z "$THEME_FONT" ] && [ -f "$HOME/.config/rofi/${NEXT}.rasi" ]; then
     THEME_FONT="$(sed -n -E 's/^[[:space:]]*font:[[:space:]]*"([^"]+)";.*$/\1/p' "$HOME/.config/rofi/${NEXT}.rasi" | head -n 1)"
 fi
 
@@ -108,6 +349,8 @@ if command -v gsettings >/dev/null 2>&1; then
         gsettings set org.gnome.desktop.interface font-name "$THEME_FONT" 2>/dev/null || true
         gsettings set org.gnome.desktop.interface monospace-font-name "$THEME_FONT" 2>/dev/null || true
     fi
+    # Ensure xdg-desktop-portal is active to relay color-scheme to Firefox
+    systemctl --user is-active --quiet xdg-desktop-portal || systemctl --user start xdg-desktop-portal xdg-desktop-portal-gtk 2>/dev/null || true
 fi
 
 for gtk_ini in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
@@ -120,31 +363,42 @@ for gtk_ini in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/setti
     fi
 done
 
-# 7. Reset cached Python Tkinter scratchpads so they respawn with the new theme palette
+# 10. Update xsettingsd and reload daemon (broadcasts theme to legacy X11 / GTK apps; Firefox receives theme via xdg-desktop-portal-gtk)
+XSETTINGSD_CONF="$HOME/.config/xsettingsd/xsettingsd.conf"
+if [ -f "$XSETTINGSD_CONF" ]; then
+    cat <<EOF > "$XSETTINGSD_CONF"
+Net/ThemeName "${GTK_THEME}"
+Gtk/ApplicationPreferDarkTheme ${DARK_PREF}
+Net/IconThemeName "Adwaita"
+Gtk/CursorThemeName "Adwaita"
+Gtk/FontName "${THEME_FONT:-Sans 10}"
+Net/EnableEventSounds 0
+Net/EnableInputFeedbackSounds 0
+Xft/Antialias 1
+Xft/Hinting 1
+Xft/HintStyle "hintslight"
+Xft/RGBA "rgb"
+EOF
+    killall -HUP xsettingsd 2>/dev/null || true
+fi
+
+# 11. Reset cached Python Tkinter scratchpads so they respawn with the new theme palette
 pkill -f '^python3 .*/Projects/qtile_bench/.*\.py$' 2>/dev/null || true
 
-# 8. Reload AwesomeWM & display theme transition notification
-if [ "$NEXT" = "origin" ]; then
-    TITLE="Act 0: THE SPECIMEN ORIGIN [EXP//LOG]"
-    BODY="Deep Wood & Mycelium Spore active (Super+o to cycle)"
-elif [ "$NEXT" = "lab" ]; then
-    TITLE="Act I: PRE-CONTAMINATION [LAB//SYS]"
-    BODY="Laboratory White theme active (Super+o to cycle)"
-elif [ "$NEXT" = "slime" ]; then
-    TITLE="Act II: BIOLOGICAL CONTAMINATION [BIO//HAZARD]"
-    BODY="Biohazard Slime theme active (Super+o to cycle)"
-elif [ "$NEXT" = "cyber" ]; then
-    TITLE="Act III: CYBERPUNK FUTURE [NET//LINK]"
-    BODY="Obsidian UV + Slime Bio-Reactor active (Super+o to cycle)"
-elif [ "$NEXT" = "space" ]; then
-    TITLE="Act IV: ORBITAL CONTAINMENT [ORB//DECK]"
-    BODY="Deep Space Vessel & Cryo-Stasis active (Super+o to cycle)"
-elif [ "$NEXT" = "shred" ]; then
-    TITLE="Standalone: THE SHREDDER [SHRED//RPM]"
-    BODY="Gunmetal, Razor Angles & Rotary Ripper Teeth active (Super+o to cycle)"
-else
-    TITLE="Standalone: CHOMP THE HAXOR [CHOMP//0x_CHOMP]"
-    BODY="Cyber-Swamp Brutalist Console & Full Couchlock active (Super+o to cycle)"
+# 12. Reload AwesomeWM & display theme transition notification
+TITLE=""
+BODY=""
+if [ -f "$THEMES_DIR/${NEXT}.lua" ]; then
+    TITLE="$(sed -n -E 's/^[[:space:]]*narrative_title[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${NEXT}.lua" | head -n 1)"
+    BODY="$(sed -n -E 's/^[[:space:]]*narrative_body[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${NEXT}.lua" | head -n 1)"
+fi
+if [ -z "$TITLE" ]; then
+    DISPLAY_NAME=""
+    if [ -f "$THEMES_DIR/${NEXT}.lua" ]; then
+        DISPLAY_NAME="$(sed -n -E 's/^[[:space:]]*display_name[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$THEMES_DIR/${NEXT}.lua" | head -n 1)"
+    fi
+    TITLE="${DISPLAY_NAME:-Theme: $NEXT}"
+    BODY="${NEXT} theme active (Super+o to cycle)"
 fi
 
 dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Remote.Eval \
@@ -153,6 +407,8 @@ dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Re
 # Wait briefly for AwesomeWM to finish restarting, then show notification
 (
     sleep 0.7
+    SAFE_TITLE="${TITLE//\'/\\\'}"
+    SAFE_BODY="${BODY//\'/\\\'}"
     dbus-send --dest=org.awesomewm.awful --type=method_call / org.awesomewm.awful.Remote.Eval \
-        string:"require('naughty').notify({ title = '$TITLE', text = '$BODY', timeout = 4 })" 2>/dev/null || true
+        string:"require('naughty').notify({ title = '${SAFE_TITLE}', text = '${SAFE_BODY}', timeout = 4 })" 2>/dev/null || true
 ) &

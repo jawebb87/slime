@@ -341,33 +341,16 @@ function slime_shapes.render_lab_bar_bg()
     end
 end
 
--- 5. Cyberpunk Future Bar & Active Window Perimeter Pulse Engine (Bio-Grid Cyberdeck):
--- Shared animation clock updated by a lightweight timer in cyber mode.
-slime_shapes.cyber_pulse_time = 0
-
--- Helper: populates a linear Cairo pattern with a pulsing toxic-green (#55f736 -> #74ff2e -> #d8eb34)
--- bio-slime energy packet (tail at stop 0.0 -> glowing core at stop 0.84 -> leading shockfront at 1.0).
-local function add_cyber_slime_pulse_stops(grad, pulse, alpha_scale)
-    alpha_scale = alpha_scale or 1.0
-    local p = pulse * alpha_scale
-    grad:add_color_stop_rgba(0.00, 0.333, 0.969, 0.212, 0.00)                   -- Transparent wake
-    grad:add_color_stop_rgba(0.20, 0.000, 0.941, 1.000, math.min(1.0, 0.22 * p)) -- #00f0ff Acid Cyan wake
-    grad:add_color_stop_rgba(0.50, 0.333, 0.969, 0.212, math.min(1.0, 0.62 * p)) -- #55f736 Toxic Bio-Slime trail
-    grad:add_color_stop_rgba(0.76, 0.455, 1.000, 0.180, math.min(1.0, 0.94 * p)) -- #74ff2e High-voltage Neon Green
-    grad:add_color_stop_rgba(0.85, 0.847, 0.922, 0.204, math.min(1.0, 1.00 * alpha_scale)) -- #d8eb34 Hot Bioluminescent Core
-    grad:add_color_stop_rgba(0.93, 0.333, 0.969, 0.212, math.min(1.0, 0.85 * p)) -- #55f736 Leading Green Front
-    grad:add_color_stop_rgba(1.00, 0.333, 0.969, 0.212, 0.00)                   -- Transparent front
-end
-
--- 5a. Cyberpunk Future Bar Background Renderer:
--- Draws an obsidian ink-violet surface (#090812 -> #161326) with an electric purple (#a855f7)
--- bottom rail and a pulsing toxic-green (#55f736) light that sweeps continuously across the bar.
+-- 5. Cyberpunk Future Bar Background Renderer (Bio-Grid Cyberdeck):
+-- Static, zero-CPU background with an obsidian ink-violet surface (#090812 -> #161326),
+-- an electric purple (#a855f7) bottom conduit rail, and a rich toxic-green (#39ff14 / #74ff2e)
+-- upward blooming neon gradient baked directly into the bottom rim.
 function slime_shapes.render_cyber_bar_bg()
     return function(_, cr, w, h)
         cr:save()
         ensure_best_antialias(cr)
 
-        -- Obsidian #090812 -> #161326 vertical gradient
+        -- Obsidian #090812 -> #161326 vertical surface gradient
         local pat = cairo.Pattern.create_linear(0, 0, 0, h)
         pat:add_color_stop_rgba(0.0, 0.035, 0.031, 0.071, 0.96) -- #090812
         pat:add_color_stop_rgba(1.0, 0.086, 0.075, 0.149, 0.96) -- #161326
@@ -386,34 +369,29 @@ function slime_shapes.render_cyber_bar_bg()
         cr:set_source(rim)
         cr:fill()
 
-        -- Pulsing toxic-green light sweeping continuously across the bar
-        local t = slime_shapes.cyber_pulse_time or 0
-        local pulse = 0.68 + 0.32 * (0.5 + 0.5 * math.sin(t * 7.2))
-        local phase = (t * 0.26) % 1.0
-        local head_x = phase * w
-        local tail_len = math.max(180, w * 0.22)
-        local lead_len = math.max(36, w * 0.04)
+        -- Static Upward Blooming Toxic-Green Neon Glow Gradient (16px high)
+        local glow_h = 16
+        local glow = cairo.Pattern.create_linear(0, h - glow_h, 0, h)
+        glow:add_color_stop_rgba(0.00, 0.224, 0.969, 0.078, 0.00) -- Transparent top
+        glow:add_color_stop_rgba(0.30, 0.000, 0.941, 1.000, 0.18) -- Soft cyan/emerald ambient wash (#00f0ff)
+        glow:add_color_stop_rgba(0.60, 0.224, 0.969, 0.078, 0.50) -- Rich toxic green (#39ff14)
+        glow:add_color_stop_rgba(0.85, 0.455, 1.000, 0.180, 0.80) -- High-voltage Neon Green (#74ff2e)
+        glow:add_color_stop_rgba(1.00, 0.850, 0.980, 0.250, 0.95) -- Hot lime bioluminescent core
 
-        for k = -1, 1 do
-            local hx = head_x + k * w
-            local x0 = hx - tail_len
-            local x1 = hx + lead_len
-            if x1 > 0 and x0 < w then
-                -- Soft upward bio-slime glow along the bottom 6px of the bar
-                local glow = cairo.Pattern.create_linear(x0, 0, x1, 0)
-                add_cyber_slime_pulse_stops(glow, pulse, 0.30)
-                cr:rectangle(math.max(0, x0), h - 6, math.min(w, x1) - math.max(0, x0), 5)
-                cr:set_source(glow)
-                cr:fill()
+        cr:rectangle(0, h - glow_h, w, glow_h)
+        cr:set_source(glow)
+        cr:fill()
 
-                -- Crisp 2px toxic-green energy core riding along the bottom edge of the bar
-                local rail = cairo.Pattern.create_linear(x0, 0, x1, 0)
-                add_cyber_slime_pulse_stops(rail, pulse, 1.00)
-                cr:rectangle(math.max(0, x0), h - 2, math.min(w, x1) - math.max(0, x0), 2)
-                cr:set_source(rail)
-                cr:fill()
-            end
-        end
+        -- Crisp 2px toxic-green / hot lime energy rail along the bottom edge
+        local rail = cairo.Pattern.create_linear(0, 0, w, 0)
+        rail:add_color_stop_rgba(0.00, 0.455, 1.000, 0.180, 0.80)
+        rail:add_color_stop_rgba(0.25, 0.847, 0.922, 0.204, 0.95)
+        rail:add_color_stop_rgba(0.50, 0.950, 1.000, 0.350, 1.00)
+        rail:add_color_stop_rgba(0.75, 0.847, 0.922, 0.204, 0.95)
+        rail:add_color_stop_rgba(1.00, 0.455, 1.000, 0.180, 0.80)
+        cr:rectangle(0, h - 2, w, 2)
+        cr:set_source(rail)
+        cr:fill()
 
         cr:restore()
     end
@@ -421,9 +399,8 @@ end
 
 -- 5b. Cyberpunk Active Window Perimeter Renderer:
 -- Renders the 4 outer edges ("top", "right", "bottom", "left") of a client window in cyber mode.
--- When unfocused: draws a deep indigo trench (#090812) with a razor-sharp 1px Neon Violet (#7928ca) outer edge.
--- When focused: draws an Electric Purple (#a855f7) outer rail and a pulsing toxic-green (#55f736 / #74ff2e)
--- bio-slime light that circles clockwise around the entire perimeter of the active window!
+-- When unfocused: dark obsidian base (#090812) with a razor-sharp 1px Neon Violet (#7928ca) outer edge (standby).
+-- When focused: 100% BOOSTED powered-on active reactor state with a 6px perimeter green neon glow pulsing in sync with desktop audio!
 function slime_shapes.render_cyber_window_edge(c, side)
     return function(_, cr, w, h)
         if not c or not c.valid then return end
@@ -432,113 +409,88 @@ function slime_shapes.render_cyber_window_edge(c, side)
 
         local focused = (client.focus == c)
 
-        -- Base trench fill
-        if focused then
-            cr:set_source_rgba(0.055, 0.047, 0.110, 0.96) -- #0e0c1c
-        else
+        if not focused then
+            -- Unfocused window: standby state (dark obsidian + 1px subtle neon violet edge)
             cr:set_source_rgba(0.035, 0.031, 0.071, 0.92) -- #090812
+            cr:rectangle(0, 0, w, h)
+            cr:fill()
+
+            cr:set_source_rgba(0.475, 0.157, 0.792, 0.85) -- #7928ca (Neon Violet)
+            if side == "top" then
+                cr:rectangle(0, 0, w, 1)
+                cr:rectangle(0, 0, 1, h)
+                cr:rectangle(w - 1, 0, 1, h)
+            elseif side == "bottom" then
+                cr:rectangle(0, h - 1, w, 1)
+                cr:rectangle(0, 0, 1, h)
+                cr:rectangle(w - 1, 0, 1, h)
+            elseif side == "left" then
+                cr:rectangle(0, 0, 1, h)
+            elseif side == "right" then
+                cr:rectangle(w - 1, 0, 1, h)
+            end
+            cr:fill()
+            cr:restore()
+            return
         end
+
+        -- Focused window: 100% BOOSTED "Powered on" reactor glow pulsing with desktop audio!
+        local audio = slime_shapes.cyber_audio_level or 0.0
+        local idle_t = slime_shapes.cyber_pulse_time or 0
+        local idle_breath = 0.36 + 0.12 * math.sin(idle_t * 2.4)
+        local pulse = math.min(1.0, math.max(idle_breath, audio * 1.25))
+
+        -- Base trench fill (#0e0c1c deep reactor obsidian)
+        cr:set_source_rgba(0.055, 0.047, 0.110, 0.98)
         cr:rectangle(0, 0, w, h)
         cr:fill()
 
-        -- Base 1px outer cyberdeck border line (#a855f7 when focused, #7928ca when unfocused)
-        if focused then
-            cr:set_source_rgba(0.659, 0.333, 0.969, 0.92) -- #a855f7 (Electric Purple)
-        else
-            cr:set_source_rgba(0.475, 0.157, 0.792, 0.85) -- #7928ca (Neon Violet)
+        -- Multi-pass Boosted Audio-Reactive Glow:
+        -- Pass 1: Full-edge glowing neon plasma conduit
+        local grad
+        if side == "top" then
+            grad = cairo.Pattern.create_linear(0, 0, 0, h)
+        elseif side == "bottom" then
+            grad = cairo.Pattern.create_linear(0, h, 0, 0)
+        elseif side == "left" then
+            grad = cairo.Pattern.create_linear(0, 0, w, 0)
+        else -- "right"
+            grad = cairo.Pattern.create_linear(w, 0, 0, 0)
         end
 
-        if side == "top" then
-            cr:rectangle(0, 0, w, 1)
-            cr:rectangle(0, 0, 1, h)
-            cr:rectangle(w - 1, 0, 1, h)
-        elseif side == "bottom" then
-            cr:rectangle(0, h - 1, w, 1)
-            cr:rectangle(0, 0, 1, h)
-            cr:rectangle(w - 1, 0, 1, h)
-        elseif side == "left" then
-            cr:rectangle(0, 0, 1, h)
-        elseif side == "right" then
-            cr:rectangle(w - 1, 0, 1, h)
-        end
+        -- Stop 0.0 is outer edge, Stop 1.0 is inner edge towards client window
+        local p_alpha = math.min(1.0, 0.65 + 0.35 * pulse)
+        grad:add_color_stop_rgba(0.00, 0.900, 1.000, 0.300, 1.00)                 -- Hot lime/white outer boundary
+        grad:add_color_stop_rgba(0.30, 0.455, 1.000, 0.180, p_alpha)             -- #74ff2e High-voltage neon
+        grad:add_color_stop_rgba(0.65, 0.224, 0.969, 0.078, p_alpha * 0.95)      -- #39ff14 Rich toxic green
+        grad:add_color_stop_rgba(1.00, 0.000, 0.850, 0.650, math.max(0.25, 0.55 * pulse)) -- #00cca0 cyan-green conduit bleed
+
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(grad)
         cr:fill()
 
-        -- If focused, draw the pulsing toxic-green light circling clockwise around the window perimeter
-        if focused then
-            local t = slime_shapes.cyber_pulse_time or 0
-            local pulse = 0.68 + 0.32 * (0.5 + 0.5 * math.sin(t * 7.5))
+        -- Pass 2: Blinding 2px outer hot neon rail with lime-white core
+        local core_r = 0.45 + 0.50 * pulse
+        local core_g = 1.00
+        local core_b = 0.20 + 0.70 * (1.0 - pulse)
+        local core_a = 1.00
+        cr:set_source_rgba(core_r, core_g, core_b, core_a)
 
-            local is_horiz = (side == "top" or side == "bottom")
-            local W = is_horiz and w or math.max(1, c.width or w)
-            local H_side = is_horiz and math.max(1, (c.height or h) - 2 * h) or h
-            local P = 2 * (W + H_side)
-
-            if P > 8 then
-                local edge_len = is_horiz and W or H_side
-                local s_start
-                if side == "top" then
-                    s_start = 0
-                elseif side == "right" then
-                    s_start = W
-                elseif side == "bottom" then
-                    s_start = W + H_side
-                else -- "left"
-                    s_start = 2 * W + H_side
-                end
-
-                local orbit_phase = (t * 0.32) % 1.0
-                local s_head = orbit_phase * P
-                local tail_len = math.min(340, math.max(140, P * 0.22))
-                local lead_len = math.min(56, math.max(24, P * 0.04))
-
-                for k = -1, 1 do
-                    local sk = s_head + k * P
-                    local s_tail = sk - tail_len
-                    local s_lead = sk + lead_len
-
-                    if s_lead > s_start and s_tail < (s_start + edge_len) then
-                        local grad
-                        if side == "top" then
-                            grad = cairo.Pattern.create_linear(s_tail, 0, s_lead, 0)
-                        elseif side == "right" then
-                            grad = cairo.Pattern.create_linear(0, s_tail - s_start, 0, s_lead - s_start)
-                        elseif side == "bottom" then
-                            grad = cairo.Pattern.create_linear(W - (s_tail - s_start), 0, W - (s_lead - s_start), 0)
-                        else -- "left"
-                            grad = cairo.Pattern.create_linear(0, H_side - (s_tail - s_start), 0, H_side - (s_lead - s_start))
-                        end
-
-                        -- Inner bio-slime glow across the full 3px conduit strip
-                        add_cyber_slime_pulse_stops(grad, pulse, 0.48)
-                        cr:rectangle(0, 0, w, h)
-                        cr:set_source(grad)
-                        cr:fill()
-
-                        -- Bright 2px outer toxic-green light along the outside edge
-                        local core_grad
-                        if side == "top" then
-                            core_grad = cairo.Pattern.create_linear(s_tail, 0, s_lead, 0)
-                            add_cyber_slime_pulse_stops(core_grad, pulse, 1.0)
-                            cr:rectangle(0, 0, w, math.min(2, h))
-                        elseif side == "right" then
-                            core_grad = cairo.Pattern.create_linear(0, s_tail - s_start, 0, s_lead - s_start)
-                            add_cyber_slime_pulse_stops(core_grad, pulse, 1.0)
-                            cr:rectangle(math.max(0, w - 2), 0, math.min(2, w), h)
-                        elseif side == "bottom" then
-                            core_grad = cairo.Pattern.create_linear(W - (s_tail - s_start), 0, W - (s_lead - s_start), 0)
-                            add_cyber_slime_pulse_stops(core_grad, pulse, 1.0)
-                            cr:rectangle(0, math.max(0, h - 2), w, math.min(2, h))
-                        else -- "left"
-                            core_grad = cairo.Pattern.create_linear(0, H_side - (s_tail - s_start), 0, H_side - (s_lead - s_start))
-                            add_cyber_slime_pulse_stops(core_grad, pulse, 1.0)
-                            cr:rectangle(0, 0, math.min(2, w), h)
-                        end
-                        cr:set_source(core_grad)
-                        cr:fill()
-                    end
-                end
-            end
+        local rail_thick = math.min(2, math.floor(h > w and w or h))
+        if side == "top" then
+            cr:rectangle(0, 0, w, rail_thick)
+            cr:rectangle(0, 0, rail_thick, h)
+            cr:rectangle(w - rail_thick, 0, rail_thick, h)
+        elseif side == "bottom" then
+            cr:rectangle(0, h - rail_thick, w, rail_thick)
+            cr:rectangle(0, 0, rail_thick, h)
+            cr:rectangle(w - rail_thick, 0, rail_thick, h)
+        elseif side == "left" then
+            cr:rectangle(0, 0, rail_thick, h)
+        elseif side == "right" then
+            cr:rectangle(w - rail_thick, 0, rail_thick, h)
         end
+        cr:fill()
 
         cr:restore()
     end
@@ -856,29 +808,12 @@ end
 -- ==============================================================================
 -- 7. Act IV Orbital Containment / Deep Space Vessel — Optical HUD & Solar Glint
 -- ==============================================================================
-slime_shapes.space_time = 0
-
--- Orbital Solar Sweep timing: every 12 seconds, a high-speed angled white/solar
--- glint sweeps across the flight-deck glass in ~1.65 seconds.
-local SPACE_SOLAR_PERIOD   = 12.0
-local SPACE_SOLAR_DURATION = 1.65
-
--- Helper: populates an angled linear Cairo pattern with a sharp white/solar specular glint
--- (#ffffff00 -> #ffffff99 -> #ffffffeb -> #e5950044 -> #0088cc22 -> #ffffff00).
-local function add_space_solar_glint_stops(grad, intensity)
-    intensity = intensity or 1.0
-    grad:add_color_stop_rgba(0.00, 1.000, 1.000, 1.000, 0.00)
-    grad:add_color_stop_rgba(0.32, 1.000, 1.000, 1.000, math.min(1.0, 0.45 * intensity)) -- #ffffff73 leading glare
-    grad:add_color_stop_rgba(0.48, 1.000, 1.000, 1.000, math.min(1.0, 0.85 * intensity)) -- #ffffffd9 bright white specular core
-    grad:add_color_stop_rgba(0.62, 0.898, 0.584, 0.000, math.min(1.0, 0.42 * intensity)) -- #e595006b Solar Flare Gold refraction
-    grad:add_color_stop_rgba(0.78, 0.000, 0.533, 0.800, math.min(1.0, 0.22 * intensity)) -- #0088cc38 Thruster Cyan dispersion
-    grad:add_color_stop_rgba(1.00, 1.000, 1.000, 1.000, 0.00)
-end
-
+-- 7. Act IV Orbital Containment / Deep Space Vessel (Flight Deck & Hull Plating)
+-- ==============================================================================
 -- 7a. Act IV Orbital Flight Deck Wibar Background Renderer:
 -- Renders Hull White (#f5f6f9) -> Airframe Grey (#e1e4ea) frosted pressure glass,
 -- a Double-Pencil top/bottom refraction border, laser-etched viewport brackets,
--- and a periodic high-speed angled Orbital Solar Glint Sweep.
+-- and a 2px bottom rim in Deep Nav Slate (#1b2028), Solar Flare Gold (#e59500) & Thruster Cyan (#0088cc).
 function slime_shapes.render_space_bar_bg()
     return function(_, cr, w, h)
         cr:save()
@@ -928,31 +863,6 @@ function slime_shapes.render_space_bar_bg()
         cr:line_to(w - 20, 1)
         cr:stroke()
 
-        -- High-speed Orbital Solar Glint Sweep across the Wibar every 12 seconds
-        local t = slime_shapes.space_time or 0
-        local cycle_t = t % SPACE_SOLAR_PERIOD
-        if cycle_t < SPACE_SOLAR_DURATION then
-            local progress = cycle_t / SPACE_SOLAR_DURATION
-            local band_w = math.max(130, w * 0.11)
-            local slant  = 42
-            local gx = -band_w + progress * (w + 2 * band_w + slant)
-
-            -- Angled diagonal solar glare across the frosted bar surface
-            local glint = cairo.Pattern.create_linear(gx - band_w, 0, gx + band_w - slant, h)
-            add_space_solar_glint_stops(glint, 0.88)
-            cr:rectangle(0, 0, w, h)
-            cr:set_source(glint)
-            cr:fill()
-
-            -- Intense specular flare catching the top 1px and bottom 2px glass lips
-            local lip_glint = cairo.Pattern.create_linear(gx - band_w * 0.7, 0, gx + band_w * 0.7, 0)
-            add_space_solar_glint_stops(lip_glint, 1.35)
-            cr:rectangle(0, 0, w, 2)
-            cr:rectangle(0, h - 3, w, 3)
-            cr:set_source(lip_glint)
-            cr:fill()
-        end
-
         cr:restore()
     end
 end
@@ -972,9 +882,6 @@ function slime_shapes.render_space_window_edge(c, side)
         ensure_best_antialias(cr)
 
         local focused = (client.focus == c)
-        local t = slime_shapes.space_time or 0
-        -- Very slow cryo-stasis breathing wave (~5.5s period) for 3-4% opacity modulation
-        local breath = 0.5 + 0.5 * math.sin(t * 1.15)
 
         if not focused then
             -- Unfocused recessed spacecraft bulkhead bevel (2-tone Double-Pencil in muted airframe grey)
@@ -1070,20 +977,6 @@ function slime_shapes.render_space_window_edge(c, side)
                 cr:fill()
             end
 
-            -- High-Speed Orbital Solar Glint Sweep across the top lip of the active window
-            -- (offset by +0.35s from the Wibar sweep so the sunlight cascades down from the bar)
-            local cycle_t = (t - 0.35) % SPACE_SOLAR_PERIOD
-            if cycle_t < SPACE_SOLAR_DURATION then
-                local progress = cycle_t / SPACE_SOLAR_DURATION
-                local band_w = math.max(110, w * 0.14)
-                local gx = -band_w + progress * (w + 2 * band_w)
-                local glint = cairo.Pattern.create_linear(gx - band_w, 0, gx + band_w, h * 2)
-                add_space_solar_glint_stops(glint, 1.25)
-                cr:rectangle(0, 0, w, h)
-                cr:set_source(glint)
-                cr:fill()
-            end
-
         elseif side == "left" then
             -- Frosted Hull White body
             cr:set_source_rgba(0.945, 0.955, 0.973, 0.96)
@@ -1173,16 +1066,15 @@ function slime_shapes.render_space_window_edge(c, side)
             end
 
         elseif side == "bottom" then
-            -- Passive Cryo-Breath Fog: slow 3-4% opacity modulation on the bottom border
-            local base_alpha = 0.93 + 0.04 * breath
-            cr:set_source_rgba(0.882, 0.894, 0.918, base_alpha) -- #e1e4ea Airframe Grey
+            -- Recessed spacecraft bulkhead bevel & frosted cryo vignette (static)
+            cr:set_source_rgba(0.882, 0.894, 0.918, 0.95) -- #e1e4ea Airframe Grey
             cr:rectangle(0, 0, w, h)
             cr:fill()
 
             -- Cryo-Stasis Frost Vignette along the bottom border (mirroring the frosted cryo core in the deck floor)
             local cryo = cairo.Pattern.create_linear(0, 0, w, 0)
-            local frost_alpha = 0.14 + 0.04 * breath
-            local core_alpha  = 0.18 + 0.04 * breath
+            local frost_alpha = 0.16
+            local core_alpha  = 0.20
             cryo:add_color_stop_rgba(0.00, 0.000, 0.533, 0.800, frost_alpha)       -- #0088cc Cryo Cyan vignette
             cryo:add_color_stop_rgba(0.35, 1.000, 1.000, 1.000, frost_alpha * 1.2) -- Frosted white ice mist
             cryo:add_color_stop_rgba(0.50, 0.333, 0.969, 0.212, core_alpha)        -- #55f736 Dormant Cryo-Slime Core reflection
@@ -1193,7 +1085,7 @@ function slime_shapes.render_space_window_edge(c, side)
             cr:fill()
 
             -- Inner 1px bright specular Double-Pencil line (#ffffffb8)
-            cr:set_source_rgba(1.000, 1.000, 1.000, 0.76 + 0.04 * breath)
+            cr:set_source_rgba(1.000, 1.000, 1.000, 0.78)
             cr:rectangle(1, 0, math.max(0, w - 2), 1)
             cr:fill()
 
@@ -1203,7 +1095,7 @@ function slime_shapes.render_space_window_edge(c, side)
             cr:fill()
 
             -- Outer 1px dimmer Thruster Cyan refraction line (#0088cc66) on Bottom edge
-            cr:set_source_rgba(0.000, 0.533, 0.800, 0.42 + 0.04 * breath)
+            cr:set_source_rgba(0.000, 0.533, 0.800, 0.44)
             cr:rectangle(0, h - 1, w, 1)
             cr:rectangle(w - 1, 0, 1, h)
             cr:fill()
@@ -1212,7 +1104,7 @@ function slime_shapes.render_space_window_edge(c, side)
             local bl = math.min(corner_len, math.floor(w * 0.25))
             if bl >= 8 then
                 -- Faint Thruster Cyan bloom (#0088cc) in bottom corners
-                cr:set_source_rgba(0.000, 0.533, 0.800, 0.22 + 0.03 * breath)
+                cr:set_source_rgba(0.000, 0.533, 0.800, 0.23)
                 cr:rectangle(0, 0, bl + 4, h)
                 cr:rectangle(w - bl - 4, 0, bl + 4, h)
                 cr:fill()
@@ -1511,5 +1403,915 @@ function slime_shapes.render_chomp_bar_bg()
 end
 slime_shapes.render_larry_bar_bg = slime_shapes.render_chomp_bar_bg
 
+-- =============================================================================
+-- 10. Heavy Physical Rust-Red & Gold Bulkhead Wibar (Dual Command Pods & Bridge)
+-- =============================================================================
+-- Profile:
+-- |                 ___________________________________________________________________                  |
+-- \________________/                                                                   \________________/
+-- Features:
+-- - Geometric wibar shape clipping matching ASCII art with dual command pods and recessed bridge
+-- - Rust-red industrial plate gradients (#240a0d -> #52171f -> #7a242e -> #9e2e38)
+-- - Dual heavy command pods with 45° chamfered wings on left (tags) and right (telemetry)
+-- - Recessed elevated bridge in center for window tasks
+-- - 3D depth bevels and ambient occlusion
+-- - Precision machined gold accent contour rail (#ffd638 / #ffaa00 / #c08014)
+-- - Heavy gold corner reinforcement brackets on all 4 chamfers
+-- - 3D tactile gold hex fasteners / rivets and gold status waveguide insets
+-- =============================================================================
+
+function slime_shapes.red_bar_shape(pod_l_w, pod_r_w, pod_h, mid_h, chamfer)
+    return function(cr, w, h)
+        ensure_best_antialias(cr)
+        local pl = pod_l_w or beautiful.bar_pod_left_width or 210
+        local pr = pod_r_w or beautiful.bar_pod_right_width or 880
+        local yp = pod_h or beautiful.bar_pod_height or h
+        local ym = mid_h or beautiful.bar_mid_height or (h - 20)
+        local ch = chamfer or beautiful.bar_chamfer or 12
+
+        cr:new_path()
+        cr:move_to(0, 0)
+        cr:line_to(w, 0)
+        cr:line_to(w, yp - ch)
+        cr:line_to(w - ch, yp)
+        cr:line_to(w - pr + ch, yp)
+        cr:line_to(w - pr, ym)
+        cr:line_to(pl, ym)
+        cr:line_to(pl - ch, yp)
+        cr:line_to(ch, yp)
+        cr:line_to(0, yp - ch)
+        cr:close_path()
+    end
+end
+
+function slime_shapes.render_red_bar_bg(pod_l_w, pod_r_w, pod_h, mid_h, chamfer)
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        local pl = pod_l_w or beautiful.bar_pod_left_width or 210
+        local pr = pod_r_w or beautiful.bar_pod_right_width or 880
+        local yp = pod_h or beautiful.bar_pod_height or h
+        local ym = mid_h or beautiful.bar_mid_height or (h - 20)
+        local ch = chamfer or beautiful.bar_chamfer or 12
+
+        local function bar_contour(c)
+            c:new_path()
+            c:move_to(0, yp - ch)
+            c:line_to(ch, yp)
+            c:line_to(pl - ch, yp)
+            c:line_to(pl, ym)
+            c:line_to(w - pr, ym)
+            c:line_to(w - pr + ch, yp)
+            c:line_to(w - ch, yp)
+            c:line_to(w, yp - ch)
+        end
+
+        local function bar_polygon(c)
+            c:new_path()
+            c:move_to(0, 0)
+            c:line_to(w, 0)
+            c:line_to(w, yp - ch)
+            c:line_to(w - ch, yp)
+            c:line_to(w - pr + ch, yp)
+            c:line_to(w - pr, ym)
+            c:line_to(pl, ym)
+            c:line_to(pl - ch, yp)
+            c:line_to(ch, yp)
+            c:line_to(0, yp - ch)
+            c:close_path()
+        end
+
+        -- 1. Base Plate Fill: Rust-Red Industrial Heavy Bulkhead Gradient
+        bar_polygon(cr)
+        local pat = cairo.Pattern.create_linear(0, 0, 0, yp)
+        pat:add_color_stop_rgba(0.00, 0.14, 0.04, 0.05, 0.99) -- #240a0d Dark scorched iron
+        pat:add_color_stop_rgba(0.35, 0.32, 0.09, 0.12, 0.99) -- #52171f Deep oxidized rust
+        pat:add_color_stop_rgba(0.70, 0.48, 0.14, 0.18, 0.99) -- #7a242e Rich rust red
+        pat:add_color_stop_rgba(1.00, 0.62, 0.18, 0.22, 1.00) -- #9e2e38 Warm rust carmine
+        cr:set_source(pat)
+        cr:fill_preserve()
+
+        -- Clip to plate for inner texture, panel seams, 3D bevels, and fasteners
+        cr:save()
+        cr:clip()
+
+        -- Subtle 45° CNC diagonal machine grain
+        cr:set_line_width(1.0)
+        cr:set_source_rgba(1.0, 0.78, 0.25, 0.035)
+        local gx = -h
+        while gx < w + h do
+            cr:move_to(gx, 0)
+            cr:line_to(gx + h, h)
+            gx = gx + 16
+        end
+        cr:stroke()
+
+        -- Vertical panel expansion seams between command pods and center bridge
+        for _, sx in ipairs({ pl, w - pr }) do
+            -- Dark groove shadow
+            cr:set_line_width(2.0)
+            cr:set_source_rgba(0.06, 0.01, 0.02, 0.90)
+            cr:move_to(sx - 1.0, 0)
+            cr:line_to(sx - 1.0, ym)
+            cr:stroke()
+            -- Gold seam specular highlight
+            cr:set_line_width(1.2)
+            cr:set_source_rgba(1.0, 0.84, 0.22, 0.70)
+            cr:move_to(sx + 0.6, 0)
+            cr:line_to(sx + 0.6, ym)
+            cr:stroke()
+        end
+
+        -- Top specular edge reflection in warm gold
+        cr:set_line_width(1.5)
+        cr:set_source_rgba(1.0, 0.85, 0.35, 0.65)
+        cr:move_to(0, 0.75)
+        cr:line_to(w, 0.75)
+        cr:stroke()
+
+        -- 3D Bottom plate inner extrusion depth (shadow bevel above gold rail)
+        bar_contour(cr)
+        cr:set_line_width(5.0)
+        cr:set_source_rgba(0.04, 0.01, 0.01, 0.60)
+        cr:stroke()
+
+        -- 3D Hex Rivets / Gold Fasteners
+        local function draw_rivet(rx, ry)
+            cr:arc(rx, ry + 1.2, 3.5, 0, 2 * math.pi)
+            cr:set_source_rgba(0, 0, 0, 0.7)
+            cr:fill()
+            cr:arc(rx, ry, 3.2, 0, 2 * math.pi)
+            cr:set_source_rgba(0.75, 0.50, 0.08, 0.98)
+            cr:fill()
+            cr:arc(rx, ry, 2.0, 0, 2 * math.pi)
+            cr:set_source_rgba(1.0, 0.86, 0.25, 1.0)
+            cr:fill()
+            cr:arc(rx - 0.7, ry - 0.7, 0.9, 0, 2 * math.pi)
+            cr:set_source_rgba(1.0, 1.0, 1.0, 0.98)
+            cr:fill()
+        end
+
+        -- Gold waveguide status slits
+        local function draw_inset_slit(sx, sy, sw)
+            cr:rectangle(sx, sy, sw, 2.5)
+            cr:set_source_rgba(0.08, 0.02, 0.02, 0.95)
+            cr:fill()
+            cr:rectangle(sx + 1, sy + 0.5, sw - 2, 1.5)
+            cr:set_source_rgba(1.0, 0.78, 0.15, 0.90)
+            cr:fill()
+        end
+
+        -- Tactile gold hardware rivets placed on lower pod deck
+        draw_rivet(18, yp - 10)
+        draw_inset_slit(28, yp - 11, 24)
+        draw_rivet(pl - 18, yp - 10)
+
+        draw_rivet(w - pr + 18, yp - 10)
+        draw_inset_slit(w - pr + 30, yp - 11, 28)
+        draw_rivet(w - 18, yp - 10)
+
+        -- Upper anchor rivets on chamfer transition
+        draw_rivet(pl - ch - 4, ym - 8)
+        draw_rivet(w - pr + ch + 4, ym - 8)
+
+        cr:restore() -- End clip
+
+        -- 2. Precision Machined Gold Accent Contour Rail
+        local trim = cairo.Pattern.create_linear(0, 0, w, 0)
+        trim:add_color_stop_rgba(0.00, 0.82, 0.58, 0.12, 0.98) -- Burnished gold
+        trim:add_color_stop_rgba(0.12, 1.00, 0.86, 0.25, 1.00) -- Specular bright gold #ffd638
+        trim:add_color_stop_rgba(0.50, 0.92, 0.68, 0.16, 0.98) -- Rich crucible gold
+        trim:add_color_stop_rgba(0.88, 1.00, 0.86, 0.25, 1.00) -- Specular bright gold
+        trim:add_color_stop_rgba(1.00, 0.82, 0.58, 0.12, 0.98) -- Burnished gold
+
+        bar_contour(cr)
+        cr:set_line_width(2.6)
+        cr:set_source(trim)
+        cr:stroke()
+
+        -- 3. Heavy Gold Chamfer Accent Brackets (reinforced heavy brackets)
+        cr:set_line_width(3.6)
+        cr:set_source_rgba(1.0, 0.90, 0.38, 1.0)
+        -- Left pod outer chamfer
+        cr:move_to(0, yp - ch - 4)
+        cr:line_to(0, yp - ch)
+        cr:line_to(ch, yp)
+        cr:line_to(ch + 8, yp)
+        cr:stroke()
+
+        -- Left pod inner chamfer accent
+        cr:move_to(pl - ch - 8, yp)
+        cr:line_to(pl - ch, yp)
+        cr:line_to(pl, ym)
+        cr:line_to(pl + 8, ym)
+        cr:stroke()
+
+        -- Right pod inner chamfer accent
+        cr:move_to(w - pr - 8, ym)
+        cr:line_to(w - pr, ym)
+        cr:line_to(w - pr + ch, yp)
+        cr:line_to(w - pr + ch + 8, yp)
+        cr:stroke()
+
+        -- Right pod outer chamfer
+        cr:move_to(w - ch - 8, yp)
+        cr:line_to(w - ch, yp)
+        cr:line_to(w, yp - ch)
+        cr:line_to(w, yp - ch - 4)
+        cr:stroke()
+
+        cr:restore()
+    end
+end
+
+-- 11. 90s Windbreaker Bar Background Renderer:
+-- Crisp light athletic nylon fabric surface (#fcfdff -> #edf1f7) with an authentic
+-- high-voltage 90s color-block racing stripe running along the bottom rim (Neon Pink,
+-- Solar Yellow, Electric Lime, Cyan, and Deep Royal Purple).
+function slime_shapes.render_windbreaker_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- Crisp nylon white/silver gradient surface
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.0, 0.988, 0.992, 1.000, 0.96) -- #fcfdff
+        pat:add_color_stop_rgba(1.0, 0.929, 0.945, 0.968, 0.97) -- #edf1f7
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- Deep dark retro indigo bounding border line
+        cr:rectangle(0, h - 3, w, 1)
+        cr:set_source_rgba(0.082, 0.075, 0.145, 0.90) -- #151324
+        cr:fill()
+
+        -- 90s Neon Color-Blocked Racing Stripe (Pink -> Yellow -> Lime -> Cyan -> Purple)
+        local stripe = cairo.Pattern.create_linear(0, 0, w, 0)
+        stripe:add_color_stop_rgba(0.00, 1.000, 0.000, 0.498, 1.0) -- #ff007f (Hot Pink)
+        stripe:add_color_stop_rgba(0.20, 1.000, 0.902, 0.000, 1.0) -- #ffe600 (Cyber Yellow)
+        stripe:add_color_stop_rgba(0.40, 0.063, 0.910, 0.384, 1.0) -- #10e862 (Neon Lime)
+        stripe:add_color_stop_rgba(0.60, 0.000, 0.824, 1.000, 1.0) -- #00d2ff (Electric Cyan)
+        stripe:add_color_stop_rgba(0.80, 0.439, 0.000, 1.000, 1.0) -- #7000ff (Royal Purple)
+        stripe:add_color_stop_rgba(1.00, 1.000, 0.000, 0.498, 1.0) -- #ff007f (Hot Pink)
+        cr:rectangle(0, h - 2, w, 2)
+        cr:set_source(stripe)
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 11. "Clay Tablet" Ancient Sun-Baked Terracotta & Mesopotamian Cuneiform
+-- ==============================================================================
+
+-- 11a. Tactile 3D Clay Tablet Shape (soft pillow bevel & extruded depth):
+function slime_shapes.clay_tablet_pod(radius, bevel)
+    radius = radius or 4
+    bevel = bevel or 3
+    return function(cr, w, h)
+        ensure_best_antialias(cr)
+        gears.shape.rounded_rect(cr, w, h, radius)
+    end
+end
+
+-- 11b. Clay Tablet Custom Bar Background Renderer:
+-- Paints an authentic carved sun-baked clay tablet slab:
+-- - Warm terracotta / slate-clay gradient (#504a4b -> #585153 -> #504a4b)
+-- - Scribe ruling incision lines (dual score lines pressed with reed stylus)
+-- - Subtle earthenware micro-porosity / porous clay sediment grain
+-- - 3D extruded clay bottom shelf (#383233 shadow bevel with drop shadow)
+-- - Specular sandstone top rim highlight (#d1c4af / #b6a994)
+-- - Incised Cuneiform Stylus Wedges stamped into the clay margins (left & right)
+function slime_shapes.render_clay_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Base Clay Slab Gradient (warm earthy slate-clay)
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.314, 0.290, 0.294, 0.99) -- #504a4b Top edge
+        pat:add_color_stop_rgba(0.35, 0.345, 0.318, 0.325, 0.99) -- #585153 Main slab body
+        pat:add_color_stop_rgba(0.85, 0.320, 0.294, 0.302, 0.99) -- #524b4d Lower shelf
+        pat:add_color_stop_rgba(1.00, 0.220, 0.196, 0.200, 1.00) -- #383233 3D bottom extrusion base
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Fine earthen porous clay texture (subtle micro-stippling along the bar)
+        cr:set_line_width(1.0)
+        cr:set_source_rgba(0.82, 0.77, 0.69, 0.04) -- #d1c4af fine sediment specks
+        local step = 37
+        local px = 12
+        while px < w do
+            cr:arc(px, (px * 7) % (h - 8) + 4, 1.2, 0, 2 * math.pi)
+            cr:fill()
+            px = px + step
+        end
+
+        -- 3. Top Specular Sandstone Chamfer Rim (#d1c4af with soft falloff)
+        cr:rectangle(0, 0, w, 1.2)
+        cr:set_source_rgba(0.820, 0.769, 0.686, 0.40) -- #d1c4af
+        cr:fill()
+
+        -- 4. Scribe Ruling Guidelines (horizontal incision grooves pressed by reed stylus)
+        -- Upper guideline
+        cr:set_line_width(1.0)
+        cr:set_source_rgba(0.18, 0.16, 0.17, 0.45) -- Dark carved shadow
+        cr:move_to(10, 4)
+        cr:line_to(w - 10, 4)
+        cr:stroke()
+        cr:set_source_rgba(0.85, 0.80, 0.72, 0.20) -- Subtle light lip
+        cr:move_to(10, 5)
+        cr:line_to(w - 10, 5)
+        cr:stroke()
+
+        -- Lower guideline
+        cr:set_source_rgba(0.18, 0.16, 0.17, 0.45)
+        cr:move_to(10, h - 7)
+        cr:line_to(w - 10, h - 7)
+        cr:stroke()
+        cr:set_source_rgba(0.85, 0.80, 0.72, 0.20)
+        cr:move_to(10, h - 6)
+        cr:line_to(w - 10, h - 6)
+        cr:stroke()
+
+        -- 5. 3D Bottom Tablet Depth / Extrusion Shelf (3-4px dark clay shelf)
+        cr:rectangle(0, h - 4, w, 4)
+        cr:set_source_rgba(0.220, 0.196, 0.200, 0.95) -- #383233 dark clay extrusion
+        cr:fill()
+
+        -- Deep under-shadow at the very bottom edge
+        cr:rectangle(0, h - 1, w, 1)
+        cr:set_source_rgba(0.13, 0.11, 0.12, 0.80) -- #211c1e deep cast shadow
+        cr:fill()
+
+        -- 6. Incised Cuneiform Stylus Wedges (authentic Sumerian/Akkadian reed stylus wedge impressions)
+        local function draw_cuneiform_vertical_wedge(x, y, len, width)
+            cr:new_path()
+            cr:move_to(x, y)
+            cr:line_to(x + width * 0.5, y + width * 0.6)
+            cr:line_to(x + width * 0.15, y + len)
+            cr:line_to(x - width * 0.15, y + len)
+            cr:line_to(x - width * 0.5, y + width * 0.6)
+            cr:close_path()
+            cr:set_source_rgba(0.16, 0.14, 0.15, 0.75)
+            cr:fill_preserve()
+            cr:set_line_width(0.7)
+            cr:set_source_rgba(0.85, 0.78, 0.70, 0.35)
+            cr:stroke()
+        end
+
+        local function draw_cuneiform_corner_wedge(x, y, size)
+            cr:new_path()
+            cr:move_to(x, y)
+            cr:line_to(x + size, y + size * 0.5)
+            cr:line_to(x, y + size)
+            cr:line_to(x - size * 0.5, y + size * 0.7)
+            cr:close_path()
+            cr:set_source_rgba(0.16, 0.14, 0.15, 0.75)
+            cr:fill_preserve()
+            cr:set_line_width(0.7)
+            cr:set_source_rgba(0.85, 0.78, 0.70, 0.35)
+            cr:stroke()
+        end
+
+        -- Left margin cuneiform scribe mark
+        draw_cuneiform_vertical_wedge(16, 12, 14, 5)
+        draw_cuneiform_corner_wedge(24, 13, 7)
+        draw_cuneiform_vertical_wedge(33, 14, 11, 4.5)
+
+        -- Right margin cuneiform scribe mark
+        draw_cuneiform_corner_wedge(w - 36, 13, 7)
+        draw_cuneiform_vertical_wedge(w - 26, 12, 14, 5)
+        draw_cuneiform_vertical_wedge(w - 18, 14, 11, 4.5)
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 12. "Looney Tunes" Golden Age Animation Light Theme Bar Renderer
+-- ==============================================================================
+-- Paints a warm vintage animation paper / cel surface (#fdfbf7 -> #f5edd8) with
+-- an authentic concentric cartoon title-ring bottom border (Acme Red, Carrot Orange,
+-- and Tweety Golden Yellow) and subtle corner target arcs.
+function slime_shapes.render_tunes_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Warm vintage cartoon cel parchment gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.992, 0.984, 0.968, 0.97) -- #fdfbf7
+        pat:add_color_stop_rgba(0.70, 0.980, 0.960, 0.925, 0.98) -- #faf5ec
+        pat:add_color_stop_rgba(1.00, 0.953, 0.925, 0.875, 0.99) -- #f3ecdf
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top crisp specular highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(1.0, 1.0, 1.0, 0.95)
+        cr:fill()
+
+        -- 3. Concentric cartoon bullseye corner watermark accents (subtle WB rings)
+        local function draw_bullseye_rings(cx, cy)
+            local rings = {
+                { r = 18, col = { 0.85, 0.08, 0.18, 0.12 } }, -- Red
+                { r = 14, col = { 1.00, 0.42, 0.00, 0.14 } }, -- Orange
+                { r = 10, col = { 1.00, 0.82, 0.00, 0.16 } }, -- Yellow
+                { r =  6, col = { 0.00, 0.36, 0.73, 0.15 } }, -- Blue core
+            }
+            for _, ring in ipairs(rings) do
+                cr:set_line_width(2.2)
+                cr:set_source_rgba(ring.col[1], ring.col[2], ring.col[3], ring.col[4])
+                cr:arc(cx, cy, ring.r, 0, 2 * math.pi)
+                cr:stroke()
+            end
+        end
+
+        draw_bullseye_rings(18, h * 0.5)
+        draw_bullseye_rings(w - 18, h * 0.5)
+
+        -- 4. Cartoon Ink Guideline
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.110, 0.086, 0.071, 0.85) -- #1c1612 deep cartoon ink
+        cr:fill()
+
+        -- 5. Looney Tunes Concentric Title Striping along bottom rim:
+        -- Tweety Golden Yellow (1px)
+        cr:rectangle(0, h - 4, w, 1)
+        cr:set_source_rgba(1.000, 0.816, 0.000, 1.0) -- #ffd000
+        cr:fill()
+
+        -- Carrot Orange (1.5px)
+        cr:rectangle(0, h - 3, w, 1.5)
+        cr:set_source_rgba(1.000, 0.420, 0.000, 1.0) -- #ff6b00
+        cr:fill()
+
+        -- Acme Dynamite Red (1.5px bottom rail)
+        cr:rectangle(0, h - 1.5, w, 1.5)
+        cr:set_source_rgba(0.851, 0.078, 0.141, 1.0) -- #d91424
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 18. Mystery Machine Bar Background Renderer (Dark Spooky Night + Flower Power Trim)
+-- ==============================================================================
+function slime_shapes.render_mystery_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Deep spooky midnight teal-black gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.063, 0.082, 0.114, 0.98) -- #10151d
+        pat:add_color_stop_rgba(0.60, 0.082, 0.114, 0.157, 0.98) -- #151d28
+        pat:add_color_stop_rgba(1.00, 0.098, 0.137, 0.188, 0.99) -- #192330
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle eerie mist cyan specular highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.110, 0.820, 0.745, 0.40) -- #1cd1be40
+        cr:fill()
+
+        -- 3. Retro 5-petal flower power daisy watermark accents on the sides
+        local function draw_flower_power(cx, cy, radius)
+            local petals = 5
+            for i = 0, petals - 1 do
+                local angle = (i * 2 * math.pi) / petals
+                local px = cx + math.cos(angle) * (radius * 0.6)
+                local py = cy + math.sin(angle) * (radius * 0.6)
+                cr:arc(px, py, radius * 0.45, 0, 2 * math.pi)
+                cr:set_source_rgba(1.000, 0.467, 0.000, 0.18) -- Flower Orange
+                cr:fill()
+            end
+            -- Center disk
+            cr:arc(cx, cy, radius * 0.35, 0, 2 * math.pi)
+            cr:set_source_rgba(0.533, 0.886, 0.173, 0.22) -- Lime Green center
+            cr:fill()
+        end
+
+        draw_flower_power(18, h * 0.5, 9)
+        draw_flower_power(w - 18, h * 0.5, 9)
+
+        -- 4. Deep ink guideline
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.04, 0.05, 0.08, 0.95)
+        cr:fill()
+
+        -- 5. The iconic Mystery Machine triple-trim along bottom rail:
+        -- Groovy Lime Green (1.5px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.533, 0.886, 0.173, 1.0) -- #88e22c
+        cr:fill()
+
+        -- Mystery Machine Turquoise Aqua (1.5px)
+        cr:rectangle(0, h - 2.8, w, 1.5)
+        cr:set_source_rgba(0.110, 0.820, 0.745, 1.0) -- #1cd1be
+        cr:fill()
+
+        -- Flower Power Orange (1.3px bottom rail)
+        cr:rectangle(0, h - 1.3, w, 1.3)
+        cr:set_source_rgba(1.000, 0.467, 0.000, 1.0) -- #ff7700
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 19. Darkwing Duck Bar Background Renderer (Midnight Purple & Heroic Trim)
+-- ==============================================================================
+function slime_shapes.render_darkwing_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Deep midnight purple / shadow plum gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.071, 0.047, 0.122, 0.98) -- #120c1f
+        pat:add_color_stop_rgba(0.60, 0.094, 0.063, 0.161, 0.98) -- #181029
+        pat:add_color_stop_rgba(1.00, 0.110, 0.075, 0.188, 0.99) -- #1c1330
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle electric cyan gas mist highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.000, 0.898, 1.000, 0.35) -- #00e5ff
+        cr:fill()
+
+        -- 3. Double-breasted cape button watermark accents on corners
+        local function draw_cape_badge(cx, cy, r)
+            -- Subtle fedora shadow arc
+            cr:arc(cx, cy - 2, r * 1.5, -math.pi * 0.8, -math.pi * 0.2)
+            cr:set_line_width(2.0)
+            cr:set_source_rgba(0.616, 0.306, 0.867, 0.20) -- Fedora purple
+            cr:stroke()
+
+            -- Large round golden button
+            cr:arc(cx, cy, r, 0, 2 * math.pi)
+            cr:set_source_rgba(1.000, 0.843, 0.000, 0.25) -- Cape button gold
+            cr:fill()
+
+            -- Inner button rim
+            cr:arc(cx, cy, r * 0.6, 0, 2 * math.pi)
+            cr:set_line_width(1.2)
+            cr:set_source_rgba(1.000, 0.420, 0.000, 0.30) -- Orange rim
+            cr:stroke()
+        end
+
+        draw_cape_badge(18, h * 0.5, 7)
+        draw_cape_badge(w - 18, h * 0.5, 7)
+
+        -- 4. Deep ink guideline
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.04, 0.02, 0.08, 0.95)
+        cr:fill()
+
+        -- 5. Darkwing Superhero Triple-Trim along bottom rail:
+        -- Fedora Purple (1.5px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.616, 0.306, 0.867, 1.0) -- #9d4edd
+        cr:fill()
+
+        -- Electric Cyan / Gas Mist (1.5px)
+        cr:rectangle(0, h - 2.8, w, 1.5)
+        cr:set_source_rgba(0.000, 0.898, 1.000, 1.0) -- #00e5ff
+        cr:fill()
+
+        -- Cape Button Gold (1.3px bottom rail)
+        cr:rectangle(0, h - 1.3, w, 1.3)
+        cr:set_source_rgba(1.000, 0.843, 0.000, 1.0) -- #ffd700
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 20. Teenage Mutant Ninja Turtles (TMNT) Bar Background Renderer
+-- ==============================================================================
+-- Dark sewer brick / mossy slate canvas with NYC manhole iron medallions,
+-- the four iconic turtle bandana gems (Leo blue, Raph red, Donnie purple, Mikey orange),
+-- and a radioactive mutagen ooze neon green glow along the bottom rail.
+-- ==============================================================================
+function slime_shapes.render_tmnt_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Deep sewer slate & mossy brick canvas gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.055, 0.082, 0.063, 0.98) -- #0e1510
+        pat:add_color_stop_rgba(0.50, 0.075, 0.114, 0.078, 0.98) -- #131d14
+        pat:add_color_stop_rgba(1.00, 0.094, 0.145, 0.102, 0.99) -- #18251a
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle mutagen ooze vapor highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.224, 1.000, 0.078, 0.25) -- #39ff14
+        cr:fill()
+
+        -- 3. Subtle sewer brick masonry mortar grid lines across baseline
+        cr:set_line_width(1.0)
+        cr:set_source_rgba(0.18, 0.28, 0.20, 0.20)
+        cr:move_to(0, h * 0.45)
+        cr:line_to(w, h * 0.45)
+        cr:stroke()
+
+        -- 4. Four Turtle Bandana Accent Gems (Leo, Raph, Donnie, Mikey)
+        local function draw_turtle_gems(start_x, cy)
+            local colors = {
+                { 0.000, 0.667, 1.000 }, -- Leonardo Blue   (#00aaff)
+                { 1.000, 0.165, 0.294 }, -- Raphael Red     (#ff2a4b)
+                { 0.616, 0.306, 0.867 }, -- Donatello Purple(#9d4edd)
+                { 1.000, 0.533, 0.000 }, -- Michelangelo Orange(#ff8800)
+            }
+            local spacing = 11
+            for i, col in ipairs(colors) do
+                local gx = start_x + (i - 1) * spacing
+                -- Outer dark rim
+                cr:arc(gx, cy, 3.8, 0, 2 * math.pi)
+                cr:set_source_rgba(0.04, 0.06, 0.04, 0.8)
+                cr:fill()
+
+                -- Vibrant bandana color dot
+                cr:arc(gx, cy, 2.5, 0, 2 * math.pi)
+                cr:set_source_rgba(col[1], col[2], col[3], 0.95)
+                cr:fill()
+
+                -- Specular highlight
+                cr:arc(gx - 0.7, cy - 0.7, 0.8, 0, 2 * math.pi)
+                cr:set_source_rgba(1.0, 1.0, 1.0, 0.8)
+                cr:fill()
+            end
+        end
+
+        draw_turtle_gems(18, h * 0.5)
+        draw_turtle_gems(w - 56, h * 0.5)
+
+        -- 5. Deep sewer ink guideline
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.02, 0.04, 0.02, 0.95)
+        cr:fill()
+
+        -- 6. TMNT Triple-Trim along bottom rail:
+        -- Shell Dark Green (1.2px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.180, 0.490, 0.196, 1.0) -- #2e7d32
+        cr:fill()
+
+        -- Glowing Mutagen Slime Green (1.6px)
+        cr:rectangle(0, h - 2.8, w, 1.6)
+        cr:set_source_rgba(0.224, 1.000, 0.078, 1.0) -- #39ff14
+        cr:fill()
+
+        -- Pizza Crust Gold (1.2px bottom rail)
+        cr:rectangle(0, h - 1.2, w, 1.2)
+        cr:set_source_rgba(1.000, 0.843, 0.000, 0.9) -- #ffd700
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 21. Muppet Babies Bar Background Renderer (Pastel Vaporwave & Dream Trim)
+-- ==============================================================================
+-- Twilight nursery violet canvas with subtle vaporwave perspective grid seams,
+-- floating pastel star badges, Kermit mint, Piggy bubblegum pink, and Gonzo periwinkle trim.
+-- ==============================================================================
+function slime_shapes.render_muppet_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Deep pastel twilight violet / nursery dream gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.102, 0.082, 0.157, 0.98) -- #1a1528
+        pat:add_color_stop_rgba(0.50, 0.133, 0.102, 0.212, 0.98) -- #221a36
+        pat:add_color_stop_rgba(1.00, 0.165, 0.122, 0.259, 0.99) -- #2a1f42
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle pastel bubblegum pink dream mist highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(1.000, 0.439, 0.651, 0.30) -- #ff70a6
+        cr:fill()
+
+        -- 3. Subtle vaporwave perspective grid lines across baseline
+        cr:set_line_width(1.0)
+        cr:set_source_rgba(0.439, 0.839, 1.000, 0.15) -- Periwinkle grid
+        cr:move_to(0, h * 0.48)
+        cr:line_to(w, h * 0.48)
+        cr:stroke()
+
+        -- 4. Floating Pastel Vaporwave Stars (Piggy Pink, Kermit Mint, Gonzo Blue)
+        local function draw_dream_stars(start_x, cy)
+            local stars = {
+                { 1.000, 0.439, 0.651, 4.0 }, -- Baby Piggy Pink   (#ff70a6)
+                { 0.502, 0.929, 0.600, 3.2 }, -- Baby Kermit Mint  (#80ed99)
+                { 0.439, 0.839, 1.000, 3.6 }, -- Baby Gonzo Cyan   (#70d6ff)
+                { 1.000, 0.820, 0.400, 3.0 }, -- Baby Fozzie Peach (#ffd166)
+            }
+            local spacing = 12
+            for i, st in ipairs(stars) do
+                local sx = start_x + (i - 1) * spacing
+                local r = st[4]
+                cr:new_path()
+                cr:move_to(sx, cy - r)
+                cr:curve_to(sx, cy - r * 0.2, sx + r * 0.2, cy, sx + r, cy)
+                cr:curve_to(sx + r * 0.2, cy, sx, cy + r * 0.2, sx, cy + r)
+                cr:curve_to(sx, cy + r * 0.2, sx - r * 0.2, cy, sx - r, cy)
+                cr:curve_to(sx - r * 0.2, cy, sx, cy - r * 0.2, sx, cy - r)
+                cr:close_path()
+                cr:set_source_rgba(st[1], st[2], st[3], 0.85)
+                cr:fill()
+            end
+        end
+
+        draw_dream_stars(18, h * 0.5)
+        draw_dream_stars(w - 56, h * 0.5)
+
+        -- 5. Deep twilight guide line
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.06, 0.04, 0.10, 0.95)
+        cr:fill()
+
+        -- 6. Muppet Babies Pastel Vaporwave Triple-Trim along bottom rail:
+        -- Kermit Mint Green (1.2px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.502, 0.929, 0.600, 1.0) -- #80ed99
+        cr:fill()
+
+        -- Piggy Bubblegum Pink (1.6px)
+        cr:rectangle(0, h - 2.8, w, 1.6)
+        cr:set_source_rgba(1.000, 0.439, 0.651, 1.0) -- #ff70a6
+        cr:fill()
+
+        -- Gonzo Periwinkle Cyan (1.2px bottom rail)
+        cr:rectangle(0, h - 1.2, w, 1.2)
+        cr:set_source_rgba(0.439, 0.839, 1.000, 0.95) -- #70d6ff
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 22. I'm Sorry Jon Bar Background Renderer (Cosmic Horror & Eldritch Amber)
+-- ==============================================================================
+-- Abyssal kitchen shadow canvas (#0f0c0b to #1e1513) with subtle eldritch tendril shadows,
+-- hanging lamp amber warmth, and a burnt lasagna orange and blood-crimson bottom rail.
+-- ==============================================================================
+function slime_shapes.render_jon_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Abyssal shadowy kitchen gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.059, 0.047, 0.043, 0.98) -- #0f0c0b
+        pat:add_color_stop_rgba(0.50, 0.086, 0.063, 0.059, 0.98) -- #16100f
+        pat:add_color_stop_rgba(1.00, 0.118, 0.082, 0.075, 0.99) -- #1e1513
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle hanging lamp warm amber highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.878, 0.337, 0.180, 0.35) -- #e0562e
+        cr:fill()
+
+        -- 3. Subtle eldritch tendril shadow arcs across the bar
+        local function draw_tendril_accent(cx, cy)
+            cr:arc(cx, cy, 8, 0, math.pi * 1.5)
+            cr:set_line_width(1.2)
+            cr:set_source_rgba(0.04, 0.02, 0.02, 0.70)
+            cr:stroke()
+
+            -- Glowing eldritch ember dot
+            cr:arc(cx + 4, cy - 2, 2.0, 0, 2 * math.pi)
+            cr:set_source_rgba(0.878, 0.337, 0.180, 0.75) -- Burnt orange
+            cr:fill()
+        end
+
+        draw_tendril_accent(24, h * 0.5)
+        draw_tendril_accent(w - 24, h * 0.5)
+
+        -- 4. Deep ink guideline
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.02, 0.01, 0.01, 0.95)
+        cr:fill()
+
+        -- 5. Eldritch Lasagna Triple-Trim along bottom rail:
+        -- Blood Red (1.2px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.820, 0.220, 0.141, 1.0) -- #d13824
+        cr:fill()
+
+        -- Burnt Lasagna Orange (1.6px)
+        cr:rectangle(0, h - 2.8, w, 1.6)
+        cr:set_source_rgba(0.878, 0.337, 0.180, 1.0) -- #e0562e
+        cr:fill()
+
+        -- Hanging Lamp Amber Gold (1.2px bottom rail)
+        cr:rectangle(0, h - 1.2, w, 1.2)
+        cr:set_source_rgba(0.898, 0.663, 0.235, 0.95) -- #e5a93c
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
+-- ==============================================================================
+-- 23. Wake & Bake (420 Special) Bar Background Renderer
+-- ==============================================================================
+-- Cozy stoner den midnight noir canvas (#101617 to #16201e) with soft billowing
+-- smoke haze gradients, ambient TV/bong cyan glow, and an herbal trichome green
+-- and golden munchies bottom rail trim.
+-- ==============================================================================
+function slime_shapes.render_bake_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Deep herbal stoner den noir gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.063, 0.086, 0.090, 0.98) -- #101617
+        pat:add_color_stop_rgba(0.50, 0.078, 0.106, 0.110, 0.98) -- #141b1c
+        pat:add_color_stop_rgba(1.00, 0.086, 0.125, 0.118, 0.99) -- #16201e
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle TV / bong water glow highlight (pale cyan / trichome tint)
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.306, 0.886, 0.925, 0.35) -- #4ee2ec
+        cr:fill()
+
+        -- 3. Billowing smoke rings / weed leaf accents at ends
+        local function draw_smoke_accent(cx, cy)
+            -- Outer soft smoke ring
+            cr:arc(cx, cy, 7, 0, 2 * math.pi)
+            cr:set_line_width(1.2)
+            cr:set_source_rgba(0.60, 0.85, 0.75, 0.25)
+            cr:stroke()
+
+            -- Inner glowing resin amber ember
+            cr:arc(cx + 2, cy - 1, 2.0, 0, 2 * math.pi)
+            cr:set_source_rgba(0.957, 0.635, 0.149, 0.85) -- #f4a226 ember
+            cr:fill()
+
+            -- Subtle herbal trichome spark
+            cr:arc(cx - 3, cy + 2, 1.5, 0, 2 * math.pi)
+            cr:set_source_rgba(0.282, 0.722, 0.322, 0.80) -- #48b852 green
+            cr:fill()
+        end
+
+        draw_smoke_accent(24, h * 0.5)
+        draw_smoke_accent(w - 24, h * 0.5)
+
+        -- 4. Deep shadow boundary
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.02, 0.03, 0.03, 0.95)
+        cr:fill()
+
+        -- 5. 420 Triple-Trim Bottom Rail:
+        -- Crunchy Munchies Red (1.2px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.902, 0.224, 0.275, 0.90) -- #e63946
+        cr:fill()
+
+        -- Cheesy Doritos Gold (1.5px)
+        cr:rectangle(0, h - 2.8, w, 1.5)
+        cr:set_source_rgba(0.957, 0.635, 0.149, 0.95) -- #f4a226
+        cr:fill()
+
+        -- Pure Emerald Cannabis Green (1.3px bottom edge)
+        cr:rectangle(0, h - 1.3, w, 1.3)
+        cr:set_source_rgba(0.282, 0.722, 0.322, 1.00) -- #48b852
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
 return slime_shapes
+
+
+
 

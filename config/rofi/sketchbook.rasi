@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Sketchbook (Lamplit Workshop)
+ * ============================================================================ */
+
+* {
+    bg:          #faf4e7ff;
+    bg-alt:      #f6efdf;
+    bg-selected: #276c67;
+    fg:          #343b39;
+    fg-selected: #faf4e7;
+    fg-muted:    #686b60;
+    border-col:  #276c67;
+    accent:      #945b29;
+    gold:        #86591f;
+    neon-blue:   #2b666f;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    3px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius:    2px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "WORKSHOP // MOTHGOMERY...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 2px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @accent;
+    text-color:       #343b39;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @neon-blue;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @accent;
+    text-color:       #343b39;
+}
+
+element selected.active {
+    background-color: @neon-blue;
+    text-color:       @fg-selected;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

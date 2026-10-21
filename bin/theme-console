@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Persistent console for any installed theme, with an optional theme banner.
+set -e
+mode="slime"
+if [ -r "$HOME/.config/awesome/theme_mode" ]; then
+    read -r mode < "$HOME/.config/awesome/theme_mode" || true
+fi
+[[ "$mode" =~ ^[a-zA-Z0-9_-]+$ ]] || mode="slime"
+if [ -x "$HOME/.local/bin/${mode}-fetch" ]; then
+    "$HOME/.local/bin/${mode}-fetch"
+else
+    title="$(sed -n -E 's/^[[:space:]]*display_name[[:space:]]*=[[:space:]]*"([^"]+)".*$/\1/p' "$HOME/.config/awesome/themes/${mode}.lua" 2>/dev/null | head -n 1)"
+    printf '\n%s console\n\n' "${title:-$mode}"
+fi
+exec "${SHELL:-/bin/zsh}" -i

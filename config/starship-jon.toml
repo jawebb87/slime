@@ -1,0 +1,92 @@
+# Starship Prompt Configuration - I'm Sorry Jon Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'jon'
+
+format = """
+[\\[ELDRITCH//LASAGNA\\]](bold fg:lasagna_orange) \
+[🍴](bold fg:amber_gold) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 👁](bold fg:jon_teal)\
+$line_break\
+$character"""
+
+[palettes.jon]
+kitchen_dark    = "#0f0c0b"
+lasagna_orange  = "#e0562e"
+amber_gold      = "#e5a93c"
+jon_teal        = "#5c7f87"
+monday_red      = "#d13824"
+parchment_cream = "#e8dcc4"
+shadow_dim      = "#8a7b6d"
+
+[username]
+show_always = true
+style_user = "bold fg:lasagna_orange"
+style_root = "bold fg:monday_red"
+format = '[$user]($style)[:](bold fg:shadow_dim)'
+
+[directory]
+style = "bold fg:amber_gold"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:jon_teal"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:lasagna_orange"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:amber_gold"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:lasagna_orange"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:jon_teal"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:lasagna_orange"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:lasagna_orange"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:jon_teal"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:monday_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:lasagna_orange)"
+error_symbol = "[❯](bold fg:monday_red)"

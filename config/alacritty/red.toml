@@ -1,0 +1,39 @@
+[window]
+opacity = 0.94
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "GohuFont 11 Nerd Font" }
+
+[colors.primary]
+background = "#0e0708"
+foreground = "#faebe8"
+
+[colors.cursor]
+cursor = "#ff1a2a"
+text = "#0e0708"
+
+[colors.selection]
+background = "#5c141d"
+text = "#ffffff"
+
+[colors.normal]
+black   = "#2c0e13"
+red     = "#39ff14" # Radioactive Acid Green: Errors scream out against the red theme!
+green   = "#ff2a3f"
+yellow  = "#ffaa00"
+blue    = "#38bdf8"
+magenta = "#e040fb"
+cyan    = "#00e5ff"
+white   = "#faebe8"
+
+[colors.bright]
+black   = "#ba6874" # Readable high-contrast ember comments/dim text
+red     = "#55ff55" # Bright Neon Green: High-intensity error pop
+green   = "#ff6073"
+yellow  = "#ffd033"
+blue    = "#7dd3fc"
+magenta = "#ea80fc"
+cyan    = "#67e8f9"
+white   = "#ffffff"

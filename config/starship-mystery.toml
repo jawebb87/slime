@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Mystery Machine Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'mystery'
+
+format = """
+[\\[SCOOBY//MYSTERY\\]](bold fg:van_cyan) \
+[🌸](bold fg:flower_orange) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🚐](bold fg:van_cyan)\
+$line_break\
+$character"""
+
+[palettes.mystery]
+midnight_dark  = "#10151d"
+van_cyan       = "#1cd1be"
+groovy_lime    = "#88e22c"
+flower_orange  = "#ff7700"
+snack_gold     = "#ffd000"
+spooky_purple  = "#b062ff"
+alert_red      = "#ff3864"
+spectral_white = "#ffffff"
+slate_dim      = "#6b8594"
+
+[username]
+show_always = true
+style_user = "bold fg:groovy_lime"
+style_root = "bold fg:alert_red"
+format = '[$user]($style)[:](bold fg:slate_dim)'
+
+[directory]
+style = "bold fg:van_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:flower_orange"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:snack_gold"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:spooky_purple"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:groovy_lime"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:flower_orange"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:snack_gold"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:groovy_lime"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:flower_orange"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:alert_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:van_cyan)"
+error_symbol = "[❯](bold fg:alert_red)"

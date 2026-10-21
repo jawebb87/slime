@@ -1,34 +1,17 @@
 #!/usr/bin/env python3
-"""
-Desktop Per-Theme Font Selector Scratchpad (font-pad)
-=====================================================
-A fast, keyboard-driven graphical font chooser for the Slime / Laboratory White
-AwesomeWM desktop. Supports independent per-theme font configuration ("slime"
-and "lab") and automatically resolves `spacing=100` monospace font names for
-Kitty so terminal fonts always update cleanly.
-
-Populates per-theme configurations across:
-  - AwesomeWM (`~/.config/awesome/theme/theme.lua`: `slime_font_*` / `lab_font_*`)
-  - Kitty Terminal (`~/.config/kitty/{slime,lab,kitty}.conf` + live SIGUSR1 reload)
-  - Rofi Launcher (`~/.config/rofi/{slime,lab,config}.rasi`)
-  - GTK-3.0 & GTK-4.0 (`~/.config/gtk-{3.0,4.0}/settings.ini` + GSettings)
-  - Python Tkinter Scratchpads (`~/Projects/qtile_bench/theme.py`)
-
-Keyboard Navigation:
-  - j / k or Up / Down : Navigate font list
-  - PageUp / PageDown  : Jump 12 fonts up / down
-  - /                  : Focus live search input
-  - m                  : Cycle target theme (Active Theme -> Other Theme -> Both)
-  - Tab                : Cycle font filter (Nerd Fonts -> Monospace -> All Fonts)
-  - [ / ] or - / +     : Decrease / increase base font size
-  - Enter              : Apply selected font to target theme(s)
-  - Esc / q            : Close scratchpad
+"""Font selector for every installed modular desktop theme.
+Updates AwesomeWM, Alacritty, Kitty, LXTerminal, Rofi, GTK and scratchpads.
+Theme selection cycles with m; Tab filters fonts; brackets adjust terminal size.
 """
 
 import os
 import re
 import sys
 import subprocess
+import json
+import shutil
+import tomllib
+from pathlib import Path
 import tkinter as tk
 
 # ==============================================================================
@@ -55,53 +38,56 @@ except Exception:
 
 HOME = os.path.expanduser("~")
 MODE_FILE = os.path.join(HOME, ".config/awesome/theme_mode")
-AWESOME_THEME = os.path.join(HOME, ".config/awesome/theme/theme.lua")
+THEMES_DIR = os.path.join(HOME, ".config/awesome/themes")
 BENCH_THEME = os.path.join(HOME, "Projects/qtile_bench/theme.py")
+
+
+def discover_themes() -> list[str]:
+    return sorted(p.stem for p in Path(THEMES_DIR).glob("*.lua")
+                  if p.stem != "template" and not p.stem.startswith("_")) or ["slime"]
 
 
 def get_active_mode() -> str:
     try:
-        with open(MODE_FILE, "r", encoding="utf-8") as f:
-            m = f.read().strip()
-            if m in ("origin", "lab", "slime", "cyber", "space", "shred"):
-                return m
+        mode = Path(MODE_FILE).read_text().strip()
+        if mode in discover_themes():
+            return mode
     except OSError:
         pass
     return "slime"
 
 
 def get_theme_font_config(mode: str) -> tuple[str, float]:
-    """Read configured display font family (from theme.lua/rofi) and size (from kitty/<mode>.conf)."""
-    family = "MartianMono Nerd Font"
-    size = 10.5
-
-    # Read display family from theme.lua if available
-    if os.path.exists(AWESOME_THEME):
-        try:
-            with open(AWESOME_THEME, "r", encoding="utf-8") as f:
-                content = f.read()
-            m = re.search(rf'local\s+{mode}_font_family\s*=\s*"([^"]+)"', content)
-            if m:
-                family = m.group(1).strip()
-        except OSError:
-            pass
-
-    # Read point size from kitty/<mode>.conf
-    kpath = os.path.join(HOME, ".config/kitty", f"{mode}.conf")
-    if os.path.exists(kpath):
-        try:
-            with open(kpath, "r", encoding="utf-8") as f:
-                for line in f:
-                    s = line.strip()
-                    if s.startswith("font_size "):
-                        try:
-                            size = float(s.split("font_size", 1)[1].strip())
-                        except ValueError:
-                            pass
-        except OSError:
-            pass
-
+    family, size = "JetBrainsMono Nerd Font", 7.0
+    try:
+        content = (Path(THEMES_DIR) / f"{mode}.lua").read_text()
+        match = re.search(r'font_family\s*=\s*"([^"\n]+)"', content)
+        if match:
+            family = match[1]
+    except OSError:
+        pass
+    try:
+        data = tomllib.loads((Path(HOME) / f".config/alacritty/{mode}.toml").read_text())
+        size = float(data["font"]["size"])
+    except (OSError, ValueError, KeyError):
+        pass
     return family, size
+
+
+def update_terminal_fonts(mode: str, family: str, size: float):
+    """Update each terminal's named profile; callers handle live copies separately."""
+    base = Path(HOME) / ".config"
+    path = base / "alacritty" / f"{mode}.toml"
+    if path.exists():
+        text = path.read_text()
+        text = re.sub(r'(?ms)(^\[font\]\n)(.*?)(?=^\[|\Z)',
+                      lambda m: m[1] + re.sub(r'(?m)^size\s*=.*$', f'size = {size:g}', m[2]), text)
+        text = re.sub(r'(family\s*=\s*)"(?:[^"\\]|\\.)*"',
+                      lambda m: m[1] + json.dumps(family), text)
+        path.write_text(text)
+    path = base / "lxterminal" / f"{mode}.conf"
+    if path.exists():
+        path.write_text(re.sub(r'(?m)^fontname=.*$', lambda _: f'fontname={family} {size:g}', path.read_text()))
 
 
 def discover_fonts() -> tuple[list[dict], set[str]]:
@@ -211,16 +197,12 @@ class FontPadApp:
         self.root.geometry(f"{target_w}x{target_h}")
 
         self.active_mode = get_active_mode()
-        self.target_mode = self.active_mode  # "origin", "lab", "slime", "cyber", "space", or "all"
+        self.target_mode = self.active_mode  # A discovered theme name or "all"
 
-        self.theme_fonts = {
-            "origin": list(get_theme_font_config("origin")),
-            "lab": list(get_theme_font_config("lab")),
-            "slime": list(get_theme_font_config("slime")),
-            "cyber": list(get_theme_font_config("cyber")),
-            "space": list(get_theme_font_config("space")),
-            "shred": list(get_theme_font_config("shred")),
-        }
+        self.theme_fonts = {name: list(get_theme_font_config(name)) for name in discover_themes()}
+        if self.active_mode not in self.theme_fonts:
+            self.active_mode = next(iter(self.theme_fonts))
+            self.target_mode = self.active_mode
 
         self.ui_font = THEME.get("font", "MartianMono Nerd Font")
         self.all_fonts, self.mono_100 = discover_fonts()
@@ -643,14 +625,9 @@ class FontPadApp:
         self._update_footer_status()
 
     def _update_footer_status(self):
-        of, osz = self.theme_fonts["origin"]
-        lf, ls = self.theme_fonts["lab"]
-        sf, ss = self.theme_fonts["slime"]
-        cf, cs = self.theme_fonts["cyber"]
-        spf, sps = self.theme_fonts["space"]
-        shf, shs = self.theme_fonts["shred"]
+        family, size = self.theme_fonts[self.active_mode]
         self.lbl_toast.configure(
-            text=f"Origin: {of} | Lab: {lf} | Slime: {sf} | Cyber: {cf} | Space: {spf} | Shred: {shf} ({shs:g}pt)",
+            text=f"{self.active_mode}: {family} ({size:g}pt) • {len(self.theme_fonts)} themes",
             fg=THEME["accent_aqua"],
         )
 
@@ -658,10 +635,10 @@ class FontPadApp:
     # Target Theme, Filtering, Selection & Live Preview
     # ==========================================================================
     def cycle_target_mode(self):
-        order = ["origin", "lab", "slime", "cyber", "space", "shred", "all"]
+        order = [*self.theme_fonts, "all"]
         idx = (order.index(self.target_mode) + 1) % len(order) if self.target_mode in order else 0
         self.target_mode = order[idx]
-        if self.target_mode in ("origin", "lab", "slime", "cyber", "space", "shred"):
+        if self.target_mode in self.theme_fonts:
             fam, sz = self.theme_fonts[self.target_mode]
             self.selected_font = fam
             self.base_size = sz
@@ -670,23 +647,14 @@ class FontPadApp:
         self._apply_filter(select_current=True)
 
     def _update_target_button(self):
-        labels = {
-            "origin": "🎯 Target: ORIGIN Theme (m)",
-            "lab": "🎯 Target: LAB Theme (m)",
-            "slime": "🎯 Target: SLIME Theme (m)",
-            "cyber": "🎯 Target: CYBER Theme (m)",
-            "space": "🎯 Target: SPACE Theme (m)",
-            "shred": "🎯 Target: SHRED Theme (m)",
-            "all": "🎯 Target: ALL Themes (m)",
-        }
-        self.btn_target.configure(text=labels.get(self.target_mode, labels["slime"]))
+        self.btn_target.configure(text=f"🎯 Target: {self.target_mode.upper()} (m)")
 
     def cycle_filter_mode(self):
         self.filter_mode_idx = (self.filter_mode_idx + 1) % len(self.FILTER_MODES)
         self._apply_filter()
 
     def adjust_size(self, delta: float):
-        self.base_size = max(7.0, min(20.0, round((self.base_size + delta) * 2) / 2))
+        self.base_size = max(6.0, min(20.0, round((self.base_size + delta) * 2) / 2))
         self.lbl_size.configure(text=f" {self.base_size:g} pt ")
         self._update_preview()
 
@@ -706,28 +674,9 @@ class FontPadApp:
                 continue
             self.filtered_fonts.append(f["name"])
 
-        origin_fam = self.theme_fonts["origin"][0]
-        lab_fam = self.theme_fonts["lab"][0]
-        slime_fam = self.theme_fonts["slime"][0]
-        cyber_fam = self.theme_fonts["cyber"][0]
-        space_fam = self.theme_fonts["space"][0]
-        shred_fam = self.theme_fonts["shred"][0]
-
         self.listbox.delete(0, "end")
         for name in self.filtered_fonts:
-            badges = []
-            if name == origin_fam:
-                badges.append("ORIGIN")
-            if name == lab_fam:
-                badges.append("LAB")
-            if name == slime_fam:
-                badges.append("SLIME")
-            if name == cyber_fam:
-                badges.append("CYBER")
-            if name == space_fam:
-                badges.append("SPACE")
-            if name == shred_fam:
-                badges.append("SHRED")
+            badges = [mode.upper() for mode, (family, _) in self.theme_fonts.items() if name == family]
             suffix = f"  [{', '.join(badges)}]" if badges else ""
             prefix = "★ " if badges else "  "
             self.listbox.insert("end", f"{prefix}{name}{suffix}")
@@ -772,19 +721,7 @@ class FontPadApp:
 
         self.lbl_preview_title.configure(text=fam, font=(fam, 15, "bold"))
 
-        badges = []
-        if fam == self.theme_fonts["origin"][0]:
-            badges.append("ORIGIN FONT")
-        if fam == self.theme_fonts["lab"][0]:
-            badges.append("LAB FONT")
-        if fam == self.theme_fonts["slime"][0]:
-            badges.append("SLIME FONT")
-        if fam == self.theme_fonts["cyber"][0]:
-            badges.append("CYBER FONT")
-        if fam == self.theme_fonts["space"][0]:
-            badges.append("SPACE FONT")
-        if fam == self.theme_fonts["shred"][0]:
-            badges.append("SHRED FONT")
+        badges = [mode.upper() + " FONT" for mode, (family, _) in self.theme_fonts.items() if fam == family]
         if badges:
             self.lbl_active_badge.configure(text=" • ".join(badges), fg=THEME["status_running"])
         else:
@@ -796,11 +733,11 @@ class FontPadApp:
         self.lbl_specimen.configure(font=(fam, pt))
         self.lbl_code.configure(font=(kitty_fam, pt))
 
-        modes_str = "origin, lab, slime, cyber, space & shred" if self.target_mode == "all" else self.target_mode
+        modes_str = "all installed themes" if self.target_mode == "all" else self.target_mode
         targets_info = (
             f"  • Target Theme Mode                         :  {modes_str.upper()}\n"
-            f"  • Kitty Terminal ({modes_str}.conf)              :  font_family {kitty_fam}  ({self.base_size:g} pt)\n"
-            f"  • AwesomeWM ({modes_str}_font_family)            :  {fam} {awesome_pt} / Bold {awesome_pt}\n"
+            f"  • Alacritty / Kitty / LXTerminal ({modes_str})              :  font_family {kitty_fam}  ({self.base_size:g} pt)\n"
+            f"  • AwesomeWM (themes/{modes_str}.lua)            :  {fam} {awesome_pt} / Bold {awesome_pt}\n"
             f"  • Rofi & GTK ({modes_str}.rasi / settings.ini)   :  {fam} {rofi_pt}\n"
             f"  • Python Scratchpads (theme.py)             :  {modes_str.upper()}_THEME[\"font\"] = \"{fam}\""
         )
@@ -814,74 +751,70 @@ class FontPadApp:
         if not fam:
             return
 
-        kitty_fam = resolve_kitty_font(fam, self.mono_100)
+        fam_clean = fam.replace('"', '').replace("\\", "").replace('\n', '').replace('\r', '')
+        kitty_fam = resolve_kitty_font(fam_clean, self.mono_100).replace('\n', '').replace('\r', '')
         kitty_size = f"{self.base_size:g}"
         awesome_size = str(max(7, int(round(self.base_size - 1.5))))
         rofi_size = str(max(8, int(round(self.base_size - 0.5))))
 
-        modes_to_update = ["origin", "lab", "slime", "cyber", "space", "shred"] if self.target_mode == "all" else [self.target_mode]
+        modes_to_update = list(self.theme_fonts) if self.target_mode == "all" else [self.target_mode]
         active_updated = self.active_mode in modes_to_update
 
         try:
             for m in modes_to_update:
-                self.theme_fonts[m] = [fam, self.base_size]
+                self.theme_fonts[m] = [fam_clean, self.base_size]
 
-                # 1. Kitty per-theme config (origin.conf, lab.conf, slime.conf, cyber.conf, space.conf, or shred.conf)
+                # 1. Terminal profiles
                 kpath = os.path.join(HOME, ".config/kitty", f"{m}.conf")
                 if os.path.exists(kpath):
                     with open(kpath, "r", encoding="utf-8") as f:
                         content = f.read()
-                    content = re.sub(r"(?m)^font_family\s+.*$", f"font_family      {kitty_fam}", content)
-                    content = re.sub(r"(?m)^font_size\s+.*$", f"font_size        {kitty_size}", content)
+                    content = re.sub(r"(?m)^font_family\s+.*$", lambda _: f"font_family      {kitty_fam}", content)
+                    content = re.sub(r"(?m)^font_size\s+.*$", lambda _: f"font_size        {kitty_size}", content)
                     with open(kpath, "w", encoding="utf-8") as f:
                         f.write(content)
 
-                # 2. Rofi per-theme config (origin.rasi, lab.rasi, slime.rasi, cyber.rasi, space.rasi, or shred.rasi)
+                update_terminal_fonts(m, kitty_fam, self.base_size)
+
+                # 2. Rofi per-theme profile
                 rpath = os.path.join(HOME, ".config/rofi", f"{m}.rasi")
                 if os.path.exists(rpath):
                     with open(rpath, "r", encoding="utf-8") as f:
                         content = f.read()
                     content = re.sub(
                         r'(?m)^(\s*font:\s*").*(";\s*)$',
-                        rf'\g<1>{fam} {rofi_size}\g<2>',
+                        lambda match: f"{match.group(1)}{fam_clean} {rofi_size}{match.group(2)}",
                         content,
                     )
                     with open(rpath, "w", encoding="utf-8") as f:
                         f.write(content)
 
-                # 3. AwesomeWM theme.lua per-theme variables
-                if os.path.exists(AWESOME_THEME):
-                    with open(AWESOME_THEME, "r", encoding="utf-8") as f:
+                # 3. Modular AwesomeWM theme
+                awesome_theme = os.path.join(THEMES_DIR, f"{m}.lua")
+                if os.path.exists(awesome_theme):
+                    with open(awesome_theme, "r", encoding="utf-8") as f:
                         content = f.read()
                     content = re.sub(
-                        rf'(?m)^(local\s+{m}_font_family\s*=\s*").*(")$',
-                        rf'\g<1>{fam}\g<2>',
+                        r'(?m)^(\s*font_family\s*=\s*")[^"]*(")',
+                        lambda match: f"{match.group(1)}{fam_clean}{match.group(2)}",
                         content,
                     )
                     content = re.sub(
-                        rf'(?m)^(local\s+{m}_font_size\s*=\s*").*(")$',
-                        rf'\g<1>{awesome_size}\g<2>',
+                        r'(?m)^(\s*font_size\s*=\s*")[^"]*(")',
+                        lambda match: f"{match.group(1)}{awesome_size}{match.group(2)}",
                         content,
                     )
-                    with open(AWESOME_THEME, "w", encoding="utf-8") as f:
+                    with open(awesome_theme, "w", encoding="utf-8") as f:
                         f.write(content)
 
-                # 4. Python Scratchpads theme.py (ORIGIN_THEME / LAB_THEME / SLIME_THEME / CYBER_THEME / SPACE_THEME / SHRED_THEME)
+                # 4. Matching Python scratchpad palette
                 if os.path.exists(BENCH_THEME):
                     with open(BENCH_THEME, "r", encoding="utf-8") as f:
                         content = f.read()
-                    block_map = {
-                        "origin": "ORIGIN_THEME",
-                        "lab": "LAB_THEME",
-                        "slime": "SLIME_THEME",
-                        "cyber": "CYBER_THEME",
-                        "space": "SPACE_THEME",
-                        "shred": "SHRED_THEME",
-                    }
-                    block_name = block_map[m]
+                    block_name = m.upper().replace("-", "_") + "_THEME"
                     content = re.sub(
                         rf'({block_name}\s*=\s*\{{[^}}]*?"font":\s*")[^"]+(")',
-                        rf'\g<1>{fam}\g<2>',
+                        lambda match: f"{match.group(1)}{fam_clean}{match.group(2)}",
                         content,
                         flags=re.DOTALL,
                     )
@@ -898,6 +831,11 @@ class FontPadApp:
                     with open(live_kpath, "w", encoding="utf-8") as f:
                         f.write(kcontent)
                 subprocess.run(["pkill", "-USR1", "-x", "kitty"], check=False, stderr=subprocess.DEVNULL)
+
+                for folder, ext in (("alacritty", "toml"), ("lxterminal", "conf")):
+                    source = Path(HOME) / ".config" / folder / f"{self.active_mode}.{ext}"
+                    if source.exists():
+                        shutil.copy2(source, source.with_name(f"{folder}.{ext}"))
 
                 active_rpath = os.path.join(HOME, ".config/rofi", f"{self.active_mode}.rasi")
                 live_rpath = os.path.join(HOME, ".config/rofi/config.rasi")

@@ -1,0 +1,109 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Mystery Machine (Scooby-Doo Spooky Night & Flower Power)
+ * ============================================================================ */
+
+* {
+    bg:          #10151df4;
+    bg-alt:      #17232e;
+    bg-selected: #1cd1be;
+    fg:          #d4e5ea;
+    fg-selected: #10151d;
+    fg-muted:    #6b8594;
+    border-col:  #1cd1be;
+    accent:      #ff7700;
+    lime:        #88e22c;
+    purple:      #b062ff;
+    red:         #ff3864;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "ComicShannsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1.5px;
+    border-color:     @lime;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "ComicShannsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "SPOOKY MYSTERY // SEARCH FOR CLUES...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @red;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @lime;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @red;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #10151d;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

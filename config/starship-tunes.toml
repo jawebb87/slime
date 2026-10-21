@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Looney Tunes Cartoon Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'tunes'
+
+format = """
+[\\[LOONEY//TUNES\\]](bold fg:acme_red) \
+[❯](bold fg:carrot_orange) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🥕](bold fg:toon_green)\
+$line_break\
+$character"""
+
+[palettes.tunes]
+acme_red      = "#c8102e"
+carrot_orange = "#ff6b00"
+toon_green    = "#0c7a36"
+daffy_gold    = "#b85d00"
+sky_blue      = "#005bbb"
+toon_purple   = "#86198f"
+ink_slate     = "#61554c"
+deep_ink      = "#1c1612"
+
+[username]
+show_always = true
+style_user = "bold fg:sky_blue"
+style_root = "bold fg:acme_red"
+format = '[$user]($style)[:](bold fg:ink_slate)'
+
+[directory]
+style = "bold fg:carrot_orange"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:acme_red"
+format = ' [\(git:](fg:ink_slate)[$branch]($style)[\)](fg:ink_slate)'
+
+[git_status]
+style = "bold fg:daffy_gold"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "bold fg:toon_green"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "bold fg:daffy_gold"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "bold fg:sky_blue"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "bold fg:toon_green"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "bold fg:sky_blue"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:daffy_gold"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:acme_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:acme_red)[❯](bold fg:carrot_orange)[❯](bold fg:sky_blue) "
+error_symbol = "[❯](bold fg:acme_red)[❯](bold fg:daffy_gold)[❯](bold fg:toon_purple) "

@@ -98,6 +98,20 @@ def detect_type(text: str) -> tuple[str, str]:
     return "TEXT", THEME["fg_dim"]
 
 
+def is_sensitive(text: str) -> bool:
+    """Identify private keys, access tokens, and sensitive secrets to prevent plaintext caching."""
+    s = text.strip()
+    if not s:
+        return False
+    if any(k in s for k in ("BEGIN OPENSSH PRIVATE KEY", "BEGIN RSA PRIVATE KEY", "BEGIN EC PRIVATE KEY", "BEGIN PRIVATE KEY", "BEGIN PGP PRIVATE KEY")):
+        return True
+    if s.startswith(("ghp_", "gho_", "ghu_", "ghs_", "ghr_", "AKIA", "ASIA")):
+        return True
+    if s.lower().startswith("bearer eyjh"):
+        return True
+    return False
+
+
 class ClipCard:
     """Widget representing a single clipboard entry row."""
 
@@ -480,7 +494,7 @@ class ClipPadApp:
     def _add_to_history(self, text: str, save: bool = True) -> bool:
         """Add new text entry if not identical to the most recent."""
         stripped = text.strip()
-        if not stripped:
+        if not stripped or is_sensitive(text):
             return False
 
         # If already at the top of history, do nothing
@@ -670,6 +684,9 @@ def run_daemon():
             current = get_current_xclip()
             if current and current.strip() and current != last_clip:
                 last_clip = current
+                if is_sensitive(current):
+                    time.sleep(1.0)
+                    continue
                 history = []
                 if os.path.exists(HISTORY_FILE):
                     try:

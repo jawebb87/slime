@@ -2,7 +2,7 @@ local awful = require("awful")
 
 local apps = {
     -- Default applications
-    terminal = "kitty",
+    terminal = "alacritty",
     editor = os.getenv("EDITOR") or "nvim",
     browser = "firefox",
     launcher = "rofi -normal-window -show drun",

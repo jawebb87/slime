@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Sugar Rush (Candy Chainsaw)
+ * ============================================================================ */
+
+* {
+    bg:          #fff1fbf4;
+    bg-alt:      #f4e3fa;
+    bg-selected: #a33c83;
+    fg:          #603575;
+    fg-selected: #fff1fb;
+    fg-muted:    #8b7197;
+    border-col:  #a33c83;
+    accent:      #b74c85;
+    gold:        #916b26;
+    neon-blue:   #45836b;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius: 14px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius: 14px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "PEW-PEW // FIND A TREAT...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 14px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @accent;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @neon-blue;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @accent;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @neon-blue;
+    text-color:       @fg-selected;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

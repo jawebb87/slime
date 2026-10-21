@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - I'm Sorry Jon (Cosmic Horror Lasagna)
+ * ============================================================================ */
+
+* {
+    bg:          #0f0c0bf5;
+    bg-alt:      #181211;
+    bg-selected: #e0562e;
+    fg:          #e8dcc4;
+    fg-selected: #0f0c0b;
+    fg-muted:    #8a7b6d;
+    border-col:  #e0562e;
+    accent:      #e5a93c;
+    crimson:     #d13824;
+    teal:        #5c7f87;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "ComicShannsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1.5px;
+    border-color:     @accent;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "ComicShannsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "BULLETS DON'T WORK JON // SEARCH SHADOWS...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @crimson;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @accent;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @crimson;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #0f0c0b;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

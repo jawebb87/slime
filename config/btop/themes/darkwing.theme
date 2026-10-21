@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Darkwing Duck (The Terror That Flaps in the Night)
+# ==============================================================================
+
+theme[main_bg]="#120c1f"
+theme[main_fg]="#e2daf0"
+theme[title]="#00e5ff"
+theme[hi_fg]="#ffd700"
+theme[selected_bg]="#1c1330"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#7c6a99"
+theme[graph_text]="#1de9b6"
+theme[meter_bg]="#181029"
+theme[proc_misc]="#00e5ff"
+
+# Box outlines
+theme[cpu_box]="#00e5ff"
+theme[mem_box]="#9d4edd"
+theme[net_box]="#ffd700"
+theme[proc_box]="#ff6b00"
+theme[div_line]="#261a40"
+
+# Temperature gradient (Electric Cyan -> Gold -> Alert Red)
+theme[temp_start]="#00e5ff"
+theme[temp_mid]="#ffd700"
+theme[temp_end]="#ff2a6d"
+
+# CPU graph
+theme[cpu_start]="#00e5ff"
+theme[cpu_mid]="#9d4edd"
+theme[cpu_end]="#ffd700"
+
+# Memory meters
+theme[free_start]="#181029"
+theme[free_mid]="#00e5ff"
+theme[free_end]="#e2daf0"
+
+theme[cached_start]="#181029"
+theme[cached_mid]="#9d4edd"
+theme[cached_end]="#bf7aeb"
+
+theme[available_start]="#181029"
+theme[available_mid]="#ffd700"
+theme[available_end]="#ffe64d"
+
+theme[used_start]="#00e5ff"
+theme[used_mid]="#ff6b00"
+theme[used_end]="#ff2a6d"
+
+# Download / Upload network graph
+theme[download_start]="#00e5ff"
+theme[download_mid]="#1de9b6"
+theme[download_end]="#52f5cb"
+
+theme[upload_start]="#ff6b00"
+theme[upload_mid]="#ffd700"
+theme[upload_end]="#ff2a6d"

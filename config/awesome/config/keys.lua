@@ -5,6 +5,7 @@ local menubar = require("menubar")
 local apps = require("config.apps")
 local menu = require("ui.menu")
 local scratchpad = require("config.scratchpad")
+local beautiful = require("beautiful")
 
 local python_bench = os.getenv("HOME") .. "/Projects/qtile_bench/"
 
@@ -21,7 +22,7 @@ root.buttons(gears.table.join(
 
 -- {{{ Global key bindings
 keys.globalkeys = gears.table.join(
-    awful.key({ modkey, "Shift"   }, "s",      hotkeys_popup.show_help,
+    awful.key({ modkey, "Control" }, "F1",     hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -163,91 +164,168 @@ keys.globalkeys = gears.table.join(
               {description = "show the menubar", group = "launcher"}),
 
     -- {{{ Python Dropdowns & Terminal Scratchpads
+    -- Ephemeral (true): Killed on dismiss/close to immediately reclaim RAM
+    -- Persistent (nil/false): Banished to hidden tag to preserve session state (agy, notes, chomp, limusic)
+
     awful.key({ modkey }, "a", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "audio_pad.py", "audio-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "audio_pad.py", "audio-pad", true)
     end, {description = "toggle audio mixer dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "i", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "wifi_pad.py", "wifi-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "wifi_pad.py", "wifi-pad", true)
     end, {description = "toggle wifi manager dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "x", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "clip_pad.py", "clip-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "clip_pad.py", "clip-pad", true)
     end, {description = "toggle clipboard history dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "t", function ()
-        scratchpad.toggle("kitty --class btop-float -e btop", "btop-float")
+        scratchpad.toggle("alacritty --class btop-float,btop-float -T btop-float -e btop", "btop-float", true)
     end, {description = "toggle btop system monitor", group = "scratchpad"}),
 
     awful.key({ modkey }, "w", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "weather_pad.py", "weather-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "weather_pad.py", "weather-pad", true)
     end, {description = "toggle weather forecast dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "n", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "log_pad.py", "log-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "log_pad.py", "log-pad", true)
     end, {description = "toggle system log viewer", group = "scratchpad"}),
 
     awful.key({ modkey, "Shift" }, "d", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "docker_pad.py", "docker-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "docker_pad.py", "docker-pad", true)
     end, {description = "toggle docker services dashboard", group = "scratchpad"}),
 
     awful.key({ modkey }, "v", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "vim_cheat.py", "vim-cheat")
+        scratchpad.toggle("python3 " .. python_bench .. "vim_cheat.py", "vim-cheat", true)
     end, {description = "toggle vim cheatsheet dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "s", function ()
-        scratchpad.toggle("kitty --class notes-pad " .. os.getenv("HOME") .. "/.local/bin/qtile-notes", "notes-pad")
-    end, {description = "toggle notes scratchpad", group = "scratchpad"}),
+        scratchpad.toggle("alacritty --class notes-pad,notes-pad -T notes-pad -e " .. os.getenv("HOME") .. "/.local/bin/qtile-notes", "notes-pad")
+    end, {description = "toggle notes scratchpad (persistent)", group = "scratchpad"}),
 
     awful.key({ modkey }, "F1", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "key_cheat.py", "key-cheat")
+        scratchpad.toggle("python3 " .. python_bench .. "key_cheat.py", "key-cheat", true)
     end, {description = "toggle keybindings cheatsheet", group = "scratchpad"}),
 
     awful.key({ modkey }, "z", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "zodiac_pad.py", "zodiac-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "zodiac_pad.py", "zodiac-pad", true)
     end, {description = "toggle zodiac calendar dropdown", group = "scratchpad"}),
 
     awful.key({ modkey }, "m", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "emoji_pad.py", "emoji-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "emoji_pad.py", "emoji-pad", true)
     end, {description = "toggle emoji picker dropdown", group = "scratchpad"}),
 
     awful.key({ }, "F12", function ()
-        scratchpad.toggle("kitty --class term-scratch", "term-scratch")
-    end, {description = "toggle dropdown terminal", group = "scratchpad"}),
+        if beautiful.mode == "mothgomery" then
+            scratchpad.toggle("alacritty --class mothgomery-pad,mothgomery-pad -T mothgomery-pad -e " .. os.getenv("HOME") .. "/.local/bin/mothgomery-pad", "mothgomery-pad")
+        elseif beautiful.mode == "gill" then
+            scratchpad.toggle("alacritty --class gill-pad,gill-pad -T gill-pad -e " .. os.getenv("HOME") .. "/.local/bin/gill-pad", "gill-pad")
+        elseif beautiful.mode == "rable" then
+            scratchpad.toggle("alacritty --class rable-pad,rable-pad -T rable-pad -e " .. os.getenv("HOME") .. "/.local/bin/rable-pad", "rable-pad")
+        elseif beautiful.mode == "tov" then
+            scratchpad.toggle("alacritty --class tov-pad,tov-pad -T tov-pad -e " .. os.getenv("HOME") .. "/.local/bin/tov-pad", "tov-pad")
+        elseif beautiful.mode == "dino" then
+            scratchpad.toggle("alacritty --class dino-pad,dino-pad -T dino-pad -e " .. os.getenv("HOME") .. "/.local/bin/dino-pad", "dino-pad")
+        elseif beautiful.mode == "crust" then
+            scratchpad.toggle("alacritty --class crust-pad,crust-pad -T crust-pad -e " .. os.getenv("HOME") .. "/.local/bin/crust-pad", "crust-pad")
+        elseif beautiful.mode == "tunes" then
+            scratchpad.toggle("alacritty --class tunes-pad,tunes-pad -T tunes-pad -e " .. os.getenv("HOME") .. "/.local/bin/tunes-pad", "tunes-pad")
+        elseif beautiful.mode == "mystery" then
+            scratchpad.toggle("alacritty --class mystery-pad,mystery-pad -T mystery-pad -e " .. os.getenv("HOME") .. "/.local/bin/mystery-pad", "mystery-pad")
+        elseif beautiful.mode == "darkwing" then
+            scratchpad.toggle("alacritty --class darkwing-pad,darkwing-pad -T darkwing-pad -e " .. os.getenv("HOME") .. "/.local/bin/darkwing-pad", "darkwing-pad")
+        elseif beautiful.mode == "tmnt" then
+            scratchpad.toggle("alacritty --class tmnt-pad,tmnt-pad -T tmnt-pad -e " .. os.getenv("HOME") .. "/.local/bin/tmnt-pad", "tmnt-pad")
+        elseif beautiful.mode == "muppet" then
+            scratchpad.toggle("alacritty --class muppet-pad,muppet-pad -T muppet-pad -e " .. os.getenv("HOME") .. "/.local/bin/muppet-pad", "muppet-pad")
+        elseif beautiful.mode == "jon" then
+            scratchpad.toggle("alacritty --class jon-pad,jon-pad -T jon-pad -e " .. os.getenv("HOME") .. "/.local/bin/jon-pad", "jon-pad")
+        elseif beautiful.mode == "bake" then
+            scratchpad.toggle("alacritty --class bake-pad,bake-pad -T bake-pad -e " .. os.getenv("HOME") .. "/.local/bin/bake-pad", "bake-pad")
+        elseif beautiful.mode == "chomp" or beautiful.mode == "larry" then
+            scratchpad.toggle("alacritty --class chomp-pad,chomp-pad -T chomp-pad -e " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
+        else
+            scratchpad.toggle("alacritty --class theme-console,theme-console -T theme-console -e " .. os.getenv("HOME") .. "/.local/bin/theme-console", "theme-console")
+        end
+    end, {description = "toggle console dropdown (persistent)", group = "scratchpad"}),
 
     awful.key({ modkey }, "g", function ()
-        scratchpad.toggle("kitty --class agy-pad " .. os.getenv("HOME") .. "/.local/bin/agy --dangerously-skip-permissions", "agy-pad")
-    end, {description = "toggle antigravity assistant", group = "scratchpad"}),
+        scratchpad.toggle("alacritty --class agy-pad,agy-pad -T agy-pad -e " .. os.getenv("HOME") .. "/.local/bin/agy", "agy-pad")
+    end, {description = "toggle antigravity assistant (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "g", function ()
+        scratchpad.toggle("alacritty --class gill-pad,gill-pad -T gill-pad -e " .. os.getenv("HOME") .. "/.local/bin/gill-pad", "gill-pad")
+    end, {description = "toggle baron von gill console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "r", function ()
+        scratchpad.toggle("alacritty --class rable-pad,rable-pad -T rable-pad -e " .. os.getenv("HOME") .. "/.local/bin/rable-pad", "rable-pad")
+    end, {description = "toggle miss rable console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "m", function ()
+        scratchpad.toggle("alacritty --class tov-pad,tov-pad -T tov-pad -e " .. os.getenv("HOME") .. "/.local/bin/tov-pad", "tov-pad")
+    end, {description = "toggle molly tov console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "b", function ()
+        scratchpad.toggle("alacritty --class dino-pad,dino-pad -T dino-pad -e " .. os.getenv("HOME") .. "/.local/bin/dino-pad", "dino-pad")
+    end, {description = "toggle dino might console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "u", function ()
+        scratchpad.toggle("alacritty --class crust-pad,crust-pad -T crust-pad -e " .. os.getenv("HOME") .. "/.local/bin/crust-pad", "crust-pad")
+    end, {description = "toggle crustpunk console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Control" }, "t", function ()
+        scratchpad.toggle("alacritty --class tunes-pad,tunes-pad -T tunes-pad -e " .. os.getenv("HOME") .. "/.local/bin/tunes-pad", "tunes-pad")
+    end, {description = "toggle looney tunes console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "v", function ()
+        scratchpad.toggle("alacritty --class mystery-pad,mystery-pad -T mystery-pad -e " .. os.getenv("HOME") .. "/.local/bin/mystery-pad", "mystery-pad")
+    end, {description = "toggle mystery machine console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "p", function ()
+        scratchpad.toggle("alacritty --class darkwing-pad,darkwing-pad -T darkwing-pad -e " .. os.getenv("HOME") .. "/.local/bin/darkwing-pad", "darkwing-pad")
+    end, {description = "toggle darkwing duck console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "s", function ()
+        scratchpad.toggle("alacritty --class tmnt-pad,tmnt-pad -T tmnt-pad -e " .. os.getenv("HOME") .. "/.local/bin/tmnt-pad", "tmnt-pad")
+    end, {description = "toggle ninja turtles console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "e", function ()
+        scratchpad.toggle("alacritty --class muppet-pad,muppet-pad -T muppet-pad -e " .. os.getenv("HOME") .. "/.local/bin/muppet-pad", "muppet-pad")
+    end, {description = "toggle muppet babies console dropdown (persistent)", group = "scratchpad"}),
+
+    awful.key({ modkey, "Shift" }, "i", function ()
+        scratchpad.toggle("alacritty --class jon-pad,jon-pad -T jon-pad -e " .. os.getenv("HOME") .. "/.local/bin/jon-pad", "jon-pad")
+    end, {description = "toggle i'm sorry jon console dropdown (persistent)", group = "scratchpad"}),
 
     awful.key({ modkey }, "y", function ()
         scratchpad.toggle("limusic-app", "limusic")
-    end, {description = "toggle limusic music player dropdown", group = "scratchpad"}),
+    end, {description = "toggle limusic music player dropdown (persistent)", group = "scratchpad"}),
 
     awful.key({ modkey }, "/", function ()
-        scratchpad.toggle("kitty --class fzf-pad " .. os.getenv("HOME") .. "/.local/bin/qtile-fzf", "fzf-pad")
+        scratchpad.toggle("alacritty --class fzf-pad,fzf-pad -T fzf-pad -e " .. os.getenv("HOME") .. "/.local/bin/qtile-fzf", "fzf-pad", true)
     end, {description = "toggle fzf file finder dropdown", group = "scratchpad"}),
 
     awful.key({ modkey, "Shift" }, "f", function ()
-        scratchpad.toggle("python3 " .. python_bench .. "font_pad.py", "font-pad")
+        scratchpad.toggle("python3 " .. python_bench .. "font_pad.py", "font-pad", true)
     end, {description = "toggle desktop font selector dropdown", group = "scratchpad"}),
 
-    awful.key({ modkey, "Shift" }, "c", function ()
-        scratchpad.toggle("kitty --class chomp-pad " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
-    end, {description = "toggle chomp the haxor console dropdown", group = "scratchpad"}),
-
-    awful.key({ modkey, "Shift" }, "l", function ()
-        scratchpad.toggle("kitty --class chomp-pad " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
-    end, {description = "toggle chomp the haxor console dropdown (alias)", group = "scratchpad"}),
+    awful.key({ modkey, "Control" }, "c", function ()
+        scratchpad.toggle("alacritty --class chomp-pad,chomp-pad -T chomp-pad -e " .. os.getenv("HOME") .. "/.local/bin/chomp-pad", "chomp-pad")
+    end, {description = "toggle chomp the haxor console dropdown (persistent)", group = "scratchpad"}),
 
     -- Lock Screen
     awful.key({ "Control", "Mod1" }, "l", function ()
         awful.spawn("slock")
     end, {description = "lock screen (slock)", group = "awesome"}),
 
-    -- Theme Toggle: Origin -> Lab -> Slime -> Cyber -> Space
+    -- Theme Toggle: Super+o to cycle forward, Super+Shift+o to load a random theme
     awful.key({ modkey }, "o", function ()
         awful.spawn(os.getenv("HOME") .. "/.local/bin/theme-toggle")
-    end, {description = "cycle Origin / Lab / Slime / Cyber / Space theme", group = "awesome"})
+    end, {description = "cycle next desktop theme", group = "awesome"}),
+
+    awful.key({ modkey, "Shift" }, "o", function ()
+        awful.spawn(os.getenv("HOME") .. "/.local/bin/theme-toggle random")
+    end, {description = "load random desktop theme", group = "awesome"})
     -- }}}
 )
 
@@ -269,7 +347,7 @@ keys.clientkeys = gears.table.join(
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "o",      function (c) c:move_to_screen()               end,
+    awful.key({ modkey, "Control" }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
     awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),

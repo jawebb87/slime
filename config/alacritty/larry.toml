@@ -1,0 +1,39 @@
+[window]
+opacity = 0.94
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "IosevkaTerm Nerd Font Mono" }
+
+[colors.primary]
+background = "#111415"
+foreground = "#e2f5ec"
+
+[colors.cursor]
+cursor = "#39ff14"
+text = "#111415"
+
+[colors.selection]
+background = "#163b31"
+text = "#39ff14"
+
+[colors.normal]
+black = "#181c1c"
+red = "#ff3b5c"
+green = "#39ff14"
+yellow = "#ffb000"
+blue = "#00d9ff"
+magenta = "#a78bfa"
+cyan = "#00ffcc"
+white = "#d1e7dd"
+
+[colors.bright]
+black = "#5c776c"
+red = "#ff5c77"
+green = "#55ff38"
+yellow = "#ffd043"
+blue = "#38bdf8"
+magenta = "#c4b5fd"
+cyan = "#66ffdd"
+white = "#ffffff"

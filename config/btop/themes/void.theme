@@ -1,0 +1,44 @@
+# ==============================================================================
+# btop++ Theme - Abyssal Void
+# ==============================================================================
+
+theme[main_bg]="#05060b"
+theme[main_fg]="#c8d6e5"
+theme[title]="#00e5ff"
+theme[hi_fg]="#ff007f"
+theme[selected_bg]="#141c38"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#475569"
+theme[graph_text]="#38bdf8"
+theme[meter_bg]="#0c101c"
+theme[proc_misc]="#00e5ff"
+
+# Box outlines
+theme[cpu_box]="#ff007f"
+theme[mem_box]="#a855f7"
+theme[net_box]="#00e5ff"
+theme[proc_box]="#3b82f6"
+theme[div_line]="#0c101c"
+
+# Temperature gradient (Teal -> Cyan -> Neon Pink)
+theme[temp_start]="#06d6a0"
+theme[temp_mid]="#00e5ff"
+theme[temp_end]="#ff0055"
+
+# CPU graph
+theme[cpu_start]="#3b82f6"
+theme[cpu_mid]="#a855f7"
+theme[cpu_end]="#ff007f"
+
+# Memory meters
+theme[free_start]="#0c101c"
+theme[free_mid]="#3b82f6"
+theme[free_end]="#38bdf8"
+
+theme[cached_start]="#0c101c"
+theme[cached_mid]="#7c3aed"
+theme[cached_end]="#c084fc"
+
+theme[available_start]="#0c101c"
+theme[available_mid]="#06d6a0"
+theme[available_end]="#00e5ff"

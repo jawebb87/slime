@@ -9,10 +9,10 @@ Features:
 - Instant switching across primary Linux and desktop log streams:
     [1] User Journal      : systemd user units, desktop services, portals, PipeWire
     [2] System Boot       : user session journal events for current boot
-    [3] Qtile Log         : ~/.local/share/qtile/qtile.log (WM errors, reloads)
+    [3] Xorg Log          : ~/.local/share/xorg/Xorg.0.log display server events
     [4] Errors Only       : journalctl priority err..emerg filtered log
     [5] X11 Errors        : ~/.xsession-errors display output
-    [6] DPKG / Apt        : /var/log/dpkg.log package update history
+    [6] Pacman / Pkg      : /var/log/pacman.log package installation history
 - Real-time search and filter with instant match highlighting ('/' to search)
 - Next / Previous match navigation (n / N)
 - Syntax & log-level color coding (Errors in Red, Warnings in Yellow, Info in Aqua)
@@ -91,11 +91,11 @@ LOG_SOURCES = [
         "desc": "User session journal events for current boot",
     },
     {
-        "name": "Qtile Log",
+        "name": "Xorg Server",
         "key": "3",
         "icon": "\uf2d0",  # fa-window-maximize
-        "file": os.path.expanduser("~/.local/share/qtile/qtile.log"),
-        "desc": "Window manager logs, event errors, config reloads",
+        "file": os.path.expanduser("~/.local/share/xorg/Xorg.0.log") if os.path.exists(os.path.expanduser("~/.local/share/xorg/Xorg.0.log")) else "/var/log/Xorg.0.log",
+        "desc": "X11 display server output, driver events, display errors",
     },
     {
         "name": "Errors Only",
@@ -112,11 +112,11 @@ LOG_SOURCES = [
         "desc": "X11 display server output and client stderr",
     },
     {
-        "name": "DPKG / Apt",
+        "name": "Pacman / Pkg",
         "key": "6",
         "icon": "\uf1b2",  # fa-cube
-        "file": "/var/log/dpkg.log",
-        "desc": "Package installation, upgrade, and removal history",
+        "file": "/var/log/pacman.log" if os.path.exists("/var/log/pacman.log") else "/var/log/dpkg.log",
+        "desc": "Package installation, system upgrade, and removal history",
     },
 ]
 

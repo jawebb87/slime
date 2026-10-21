@@ -81,18 +81,18 @@ A cohesive, biohazard/radioactive-swamp themed desktop environment built on **Aw
 | Shortcut | Action / Dropdown | Description |
 | :--- | :--- | :--- |
 | **`Super + q`** | `client:kill()` | Close active focused window (also `Alt + F4` / `Super + Shift + c`) |
-| **`Super + Return`** | `kitty` | Spawn Kitty terminal |
+| **`Super + Return`** | `alacritty` | Spawn Alacritty terminal |
 | **`Super + b`** | `firefox` | Spawn Firefox browser |
 | **`Super + d`** | `rofi -normal-window -show drun` | Launch Rofi application launcher |
 | **`Super + a`** | `audio_pad.py` | PipeWire / WirePlumber audio dashboard |
 | **`Super + i`** | `wifi_pad.py` | Wi-Fi network scanner & connection manager |
 | **`Super + x`** | `clip_pad.py` | Clipboard history search and copy manager |
-| **`Super + t`** | `btop-float` | Floating btop system monitor (`kitty --class btop-float`) |
+| **`Super + t`** | `btop-float` | Floating btop system monitor in Alacritty |
 | **`Super + w`** | `weather_pad.py`| Weather forecast dashboard |
 | **`Super + n`** | `log_pad.py` | Systemd journal log viewer |
 | **`Super + Shift + d`**| `docker_pad.py` | Docker container and service status monitor |
 | **`Super + v`** | `vim_cheat.py` | Vim keybindings cheatsheet |
-| **`Super + s`** | `qtile-notes` | Quick timestamped note-taking scratchpad (`kitty --class notes-pad`) |
+| **`Super + s`** | `qtile-notes` | Quick timestamped note-taking scratchpad (Alacritty notes-pad) |
 | **`Super + F1`** | `key_cheat.py` | Desktop keybindings cheatsheet |
 | **`Super + z`** | `zodiac_pad.py` | Zodiac and calendar information |
 | **`Super + m`** | `emoji_pad.py` | Interactive emoji picker |
@@ -143,3 +143,135 @@ cd ~/Projects/slime
 ./sync.sh --restore
 ```
 `sync.sh` automatically creates a safety backup at `~/.slime_backup_<timestamp>` before overwriting any live files, then restarts AwesomeWM.
+
+## Foundry — Victorian Engine Room
+
+A cast-iron, aged-brass, and copper theme with gear assemblies along the
+wibar and riveted iron window sills, plus a matching boiler-room wallpaper. Run
+`theme-toggle foundry` after deployment. See [the Foundry guide](docs/foundry.md)
+for styling, dimensions, and validation commands.
+
+## Mothgomery — Lamplit Workshop
+
+Gill's companion theme shares its rounded glass layout, with brass focus accents,
+parchment text, and the supplied moth inventor wallpaper. See
+[the Mothgomery guide](docs/mothgomery.md) for the palette and activation.
+
+## Sketchbook — Notes in Progress
+
+A light paper-and-watercolor theme with graphite text, teal selections, clipped
+paper corners, and the supplied hedgehog wallpaper. See the
+[Sketchbook guide](docs/sketchbook.md) for styling, validation, and activation.
+
+## Grindhouse JAWS — Terror from the Deep
+
+A dark ocean-blue theme with aged cream text, poster-yellow focus accents, blood-red
+alerts, and the supplied vintage shark poster. Select `theme-toggle jaws` after
+deployment. See [the Grindhouse JAWS guide](docs/jaws.md).
+
+## The Bamboo Corsair
+
+Violet sails, bamboo green focus accents, ghost lantern mint, and transparent
+unfocused windows. Select `theme-toggle bamboo-corsair` after deployment. See
+[The Bamboo Corsair guide](docs/bamboo-corsair.md) for the palette and opacity.
+
+## Eeyore — Watercolor Sky
+
+A modern cloud-white floating bar, sky-blue selections, sage status accents, and
+muted plum details from the supplied watercolor wallpaper. Select
+`theme-toggle eeyore` after deployment. See [the Eeyore guide](docs/eeyore.md).
+
+## Halfpipe — After Hours
+
+A concrete ramp silhouette with raised quarterpipes, deck workspace markers,
+a grinding skater for the active workspace, park signage stats, and a scoreboard
+clock, with the supplied graffiti skatepark wallpaper. Select
+`theme-toggle halfpipe`. See
+[the Halfpipe guide and bar preview](docs/halfpipe.md).
+
+## Punk Show! — Sound Check
+
+A battered console bar with channel-button workspaces, live CPU and memory LED
+meters, a red seven-segment clock, and the supplied amplifier-wall wallpaper.
+Select `theme-toggle punk-show`. See [the Punk Show guide](docs/punk-show.md).
+
+## Sugar Rush — Candy Chainsaw
+
+A frosted-pink chainsaw bar with lavender teeth, heart workspace markers, live
+sprinkle meters, and the supplied candy-land wallpaper. Select
+`theme-toggle sugar-rush`. See [the Sugar Rush guide](docs/sugar-rush.md).
+
+## Crayon Chomp — Hacker Muskrat
+
+A detached paper bar with broken crayon strokes, multicolor workspace markers,
+and scribbled telemetry, inspired by the supplied pond-side hacker muskrat.
+Select `theme-toggle crayon-chomp` after deployment. See
+[the Crayon Chomp guide and preview](docs/crayon-chomp.md).
+
+## Satanic Panic — Do Not Play
+
+A detached tarnished knife bar with dried oxblood crust, a riveted handle,
+and the supplied VHS occult desk wallpaper. See
+[the Satanic Panic guide and preview](docs/satanic-panic.md).
+
+## Vaporwave Schizoid — Signal Lost
+
+A detached holographic bar with fractured neon edges, wireframe pyramid
+workspaces, and subtle VHS scanlines, paired with the supplied neon pyramid
+wallpaper. Select `theme-toggle vaporwave-schizoid`. See
+[the Vaporwave Schizoid guide and preview](docs/vaporwave-schizoid.md).
+
+## Theme feature parity
+
+All 37 themes provide Alacritty, Kitty, LXTerminal, tmux, Rofi, Picom, Starship,
+btop, Neovim, and Python pad palettes. Neovim follows the desktop theme on launch
+and when focus returns. The font chooser discovers all installed AwesomeWM themes
+and updates their modular definitions and terminal profiles.
+
+Later Alacritty profiles (Foundry through Vaporwave Schizoid) use the established
+7 pt terminal size; Slime retains its existing 6.5 pt accessibility-font setting.
+Kitty and LXTerminal retain their established per-application sizes.
+
+Every bar retains CPU/system controls. Hover over CPU or memory meters for
+CPU temperature, GPU temperature, RAM, and free disk details where available;
+hover over the clock for the full date. Compact bars use shorter labels.
+F12 retains existing character consoles and uses the current theme's name for
+other consoles. Custom art, mascot presence and decorative geometry remain
+specific to each theme.
+
+Shortcut conflicts resolved: native Awesome help uses Super+Control+F1;
+Chomp console uses Super+Control+c; Tunes console uses Super+Control+t.
+Super+Shift+c closes a window, Super+Shift+t toggles keep-on-top, and
+Super+Shift+l adjusts the master count. Super+Shift+s opens the TMNT console.
+
+Run `python -m unittest discover -s tests -v` for theme parity and regression
+checks. Tests use temporary homes and stub desktop commands.
+
+## Bar autohide — all themes
+
+Every theme's bar starts hidden. Move the pointer to the invisible 2-pixel strip
+along the top of any screen to reveal that screen's bar. Detached bars retain
+their themed gap and shape; the gap stays reachable while moving to the controls.
+The bar hides about half a second after the pointer leaves its top region.
+
+Bars overlay windows without reserving desktop space or moving tiled clients.
+Each monitor reveals independently, including over fullscreen windows, and follows
+screen geometry changes. The edge strip scales with DPI and remains transparent.
+Restart AwesomeWM after deployment to load the behavior.
+
+```sh
+python -m unittest discover -s tests -p test_bar_autohide.py
+```
+
+## The Well — Something Answered
+
+A moonlit stone bar with well-ring workspaces, spectral teal accents, and
+creeping tentacles, paired with `Moonlit Eldritch Well.png`. Select
+`theme-toggle moonlit-well`. See [The Well guide and preview](docs/moonlit-well.md).
+
+## SCP Facility — Security Operations
+
+A gunmetal security dashboard with camera-style workspaces, containment-red
+focus indicators, warning amber, and segmented system meters. Paired with the
+supplied SCP containment corridor wallpaper. Select `theme-toggle scp-facility`.
+See [the SCP Facility guide and preview](docs/scp-facility.md).

@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Muppet Babies (Pastel Vaporwave Dreams)
+# ==============================================================================
+
+theme[main_bg]="#1a1528"
+theme[main_fg]="#f0e6f6"
+theme[title]="#ff70a6"
+theme[hi_fg]="#ffd166"
+theme[selected_bg]="#241c38"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#8b7a9e"
+theme[graph_text]="#70d6ff"
+theme[meter_bg]="#1f1830"
+theme[proc_misc]="#80ed99"
+
+# Box outlines
+theme[cpu_box]="#ff70a6"
+theme[mem_box]="#b388ff"
+theme[net_box]="#70d6ff"
+theme[proc_box]="#ffd166"
+theme[div_line]="#2e2346"
+
+# Temperature gradient (Kermit Mint -> Fozzie Peach -> Animal Coral)
+theme[temp_start]="#80ed99"
+theme[temp_mid]="#ffd166"
+theme[temp_end]="#ff4d6d"
+
+# CPU graph
+theme[cpu_start]="#70d6ff"
+theme[cpu_mid]="#ff70a6"
+theme[cpu_end]="#ff4d6d"
+
+# Memory meters
+theme[free_start]="#1f1830"
+theme[free_mid]="#80ed99"
+theme[free_end]="#a7f3d0"
+
+theme[cached_start]="#1f1830"
+theme[cached_mid]="#b388ff"
+theme[cached_end]="#d1b3ff"
+
+theme[available_start]="#1f1830"
+theme[available_mid]="#ffd166"
+theme[available_end]="#ffe28a"
+
+theme[used_start]="#70d6ff"
+theme[used_mid]="#ff70a6"
+theme[used_end]="#ff4d6d"
+
+# Download / Upload network graph
+theme[download_start]="#70d6ff"
+theme[download_mid]="#a0e1ff"
+theme[download_end]="#80ed99"
+
+theme[upload_start]="#ff70a6"
+theme[upload_mid]="#ffd166"
+theme[upload_end]="#ff4d6d"

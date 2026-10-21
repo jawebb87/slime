@@ -1,0 +1,95 @@
+# Starship Prompt Configuration - Teenage Mutant Ninja Turtles (TMNT) Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'tmnt'
+
+format = """
+[\\[TURTLE//POWER\\]](bold fg:mutagen) \
+[🐢](bold fg:pizza_gold) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🍕](bold fg:mikey_orange)\
+$line_break\
+$character"""
+
+[palettes.tmnt]
+sewer_dark   = "#0e1510"
+mutagen      = "#39ff14"
+leo_blue     = "#00aaff"
+raph_red     = "#ff2a4b"
+donnie_purple= "#9d4edd"
+mikey_orange = "#ff8800"
+pizza_gold   = "#ffd700"
+shell_green  = "#4caf50"
+white        = "#ffffff"
+slate_dim    = "#5a7d5f"
+
+[username]
+show_always = true
+style_user = "bold fg:mutagen"
+style_root = "bold fg:raph_red"
+format = '[$user]($style)[:](bold fg:slate_dim)'
+
+[directory]
+style = "bold fg:leo_blue"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:pizza_gold"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:mikey_orange"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:donnie_purple"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:mutagen"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:pizza_gold"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:mikey_orange"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:mutagen"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:pizza_gold"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:raph_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:mutagen)"
+error_symbol = "[❯](bold fg:raph_red)"

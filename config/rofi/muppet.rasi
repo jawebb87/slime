@@ -1,0 +1,110 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Muppet Babies (Pastel Vaporwave Dreams)
+ * ============================================================================ */
+
+* {
+    bg:          #1a1528f4;
+    bg-alt:      #241c38;
+    bg-selected: #ff70a6;
+    fg:          #f0e6f6;
+    fg-selected: #1a1528;
+    fg-muted:    #8b7a9e;
+    border-col:  #ff70a6;
+    accent:      #ffd166;
+    kermit:      #80ed99;
+    piggy:       #ff70a6;
+    gonzo:       #70d6ff;
+    animal:      #ff4d6d;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "ComicShannsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1.5px;
+    border-color:     @accent;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "ComicShannsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "MAKE YOUR DREAMS COME TRUE // SEARCH PLAYROOM...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @animal;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @kermit;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @animal;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #1a1528;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

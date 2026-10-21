@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Molly Tov Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'tov'
+
+format = """
+[\\[ANARCHY//TOV\\]](bold fg:anarchist_red) \
+[❯](bold fg:molotov_amber) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 󰈸](bold fg:molotov_amber)\
+$line_break\
+$character"""
+
+[palettes.tov]
+asphalt_dark   = "#0f0d0e"
+anarchist_red  = "#e63946"
+molotov_amber  = "#f77f00"
+blaze_orange   = "#fcbf49"
+incandescent_y = "#eae2b7"
+acid_green     = "#70e000"
+faded_denim    = "#457b9d"
+ash_white      = "#f1faee"
+concrete_gray  = "#a8dadc"
+
+[username]
+show_always = true
+style_user = "bold fg:acid_green"
+style_root = "bold fg:anarchist_red"
+format = '[$user]($style)[:](bold fg:concrete_gray)'
+
+[directory]
+style = "bold fg:faded_denim"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:molotov_amber"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:acid_green"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:blaze_orange"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:acid_green"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:molotov_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:acid_green"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:acid_green"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:molotov_amber"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:anarchist_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:molotov_amber)"
+error_symbol = "[❯](bold fg:anarchist_red)"

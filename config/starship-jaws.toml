@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Grindhouse JAWS Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'jaws'
+
+format = """
+[\\[GRINDHOUSE//JAWS\\]](bold fg:copper) \
+[❯](bold fg:lamp_brass) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🦈](bold fg:lamp_brass)\
+$line_break\
+$character"""
+
+[palettes.jaws]
+workshop_dark   = "#0b151b"
+lamp_brass    = "#e8bd4e"
+copper    = "#ef7160"
+copper_dark    = "#c64b40"
+moss   = "#aab987"
+lamp_glow   = "#f5d675"
+fungal_teal    = "#7db4ba"
+weathered_stone    = "#a4aaa3"
+parchment      = "#ecdfbf"
+
+[username]
+show_always = true
+style_user = "bold fg:lamp_glow"
+style_root = "bold fg:copper_dark"
+format = '[$user]($style)[:](bold fg:weathered_stone)'
+
+[directory]
+style = "bold fg:lamp_brass"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:copper"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:moss"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:lamp_glow"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:lamp_glow"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:copper"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:moss"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:lamp_glow"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:copper"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:copper_dark"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:lamp_brass)"
+error_symbol = "[❯](bold fg:copper)"

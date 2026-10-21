@@ -1,0 +1,121 @@
+configuration {
+    modi: "drun,run,window";
+    font: "ComicShannsMono Nerd Font 11";
+    show-icons: true;
+    display-drun: "  ";
+    display-run: "  ";
+    display-window: "  ";
+    drun-display-format: "{name}";
+}
+
+@theme "/dev/null"
+
+* {
+    bg-col:        #faf5ebfc;
+    bg-col-light:  #ffffff;
+    border-col:    #d91424;
+    border-orange: #ff6b00;
+    border-blue:   #005bbb;
+    selected-col:  #d91424;
+    fg-col:        #1c1612;
+    fg-col-bright: #ffffff;
+    grey:          #61554c;
+
+    width: 600;
+    margin: 0;
+    padding: 0;
+}
+
+element-text, element-icon, mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 380px;
+    border: 3px;
+    border-color: @border-col;
+    border-radius: 8px;
+    background-color: @bg-col;
+    padding: 15px;
+}
+
+mainbox {
+    background-color: transparent;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @bg-col-light;
+    border: 2px;
+    border-color: @border-orange;
+    border-radius: 6px;
+    padding: 2px;
+    margin: 0 0 10px 0;
+}
+
+prompt {
+    background-color: @border-col;
+    padding: 8px 12px;
+    text-color: #ffffff;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+entry {
+    padding: 8px;
+    margin: 4px;
+    text-color: @fg-col;
+    background-color: transparent;
+}
+
+listview {
+    border: 0px;
+    padding: 6px 0px;
+    margin: 10px 0px 0px 20px;
+    columns: 1;
+    lines: 6;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 12px;
+    background-color: transparent;
+    text-color: @fg-col;
+    border-radius: 6px;
+}
+
+element-icon {
+    size: 22px;
+    margin: 0 10px 0 0;
+}
+
+element selected {
+    background-color: @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+button {
+    padding: 8px;
+    background-color: @bg-col-light;
+    text-color: @grey;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+    border-radius: 6px;
+    margin: 4px;
+    border: 1px;
+    border-color: #dcd3c5;
+}
+
+button selected {
+    background-color: @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
+}

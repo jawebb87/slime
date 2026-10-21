@@ -13,7 +13,22 @@
 set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BIN_LIST=(apply-power-limits.sh battery-threshold dots play powerprofilesctl qtile-fzf qtile-notes qtile-screenshot sorted termplay theme-toggle)
+# Copy only scripts owned by this project when pulling live changes.
+BIN_LIST=()
+for script in "$SCRIPT_DIR/bin"/*; do
+    BIN_LIST+=("${script##*/}")
+done
+
+copy_wallpapers() {
+    local source="$1" destination="$2" image
+    mkdir -p "$destination"
+    for image in "$source"/*; do
+        [ -f "$image" ] || continue
+        case "${image,,}" in
+            *.jpg|*.jpeg|*.png|*.webp) cp -p "$image" "$destination/" ;;
+        esac
+    done
+}
 
 color() {
     local c="$1"; shift
@@ -34,24 +49,31 @@ backup_live_to_repo() {
     mkdir -p "$SCRIPT_DIR/config/awesome"
     cp -rp "$HOME/.config/awesome"/* "$SCRIPT_DIR/config/awesome/"
     
-    # Picom, Kitty, Rofi (including slime & lab variants)
-    mkdir -p "$SCRIPT_DIR/config/picom" "$SCRIPT_DIR/config/kitty" "$SCRIPT_DIR/config/rofi"
+    # Picom, Kitty, Alacritty, LXTerminal, TMUX, Rofi, XSettingsd (including theme variants)
+    mkdir -p "$SCRIPT_DIR/config/picom" "$SCRIPT_DIR/config/kitty" "$SCRIPT_DIR/config/alacritty" "$SCRIPT_DIR/config/lxterminal" "$SCRIPT_DIR/config/tmux/themes" "$SCRIPT_DIR/config/rofi" "$SCRIPT_DIR/config/xsettingsd"
     cp -p "$HOME/.config/picom"/*.conf "$SCRIPT_DIR/config/picom/" 2>/dev/null || true
     cp -p "$HOME/.config/kitty"/*.conf "$SCRIPT_DIR/config/kitty/" 2>/dev/null || true
+    cp -p "$HOME/.config/alacritty"/*.toml "$SCRIPT_DIR/config/alacritty/" 2>/dev/null || true
+    cp -p "$HOME/.config/lxterminal"/*.conf "$SCRIPT_DIR/config/lxterminal/" 2>/dev/null || true
+    cp -p "$HOME/.config/tmux"/*.conf "$SCRIPT_DIR/config/tmux/" 2>/dev/null || true
+    cp -p "$HOME/.config/tmux/themes"/*.conf "$SCRIPT_DIR/config/tmux/themes/" 2>/dev/null || true
     cp -p "$HOME/.config/rofi"/*.rasi "$SCRIPT_DIR/config/rofi/" 2>/dev/null || true
+    cp -p "$HOME/.config/xsettingsd"/*.conf "$SCRIPT_DIR/config/xsettingsd/" 2>/dev/null || true
     
     # Neovim & Btop
     mkdir -p "$SCRIPT_DIR/config/nvim" "$SCRIPT_DIR/config/btop"
     [ -d "$HOME/.config/nvim" ] && cp -rp "$HOME/.config/nvim"/* "$SCRIPT_DIR/config/nvim/"
     [ -d "$HOME/.config/btop" ] && cp -rp "$HOME/.config/btop"/* "$SCRIPT_DIR/config/btop/"
     
-    # GTK, MPV, yt-dlp, Starship
-    mkdir -p "$SCRIPT_DIR/config/gtk-3.0" "$SCRIPT_DIR/config/gtk-4.0" "$SCRIPT_DIR/config/mpv" "$SCRIPT_DIR/config/yt-dlp"
+    # GTK, MPV, yt-dlp, Starship, XDG Desktop Portal, Fastfetch
+    mkdir -p "$SCRIPT_DIR/config/gtk-3.0" "$SCRIPT_DIR/config/gtk-4.0" "$SCRIPT_DIR/config/mpv" "$SCRIPT_DIR/config/yt-dlp" "$SCRIPT_DIR/config/xdg-desktop-portal" "$SCRIPT_DIR/config/fastfetch"
     [ -f "$HOME/.config/gtk-3.0/settings.ini" ] && cp -p "$HOME/.config/gtk-3.0/settings.ini" "$SCRIPT_DIR/config/gtk-3.0/"
     [ -f "$HOME/.config/gtk-4.0/settings.ini" ] && cp -p "$HOME/.config/gtk-4.0/settings.ini" "$SCRIPT_DIR/config/gtk-4.0/"
     [ -f "$HOME/.config/mpv/mpv.conf" ] && cp -p "$HOME/.config/mpv/mpv.conf" "$SCRIPT_DIR/config/mpv/"
     [ -f "$HOME/.config/yt-dlp/config" ] && cp -p "$HOME/.config/yt-dlp/config" "$SCRIPT_DIR/config/yt-dlp/"
     cp -p "$HOME/.config"/starship*.toml "$SCRIPT_DIR/config/" 2>/dev/null || true
+    [ -d "$HOME/.config/xdg-desktop-portal" ] && cp -rp "$HOME/.config/xdg-desktop-portal"/* "$SCRIPT_DIR/config/xdg-desktop-portal/" 2>/dev/null || true
+    [ -d "$HOME/.config/fastfetch" ] && cp -rp "$HOME/.config/fastfetch"/* "$SCRIPT_DIR/config/fastfetch/" 2>/dev/null || true
     
     # User scripts
     mkdir -p "$SCRIPT_DIR/bin"
@@ -72,14 +94,7 @@ backup_live_to_repo() {
     [ -f "$HOME/.zshrc" ] && cp -p "$HOME/.zshrc" "$SCRIPT_DIR/shell/.zshrc"
     [ -f "$HOME/.bashrc" ] && cp -p "$HOME/.bashrc" "$SCRIPT_DIR/shell/.bashrc"
     [ -f "$HOME/.bash_aliases" ] && cp -p "$HOME/.bash_aliases" "$SCRIPT_DIR/shell/.bash_aliases"
-    [ -f "$HOME/Pictures/wallpaper/origin.jpg" ] && cp -p "$HOME/Pictures/wallpaper/origin.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/slime.jpg" ] && cp -p "$HOME/Pictures/wallpaper/slime.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/lab.jpg" ] && cp -p "$HOME/Pictures/wallpaper/lab.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/cyber.jpg" ] && cp -p "$HOME/Pictures/wallpaper/cyber.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/space.jpg" ] && cp -p "$HOME/Pictures/wallpaper/space.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/shred.jpg" ] && cp -p "$HOME/Pictures/wallpaper/shred.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/larry.jpg" ] && cp -p "$HOME/Pictures/wallpaper/larry.jpg" "$SCRIPT_DIR/wallpaper/"
-    [ -f "$HOME/Pictures/wallpaper/chomp.jpg" ] && cp -p "$HOME/Pictures/wallpaper/chomp.jpg" "$SCRIPT_DIR/wallpaper/"
+    copy_wallpapers "$HOME/Pictures/wallpaper" "$SCRIPT_DIR/wallpaper"
     
     color green "✔ All configs refreshed into ~/Projects/slime."
     echo ""
@@ -101,19 +116,38 @@ backup_live_to_repo() {
 }
 
 restore_repo_to_live() {
-    local backup_dir="$HOME/.slime_backup_$(date +%Y%m%d_%H%M%S)"
+    local backup_dir
+    backup_dir="$(mktemp -d "$HOME/.slime_backup_$(date +%Y%m%d_%H%M%S)_XXXXXX")"
     color yellow "=== 🟡 Restoring ~/Projects/slime -> Live System ==="
     color dim "Creating backup of current configs at $backup_dir..."
     mkdir -p "$backup_dir"
     
-    # Backup existing
-    [ -d "$HOME/.config/awesome" ] && cp -rp "$HOME/.config/awesome" "$backup_dir/"
-    [ -f "$HOME/.config/picom/picom.conf" ] && cp -p "$HOME/.config/picom/picom.conf" "$backup_dir/"
-    [ -f "$HOME/.config/kitty/kitty.conf" ] && cp -p "$HOME/.config/kitty/kitty.conf" "$backup_dir/"
-    [ -f "$HOME/.config/rofi/config.rasi" ] && cp -p "$HOME/.config/rofi/config.rasi" "$backup_dir/"
-    
+    # Preserve all deployment destinations with their paths relative to HOME.
+    # Finish the backup before touching any live files; cp failures abort restore.
+    local relative source
+    local destinations=(
+        .config/awesome .config/picom .config/kitty .config/alacritty
+        .config/lxterminal .config/tmux .config/rofi .config/xsettingsd
+        .config/xdg-desktop-portal .config/nvim .config/btop
+        .config/gtk-3.0 .config/gtk-4.0 .config/mpv .config/yt-dlp
+        .config/fastfetch
+        .local/bin Projects/qtile_bench Pictures/wallpaper
+        .zshrc .bashrc .bash_aliases
+    )
+    for source in "$HOME/.config"/starship*.toml; do
+        [ -e "$source" ] || [ -L "$source" ] || continue
+        destinations+=("${source#"$HOME/"}")
+    done
+    for relative in "${destinations[@]}"; do
+        source="$HOME/$relative"
+        if [ -e "$source" ] || [ -L "$source" ]; then
+            mkdir -p "$backup_dir/$(dirname "$relative")"
+            cp -a "$source" "$backup_dir/$relative"
+        fi
+    done
+
     # Deploy
-    mkdir -p "$HOME/.config/awesome" "$HOME/.config/picom" "$HOME/.config/kitty" "$HOME/.config/rofi"
+    mkdir -p "$HOME/.config/alacritty" "$HOME/.config/awesome" "$HOME/.config/picom" "$HOME/.config/kitty" "$HOME/.config/lxterminal" "$HOME/.config/tmux/themes" "$HOME/.config/rofi" "$HOME/.config/xsettingsd" "$HOME/.config/xdg-desktop-portal" "$HOME/.config/fastfetch"
     mkdir -p "$HOME/.config/nvim" "$HOME/.config/btop" "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
     mkdir -p "$HOME/.config/mpv" "$HOME/.config/yt-dlp" "$HOME/.local/bin" "$HOME/Projects/qtile_bench"
     mkdir -p "$HOME/Pictures/wallpaper"
@@ -121,7 +155,14 @@ restore_repo_to_live() {
     cp -rp "$SCRIPT_DIR/config/awesome"/* "$HOME/.config/awesome/"
     cp -p "$SCRIPT_DIR/config/picom"/*.conf "$HOME/.config/picom/"
     cp -p "$SCRIPT_DIR/config/kitty"/*.conf "$HOME/.config/kitty/"
+    cp -p "$SCRIPT_DIR/config/alacritty"/*.toml "$HOME/.config/alacritty/"
+    cp -p "$SCRIPT_DIR/config/lxterminal"/*.conf "$HOME/.config/lxterminal/" 2>/dev/null || true
+    cp -p "$SCRIPT_DIR/config/tmux"/*.conf "$HOME/.config/tmux/" 2>/dev/null || true
+    cp -p "$SCRIPT_DIR/config/tmux/themes"/*.conf "$HOME/.config/tmux/themes/" 2>/dev/null || true
     cp -p "$SCRIPT_DIR/config/rofi"/*.rasi "$HOME/.config/rofi/"
+    cp -p "$SCRIPT_DIR/config/xsettingsd"/*.conf "$HOME/.config/xsettingsd/" 2>/dev/null || true
+    [ -d "$SCRIPT_DIR/config/xdg-desktop-portal" ] && cp -rp "$SCRIPT_DIR/config/xdg-desktop-portal"/* "$HOME/.config/xdg-desktop-portal/" 2>/dev/null || true
+    [ -d "$SCRIPT_DIR/config/fastfetch" ] && cp -rp "$SCRIPT_DIR/config/fastfetch"/* "$HOME/.config/fastfetch/" 2>/dev/null || true
     cp -rp "$SCRIPT_DIR/config/nvim"/* "$HOME/.config/nvim/"
     cp -rp "$SCRIPT_DIR/config/btop"/* "$HOME/.config/btop/"
     cp -p "$SCRIPT_DIR/config/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/"
@@ -131,22 +172,19 @@ restore_repo_to_live() {
     cp -p "$SCRIPT_DIR/config"/starship*.toml "$HOME/.config/"
     
     cp -a "$SCRIPT_DIR/bin"/* "$HOME/.local/bin/"
-    chmod +x "$HOME/.local/bin"/*
+    for source in "$SCRIPT_DIR/bin"/*; do
+        chmod +x "$HOME/.local/bin/${source##*/}"
+    done
     
     cp -p "$SCRIPT_DIR/pads"/*.py "$HOME/Projects/qtile_bench/"
-    chmod +x "$HOME/Projects/qtile_bench"/*.py
+    for source in "$SCRIPT_DIR/pads"/*.py; do
+        chmod +x "$HOME/Projects/qtile_bench/${source##*/}"
+    done
     
     [ -f "$SCRIPT_DIR/shell/.zshrc" ] && cp -p "$SCRIPT_DIR/shell/.zshrc" "$HOME/.zshrc"
     [ -f "$SCRIPT_DIR/shell/.bashrc" ] && cp -p "$SCRIPT_DIR/shell/.bashrc" "$HOME/.bashrc"
     [ -f "$SCRIPT_DIR/shell/.bash_aliases" ] && cp -p "$SCRIPT_DIR/shell/.bash_aliases" "$HOME/.bash_aliases"
-    [ -f "$SCRIPT_DIR/wallpaper/origin.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/origin.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/slime.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/slime.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/lab.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/lab.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/cyber.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/cyber.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/space.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/space.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/shred.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/shred.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/larry.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/larry.jpg" "$HOME/Pictures/wallpaper/"
-    [ -f "$SCRIPT_DIR/wallpaper/chomp.jpg" ] && cp -p "$SCRIPT_DIR/wallpaper/chomp.jpg" "$HOME/Pictures/wallpaper/"
+    copy_wallpapers "$SCRIPT_DIR/wallpaper" "$HOME/Pictures/wallpaper"
     
     color green "✔ Restore complete! Live configs updated."
     color dim "Previous configs saved in: $backup_dir"

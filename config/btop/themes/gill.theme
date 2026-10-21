@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Baron von Gill (Subterranean Grotto)
+# ==============================================================================
+
+theme[main_bg]="#080e15"
+theme[main_fg]="#cbd5e1"
+theme[title]="#00f5d4"
+theme[hi_fg]="#fb7185"
+theme[selected_bg]="#162d42"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#475569"
+theme[graph_text]="#38bdf8"
+theme[meter_bg]="#0c1520"
+theme[proc_misc]="#00f5d4"
+
+# Box outlines
+theme[cpu_box]="#00f5d4"
+theme[mem_box]="#38bdf8"
+theme[net_box]="#34d399"
+theme[proc_box]="#fb7185"
+theme[div_line]="#0c1520"
+
+# Temperature gradient (Moss Emerald -> Bioluminescent Cyan -> Coral Gills)
+theme[temp_start]="#34d399"
+theme[temp_mid]="#00f5d4"
+theme[temp_end]="#fb7185"
+
+# CPU graph
+theme[cpu_start]="#0284c7"
+theme[cpu_mid]="#00f5d4"
+theme[cpu_end]="#fb7185"
+
+# Memory meters
+theme[free_start]="#0c1520"
+theme[free_mid]="#0284c7"
+theme[free_end]="#38bdf8"
+
+theme[cached_start]="#0c1520"
+theme[cached_mid]="#10b981"
+theme[cached_end]="#34d399"
+
+theme[available_start]="#0c1520"
+theme[available_mid]="#00f5d4"
+theme[available_end]="#5eead4"
+
+theme[used_start]="#0284c7"
+theme[used_mid]="#fbbf24"
+theme[used_end]="#fb7185"
+
+# Download / Upload network graph
+theme[download_start]="#0284c7"
+theme[download_mid]="#00f5d4"
+theme[download_end]="#5eead4"
+
+theme[upload_start]="#10b981"
+theme[upload_mid]="#fbbf24"
+theme[upload_end]="#fb7185"

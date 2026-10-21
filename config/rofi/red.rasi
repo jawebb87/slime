@@ -1,0 +1,86 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Doom (Rip & Tear)
+ * ============================================================================ */
+
+* {
+    bg:          #0e0708f6;
+    bg-alt:      #220c10;
+    bg-selected: #3b1118;
+    fg:          #ffffff;
+    fg-muted:    #ba6874;
+    accent:      #ff1a2a;
+    spark:       #ff4d5e;
+    amber:       #ffaa00;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "GohuFont 11 Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    0px;
+    padding:          14px;
+}
+
+mainbox {
+    spacing:  10px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @spark;
+    border-radius:    0px;
+    padding:          10px 12px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @spark;
+}
+
+entry {
+    placeholder:       "DOOM // EXECUTE...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      4px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 0px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @spark;
+    border:           1px;
+    border-color:     @accent;
+}
+
+element-icon {
+    size: 20px;
+}
+
+element-text {
+    vertical-align: 0.5;
+}

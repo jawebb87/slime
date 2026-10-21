@@ -1,0 +1,93 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'punk-show'
+
+format = """
+[\\[PUNK//SHOW\\]](bold fg:copper) \
+[❯](bold fg:lamp_brass) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ ⚡](bold fg:lamp_brass)\
+$line_break\
+$character"""
+
+[palettes.punk-show]
+workshop_dark   = "#161815"
+lamp_brass    = "#ef4148"
+copper    = "#f46b66"
+copper_dark    = "#c05a60"
+moss   = "#91ad6e"
+lamp_glow   = "#d1ac63"
+fungal_teal    = "#91ad6e"
+weathered_stone    = "#9c9e8b"
+parchment      = "#ddd7c0"
+
+[username]
+show_always = true
+style_user = "bold fg:lamp_glow"
+style_root = "bold fg:copper_dark"
+format = '[$user]($style)[:](bold fg:weathered_stone)'
+
+[directory]
+style = "bold fg:lamp_brass"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:copper"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:moss"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:lamp_glow"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:lamp_glow"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:copper"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:moss"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:lamp_glow"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:copper"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:copper_dark"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:lamp_brass)"
+error_symbol = "[❯](bold fg:copper)"

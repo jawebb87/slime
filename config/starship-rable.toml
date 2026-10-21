@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Miss Rable Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'rable'
+
+format = """
+[\\[PUNK//RABLE\\]](bold fg:neon_pink) \
+[❯](bold fg:electric_cyan) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 󰊠](bold fg:neon_pink)\
+$line_break\
+$character"""
+
+[palettes.rable]
+alley_dark     = "#0a0812"
+neon_pink      = "#ff2a85"
+electric_cyan  = "#00f0ff"
+torn_crimson   = "#e11d48"
+toxic_lime     = "#39ff14"
+streetlamp_gold= "#ffb000"
+shadow_slate   = "#5a5261"
+silver_spike   = "#ffffff"
+
+[username]
+show_always = true
+style_user = "bold fg:electric_cyan"
+style_root = "bold fg:neon_pink"
+format = '[$user]($style)[:](bold fg:shadow_slate)'
+
+[directory]
+style = "bold fg:neon_pink"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:electric_cyan"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:toxic_lime"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:streetlamp_gold"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:toxic_lime"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:neon_pink"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:neon_pink)"
+error_symbol = "[❯](bold fg:electric_cyan)"

@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Molly Tov (Street Riot & Burning Anarchy)
+# ==============================================================================
+
+theme[main_bg]="#0f0d0e"
+theme[main_fg]="#f1faee"
+theme[title]="#f77f00"
+theme[hi_fg]="#70e000"
+theme[selected_bg]="#2d272a"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#a8dadc"
+theme[graph_text]="#eae2b7"
+theme[meter_bg]="#1e1a1c"
+theme[proc_misc]="#f77f00"
+
+# Box outlines
+theme[cpu_box]="#f77f00"
+theme[mem_box]="#fcbf49"
+theme[net_box]="#70e000"
+theme[proc_box]="#e63946"
+theme[div_line]="#1e1a1c"
+
+# Temperature gradient (Acid Green -> Molotov Amber -> Anarchist Red)
+theme[temp_start]="#70e000"
+theme[temp_mid]="#f77f00"
+theme[temp_end]="#e63946"
+
+# CPU graph
+theme[cpu_start]="#457b9d"
+theme[cpu_mid]="#f77f00"
+theme[cpu_end]="#e63946"
+
+# Memory meters
+theme[free_start]="#1e1a1c"
+theme[free_mid]="#457b9d"
+theme[free_end]="#a8dadc"
+
+theme[cached_start]="#1e1a1c"
+theme[cached_mid]="#55a630"
+theme[cached_end]="#70e000"
+
+theme[available_start]="#1e1a1c"
+theme[available_mid]="#f77f00"
+theme[available_end]="#fcbf49"
+
+theme[used_start]="#457b9d"
+theme[used_mid]="#fcbf49"
+theme[used_end]="#e63946"
+
+# Download / Upload network graph
+theme[download_start]="#457b9d"
+theme[download_mid]="#f77f00"
+theme[download_end]="#fcbf49"
+
+theme[upload_start]="#55a630"
+theme[upload_mid]="#70e000"
+theme[upload_end]="#e63946"

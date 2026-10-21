@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Crust (Crustpunk Drifter & Alleyway Phantom)
+# ==============================================================================
+
+theme[main_bg]="#0f0e0f"
+theme[main_fg]="#f5f5f4"
+theme[title]="#f4d06f"
+theme[hi_fg]="#d97706"
+theme[selected_bg]="#27221f"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#a8a29e"
+theme[graph_text]="#e5c158"
+theme[meter_bg]="#1a1716"
+theme[proc_misc]="#f4d06f"
+
+# Box outlines
+theme[cpu_box]="#f4d06f"
+theme[mem_box]="#d97706"
+theme[net_box]="#38bdf8"
+theme[proc_box]="#991b1b"
+theme[div_line]="#1a1716"
+
+# Temperature gradient (Dumpster Moss -> Weathered Bone -> Brick Crimson)
+theme[temp_start]="#65a30d"
+theme[temp_mid]="#f4d06f"
+theme[temp_end]="#991b1b"
+
+# CPU graph
+theme[cpu_start]="#38bdf8"
+theme[cpu_mid]="#f4d06f"
+theme[cpu_end]="#d97706"
+
+# Memory meters
+theme[free_start]="#1a1716"
+theme[free_mid]="#38bdf8"
+theme[free_end]="#a8a29e"
+
+theme[cached_start]="#1a1716"
+theme[cached_mid]="#65a30d"
+theme[cached_end]="#84cc16"
+
+theme[available_start]="#1a1716"
+theme[available_mid]="#f4d06f"
+theme[available_end]="#d97706"
+
+theme[used_start]="#38bdf8"
+theme[used_mid]="#d97706"
+theme[used_end]="#991b1b"
+
+# Download / Upload network graph
+theme[download_start]="#38bdf8"
+theme[download_mid]="#f4d06f"
+theme[download_end]="#d97706"
+
+theme[upload_start]="#65a30d"
+theme[upload_mid]="#f4d06f"
+theme[upload_end]="#991b1b"

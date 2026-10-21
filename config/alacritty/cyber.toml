@@ -1,0 +1,39 @@
+[window]
+opacity = 0.93
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "ZedMono Nerd Font Mono" }
+
+[colors.primary]
+background = "#090812"
+foreground = "#e0d8f6"
+
+[colors.cursor]
+cursor = "#00f0ff"
+text = "#090812"
+
+[colors.selection]
+background = "#7928ca"
+text = "#ffffff"
+
+[colors.normal]
+black = "#090812"
+red = "#ff007f"
+green = "#55f736"
+yellow = "#d8eb34"
+blue = "#7928ca"
+magenta = "#a855f7"
+cyan = "#00f0ff"
+white = "#e0d8f6"
+
+[colors.bright]
+black = "#4c3f78"
+red = "#ff3399"
+green = "#74ff2e"
+yellow = "#f3ff47"
+blue = "#a855f7"
+magenta = "#c084fc"
+cyan = "#5ce1e6"
+white = "#ffffff"

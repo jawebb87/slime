@@ -18,14 +18,17 @@ Features:
 from __future__ import annotations
 
 import argparse
+import datetime
+import json
 import logging
 import os
 import shutil
 import signal
+import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Logger setup
 logger = logging.getLogger("sorted")
@@ -303,6 +306,228 @@ def get_collision_free_path(target_dir: Path, filename: str) -> Path:
         counter += 1
 
 
+def get_history_file(home_dir: Optional[Path] = None) -> Path:
+    """Return the Path to the history JSONL log file."""
+    base = home_dir if home_dir else Path.home()
+    return base / ".local" / "share" / "sorted" / "history.jsonl"
+
+
+def append_history(
+    src: Path,
+    dest: Path,
+    category: str,
+    home_dir: Optional[Path] = None,
+) -> None:
+    """Append a record of a moved file to the persistent history file."""
+    try:
+        hist_path = get_history_file(home_dir)
+        hist_path.parent.mkdir(parents=True, exist_ok=True)
+        record = {
+            "timestamp": time.time(),
+            "time_str": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "filename": src.name,
+            "src": str(src),
+            "dest": str(dest),
+            "category": category,
+        }
+        with open(hist_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+    except Exception as e:
+        logger.debug("Failed to append history record: %s", e)
+
+
+def load_history(home_dir: Optional[Path] = None, limit: int = 10) -> List[Dict[str, Any]]:
+    """Load the most recent records from the history log file."""
+    hist_path = get_history_file(home_dir)
+    if not hist_path.exists():
+        return []
+    records: List[Dict[str, Any]] = []
+    try:
+        with open(hist_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        records.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+    except Exception as e:
+        logger.debug("Failed to read history: %s", e)
+        return []
+    return records[-limit:] if limit > 0 else records
+
+
+def get_history_count(home_dir: Optional[Path] = None) -> int:
+    """Count the total number of history records."""
+    hist_path = get_history_file(home_dir)
+    if not hist_path.exists():
+        return 0
+    count = 0
+    try:
+        with open(hist_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    count += 1
+    except Exception:
+        pass
+    return count
+
+
+def send_notification(title: str, message: str, timeout_ms: int = 4000) -> None:
+    """Send a desktop notification via gdbus or dbus-send or notify-send."""
+    # 1. Try gdbus (standard freedesktop notification)
+    try:
+        res = subprocess.run(
+            [
+                "gdbus",
+                "call",
+                "--session",
+                "--dest",
+                "org.freedesktop.Notifications",
+                "--object-path",
+                "/org/freedesktop/Notifications",
+                "--method",
+                "org.freedesktop.Notifications.Notify",
+                "sorted",
+                "0",
+                "folder-download",
+                title,
+                message,
+                "[]",
+                "{}",
+                str(timeout_ms),
+            ],
+            capture_output=True,
+            timeout=2,
+        )
+        if res.returncode == 0:
+            return
+    except Exception:
+        pass
+
+    # 2. Try AwesomeWM naughty via dbus-send
+    try:
+        clean_title = json.dumps(title)
+        clean_message = json.dumps(message)
+        lua_code = f"require('naughty').notify({{ title = {clean_title}, text = {clean_message}, timeout = {timeout_ms / 1000} }})"
+        res = subprocess.run(
+            [
+                "dbus-send",
+                "--dest=org.awesomewm.awful",
+                "--type=method_call",
+                "/",
+                "org.awesomewm.awful.Remote.Eval",
+                f"string:{lua_code}",
+            ],
+            capture_output=True,
+            timeout=2,
+        )
+        if res.returncode == 0:
+            return
+    except Exception:
+        pass
+
+    # 3. Try notify-send if installed
+    try:
+        ns = shutil.which("notify-send")
+        if ns:
+            subprocess.run([ns, "-t", str(timeout_ms), title, message], timeout=2)
+    except Exception:
+        pass
+
+
+def get_downloads_diagnostics(downloads_dir: Path) -> Dict[str, Any]:
+    """Inspect downloads_dir to explain why files were or were not sorted."""
+    if not downloads_dir.exists() or not downloads_dir.is_dir():
+        return {
+            "exists": False,
+            "loose_files": [],
+            "category_dirs": [],
+            "other_dirs": [],
+            "ignored_files": [],
+            "total_items": 0,
+        }
+
+    loose_files: List[str] = []
+    category_dirs: List[str] = []
+    other_dirs: List[str] = []
+    ignored_files: List[str] = []
+
+    try:
+        entries = sorted(downloads_dir.iterdir(), key=lambda p: p.name.lower())
+    except OSError:
+        return {
+            "exists": True,
+            "loose_files": [],
+            "category_dirs": [],
+            "other_dirs": [],
+            "ignored_files": [],
+            "total_items": 0,
+        }
+
+    for item in entries:
+        if item.is_dir():
+            if item.name in DOWNLOADS_CATEGORIES:
+                category_dirs.append(item.name)
+            else:
+                other_dirs.append(item.name)
+        elif item.is_file() and not item.is_symlink():
+            if is_ignored(item):
+                ignored_files.append(item.name)
+            else:
+                loose_files.append(item.name)
+
+    return {
+        "exists": True,
+        "loose_files": loose_files,
+        "category_dirs": category_dirs,
+        "other_dirs": other_dirs,
+        "ignored_files": ignored_files,
+        "total_items": len(entries),
+    }
+
+
+def print_status_report(home_dir: Path, downloads_dir: Path) -> None:
+    """Print an exhaustive, human-readable status report."""
+    diag = get_downloads_diagnostics(downloads_dir)
+    total_sorted = get_history_count(home_dir)
+    recent = load_history(home_dir, limit=10)
+
+    print("\n" + "=" * 55)
+    print("        Downloads Organizer Status (sorted)        ")
+    print("=" * 55)
+    print(f"Downloads Directory: {downloads_dir}")
+    if not diag["exists"]:
+        print("  Status: Directory does not exist!")
+    else:
+        print(f"  Loose files to sort:       {len(diag['loose_files'])}")
+        if diag["loose_files"]:
+            print(f"    -> {', '.join(diag['loose_files'][:5])}")
+        cat_str = ", ".join(diag["category_dirs"]) if diag["category_dirs"] else "none"
+        print(f"  Category subdirectories:   {len(diag['category_dirs'])} ({cat_str})")
+        other_str = ", ".join(diag["other_dirs"]) if diag["other_dirs"] else "none"
+        print(f"  Folders skipped by design: {len(diag['other_dirs'])} ({other_str})")
+        ign_str = ", ".join(diag["ignored_files"]) if diag["ignored_files"] else "none"
+        print(f"  In-progress / ignored:     {len(diag['ignored_files'])} ({ign_str})")
+
+    hist_file = get_history_file(home_dir)
+    print(f"\nHistory Log: {hist_file}")
+    print(f"  Lifetime files organized:  {total_sorted}")
+
+    if recent:
+        print("\nRecent Activity (latest first):")
+        for rec in reversed(recent):
+            time_display = rec.get("time_str", "Unknown time")
+            fname = rec.get("filename", "unknown")
+            dest = rec.get("dest", "")
+            dest_display = dest.replace(str(home_dir), "~")
+            cat = rec.get("category", "")
+            print(f"  • [{time_display}] {fname} -> {dest_display} ({cat})")
+    else:
+        print("\nNo recent sorting history recorded yet.")
+    print("=" * 55 + "\n")
+
+
 def sort_file(
     path: Path,
     home_dir: Path,
@@ -344,6 +569,7 @@ def sort_file(
         # Move the file
         shutil.move(str(path), str(dest_path))
         logger.info("Moved '%s' -> '%s'", path.name, dest_path)
+        append_history(src=path, dest=dest_path, category=category, home_dir=home_dir)
         return dest_path
 
     except (PermissionError, OSError) as e:
@@ -355,6 +581,7 @@ def run_once(
     home_dir: Path,
     downloads_dir: Path,
     dry_run: bool = False,
+    notify: bool = False,
 ) -> int:
     """
     Perform a single pass over ~/Downloads, sorting all eligible files.
@@ -366,6 +593,7 @@ def run_once(
 
     logger.debug("Scanning '%s'...", downloads_dir)
     sorted_count = 0
+    moved_summary: List[str] = []
 
     try:
         # List entries in downloads_dir (non-recursive)
@@ -377,8 +605,16 @@ def run_once(
     for item in entries:
         # We only sort top-level files in Downloads (do not touch subdirectories)
         if item.is_file() and not item.is_symlink():
-            if sort_file(item, home_dir, downloads_dir, dry_run=dry_run):
+            dest = sort_file(item, home_dir, downloads_dir, dry_run=dry_run)
+            if dest:
                 sorted_count += 1
+                moved_summary.append(f"{item.name} -> {dest.parent.name}/{dest.name}")
+
+    if notify and sorted_count > 0:
+        summary_text = "\n".join(f"• {s}" for s in moved_summary[:5])
+        if len(moved_summary) > 5:
+            summary_text += f"\n... and {len(moved_summary) - 5} more"
+        send_notification("Downloads Organizer", f"Sorted {sorted_count} file(s):\n{summary_text}")
 
     return sorted_count
 
@@ -389,6 +625,7 @@ def run_watch(
     interval: float = 3.0,
     settle_time: float = 2.0,
     dry_run: bool = False,
+    notify: bool = False,
 ) -> None:
     """
     Continuously monitor ~/Downloads for new files and sort them once
@@ -443,8 +680,10 @@ def run_watch(
                         and current_mtime == prev_mtime
                         and (now - first_seen >= settle_time)
                     ):
-                        sort_file(item, home_dir, downloads_dir, dry_run=dry_run)
+                        dest = sort_file(item, home_dir, downloads_dir, dry_run=dry_run)
                         file_tracker.pop(item, None)
+                        if notify and dest:
+                            send_notification("Downloads Organizer", f"Sorted '{item.name}' -> {dest.parent.name}/{dest.name}")
                     else:
                         file_tracker[item] = (current_size, current_mtime, first_seen)
 
@@ -485,6 +724,17 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         help="Run continuously as a background watcher daemon.",
     )
 
+    parser.add_argument(
+        "-s",
+        "--status",
+        action="store_true",
+        help="Show Downloads status, lifetime statistics, and recent activity history.",
+    )
+    parser.add_argument(
+        "--notify",
+        action="store_true",
+        help="Send desktop notification when files are sorted.",
+    )
     parser.add_argument(
         "-n",
         "--dry-run",
@@ -531,12 +781,17 @@ def main(argv: Optional[List[str]] = None) -> int:
     home_dir: Path = args.home_dir.resolve()
     downloads_dir: Path = args.downloads_dir.resolve()
 
+    if args.status:
+        print_status_report(home_dir=home_dir, downloads_dir=downloads_dir)
+        return 0
+
     if args.watch:
         run_watch(
             home_dir=home_dir,
             downloads_dir=downloads_dir,
             interval=args.interval,
             dry_run=args.dry_run,
+            notify=args.notify,
         )
         return 0
     else:
@@ -544,8 +799,34 @@ def main(argv: Optional[List[str]] = None) -> int:
             home_dir=home_dir,
             downloads_dir=downloads_dir,
             dry_run=args.dry_run,
+            notify=args.notify,
         )
         logger.info("Sorted %d file(s).", count)
+        if count == 0 and not args.dry_run:
+            diag = get_downloads_diagnostics(downloads_dir)
+            details = []
+            if diag["other_dirs"]:
+                details.append(f"skipped {len(diag['other_dirs'])} folder(s): {', '.join(diag['other_dirs'])}")
+            if diag["category_dirs"]:
+                details.append(f"{len(diag['category_dirs'])} organized category: {', '.join(diag['category_dirs'])}")
+            if diag["ignored_files"]:
+                details.append(f"skipped {len(diag['ignored_files'])} in-progress/ignored file(s)")
+
+            if details:
+                logger.info("Downloads status: 0 loose files (%s)", "; ".join(details))
+            else:
+                logger.info("Downloads status: folder is clean (0 items).")
+
+            recent = load_history(home_dir, limit=1)
+            if recent:
+                last_item = recent[0]
+                dest_str = last_item.get("dest", "").replace(str(home_dir), "~")
+                logger.info(
+                    "Last sorted: '%s' -> '%s' (%s)",
+                    last_item.get("filename", ""),
+                    dest_str,
+                    last_item.get("time_str", ""),
+                )
         return 0
 
 

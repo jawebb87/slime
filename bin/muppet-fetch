@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# muppet-fetch: Muppet Babies Terminal Fetch
+# ==============================================================================
+# "Muppet Babies, we make our dreams come true!"
+# ==============================================================================
+import os
+import platform
+import re
+import subprocess
+import sys
+
+# High-Readability TrueColor ANSI Escapes based on Muppet Babies Pastel Vaporwave Palette
+PINK    = "\033[38;2;255;112;166m"   # Baby Piggy Bubblegum Pink (#ff70a6)
+MINT    = "\033[38;2;128;237;153m"   # Baby Kermit Mint Green (#80ed99)
+CYAN    = "\033[38;2;112;214;255m"   # Baby Gonzo Periwinkle Cyan (#70d6ff)
+PEACH   = "\033[38;2;255;209;102m"   # Baby Fozzie Warm Peach Gold (#ffd166)
+CORAL   = "\033[38;2;255;77;109m"    # Baby Animal Coral Pink (#ff4d6d)
+LILAC   = "\033[38;2;179;136;255m"   # Lilac Dream Purple (#b388ff)
+WHITE   = "\033[38;2;255;255;255m"   # Crisp White (#ffffff)
+TEXT    = "\033[38;2;240;230;246m"   # Pastel Dream White (#f0e6f6)
+DIM     = "\033[38;2;139;122;158m"   # Shadow Lavender (#8b7a9e)
+DIVIDER = "\033[38;2;46;35;70m"      # Nursery Grid Border (#2e2346)
+R       = "\033[0m"
+BOLD    = "\033[1m"
+
+def get_uptime():
+    try:
+        with open("/proc/uptime", "r") as f:
+            seconds = float(f.readline().split()[0])
+        hrs = int(seconds // 3600)
+        mins = int((seconds % 3600) // 60)
+        return f"{hrs}h {mins}m"
+    except Exception:
+        return "unknown"
+
+def get_memory():
+    try:
+        mem_total, mem_avail = 0, 0
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_avail = int(line.split()[1])
+        used = (mem_total - mem_avail) / 1024 / 1024
+        total = mem_total / 1024 / 1024
+        pct = (used / total) * 100 if total > 0 else 0
+        bars = int(pct / 10)
+        bar_str = "[" + "=" * bars + "-" * (10 - bars) + "]"
+        return f"{used:.1f}G / {total:.1f}G {bar_str}"
+    except Exception:
+        return "unknown"
+
+def get_packages():
+    try:
+        out = subprocess.check_output("pacman -Qq 2>/dev/null | wc -l", shell=True).decode().strip()
+        return f"{out} (pacman)"
+    except Exception:
+        return "N/A"
+
+def main():
+    user = os.getenv("USER", "jaws")
+    hostname = platform.node()
+    os_name = "Arch Linux x86_64"
+    kernel = platform.release()
+    uptime = get_uptime()
+    memory = get_memory()
+    packages = get_packages()
+    shell = os.path.basename(os.getenv("SHELL", "zsh"))
+    term = os.getenv("TERM", "alacritty")
+
+    ans_paths = [
+        os.path.expanduser("~/.config/fastfetch/muppet.ans"),
+        os.path.expanduser("~/.config/fastfetch/muppet_big.ans"),
+    ]
+    ans_path = next((p for p in ans_paths if os.path.exists(p)), None)
+    mascot_lines = []
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+
+    if ans_path and os.path.exists(ans_path):
+        try:
+            with open(ans_path, "r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    clean = line.replace("\x1b[?25l", "").replace("\x1b[?25h", "").rstrip("\r\n")
+                    if ansi_escape.sub("", clean).strip():
+                        mascot_lines.append(clean)
+        except Exception:
+            pass
+
+    if not mascot_lines:
+        mascot_lines = [
+            rf"        {PINK}.-'\"'-.{R}        ",
+            rf"     {CYAN}.-'{MINT}.-'\"'-.{PINK}'-.     {R}",
+            rf"   {CYAN}/ {MINT}/ {PEACH}.-'\"'-.{PINK} \\ {CYAN}\   {R}",
+            rf"  {CYAN}| {MINT}| {PEACH}| {LILAC} (◕‿◕) {PEACH}| {PINK}| {CYAN}|  {R}",
+            rf"  {CYAN}| {MINT}| {PEACH}| {CORAL}  \___/  {PEACH}| {PINK}| {CYAN}|  {R}",
+            rf"   {CYAN}\\ {MINT}\\ {PEACH}'-...-' {PINK}/ {CYAN}/   {R}",
+            rf"     {CYAN}'-.{MINT}'.....'{PINK}.-'     {R}",
+            rf"        {LILAC}'-----'        {R}",
+            rf"     {PINK}✨ [DREAMS COME TRUE] ✨{R}",
+        ]
+
+    mascot_width = max(len(ansi_escape.sub("", line)) for line in mascot_lines) if mascot_lines else 44
+
+    div_len = 54
+    div_line = f"{DIVIDER}" + "─" * div_len + f"{R}"
+
+    info_lines = [
+        f"{BOLD}{PINK}✨ REALM: NURSERY PLAYROOM // VAPORWAVE DAYDREAM{R}",
+        f"{BOLD}{PEACH}🧸 SQUAD: MUPPET BABIES // DREAMS COME TRUE{R}",
+        div_line,
+        f"{PINK}[ BABY ]{R} ❯ {WHITE}{user}@{hostname}{R} {DIM}// making dreams come true!{R}",
+        f"{PINK}[ REALM]{R} ❯ {TEXT}{os_name}{R} {DIM}// AwesomeWM 4.3{R}",
+        f"{PINK}[ KRNL ]{R} ❯ {TEXT}{kernel}{R}",
+        f"{PINK}[ UPTM ]{R} ❯ {PEACH}{uptime}{R}",
+        f"{PINK}[ PACK ]{R} ❯ {TEXT}{packages}{R}",
+        f"{PINK}[ SHEL ]{R} ❯ {TEXT}{shell}{R} {DIM}// starship [DREAMS//VAPORWAVE]{R}",
+        f"{PINK}[ TERM ]{R} ❯ {TEXT}{term}{R} {DIM}// ComicShannsMono Nerd Font{R}",
+        f"{PINK}[ PLAY ]{R} ❯ {MINT}{memory}{R}",
+        div_line,
+        f"{PINK}████{MINT}████{CYAN}████{PEACH}████{CORAL}████{LILAC}████{WHITE}████{DIM}████{R}",
+    ]
+
+    try:
+        term_cols = int(os.getenv("COLUMNS", "0")) or os.get_terminal_size().columns
+    except Exception:
+        term_cols = 120
+
+    print()
+    if term_cols >= mascot_width + 50:
+        offset = max(0, (len(mascot_lines) - len(info_lines)) // 2)
+        max_rows = max(len(mascot_lines), len(info_lines) + offset)
+        for i in range(max_rows):
+            left = ""
+            if i < len(mascot_lines):
+                line = mascot_lines[i]
+                vis_len = len(ansi_escape.sub("", line))
+                pad = " " * max(0, mascot_width - vis_len)
+                left = line + pad + "   "
+            else:
+                left = " " * (mascot_width + 3)
+
+            info_idx = i - offset
+            right = ""
+            if 0 <= info_idx < len(info_lines):
+                right = info_lines[info_idx]
+
+            print(f" {left}{right}")
+    else:
+        for line in mascot_lines:
+            print(f" {line}")
+        print()
+        for line in info_lines:
+            print(f" {line}")
+    print()
+
+if __name__ == "__main__":
+    main()

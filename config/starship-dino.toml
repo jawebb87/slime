@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Dino Might Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'dino'
+
+format = """
+[\\[RADIOACTIVE//MIGHT\\]](bold fg:radioactive_green) \
+[❯](bold fg:spray_orange) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 󰈸](bold fg:radioactive_green)\
+$line_break\
+$character"""
+
+[palettes.dino]
+asphalt_dark      = "#0c0c0e"
+siren_red         = "#ff1744"
+radioactive_green = "#76ff03"
+spray_orange      = "#ff6d00"
+warm_sparks       = "#ffab00"
+siren_blue        = "#00b0ff"
+specular_silver   = "#f4f4f5"
+slate_mist        = "#a1a1aa"
+
+[username]
+show_always = true
+style_user = "bold fg:radioactive_green"
+style_root = "bold fg:siren_red"
+format = '[$user]($style)[:](bold fg:slate_mist)'
+
+[directory]
+style = "bold fg:siren_blue"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:spray_orange"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:radioactive_green"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:warm_sparks"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:radioactive_green"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:spray_orange"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:radioactive_green"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:radioactive_green"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:spray_orange"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:siren_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:radioactive_green)"
+error_symbol = "[❯](bold fg:siren_red)"

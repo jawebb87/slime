@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Interactive theme console; use a theme banner when one is installed.
+set -e
+
+if [ -x "$HOME/.local/bin/mothgomery-fetch" ]; then
+    "$HOME/.local/bin/mothgomery-fetch"
+else
+    printf '\n%s\n\n' 'Mothgomery console'
+fi
+exec "${SHELL:-/bin/zsh}" -i

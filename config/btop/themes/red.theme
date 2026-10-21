@@ -1,0 +1,44 @@
+# ==============================================================================
+# btop++ Theme - Doom (Rip & Tear)
+# ==============================================================================
+
+theme[main_bg]="#0e0708"
+theme[main_fg]="#ffffff"
+theme[title]="#ff4d5e"
+theme[hi_fg]="#ff1a2a"
+theme[selected_bg]="#3b1118"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#ba6874"
+theme[graph_text]="#ff7585"
+theme[meter_bg]="#220c10"
+theme[proc_misc]="#faebe8"
+
+# Box outlines
+theme[cpu_box]="#ff3347"
+theme[mem_box]="#d93b4c"
+theme[net_box]="#38bdf8"
+theme[proc_box]="#ff1a2a"
+theme[div_line]="#4a171e"
+
+# Temperature gradient (Crucible Amber -> Molten Lava -> Searing Red)
+theme[temp_start]="#ffaa00"
+theme[temp_mid]="#ff5500"
+theme[temp_end]="#ff1a2a"
+
+# CPU graph
+theme[cpu_start]="#8a2530"
+theme[cpu_mid]="#ff1a2a"
+theme[cpu_end]="#39ff14"
+
+# Memory meters
+theme[free_start]="#4a161d"
+theme[free_mid]="#ba6874"
+theme[free_end]="#ff4d5e"
+
+theme[cached_start]="#6b1d26"
+theme[cached_mid]="#d93648"
+theme[cached_end]="#ff7585"
+
+theme[available_start]="#8a2530"
+theme[available_mid]="#ff556b"
+theme[available_end]="#ffffff"

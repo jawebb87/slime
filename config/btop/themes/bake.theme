@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Wake & Bake (420 Special)
+# ==============================================================================
+
+theme[main_bg]="#111618"
+theme[main_fg]="#e5dfd5"
+theme[title]="#48b852"
+theme[hi_fg]="#f4a226"
+theme[selected_bg]="#16201e"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#70857b"
+theme[graph_text]="#4ee2ec"
+theme[meter_bg]="#16201e"
+theme[proc_misc]="#4ee2ec"
+
+# Box outlines
+theme[cpu_box]="#48b852"
+theme[mem_box]="#f4a226"
+theme[net_box]="#4ee2ec"
+theme[proc_box]="#e63946"
+theme[div_line]="#1a2622"
+
+# Temperature gradient (Gold -> Orange -> Red)
+theme[temp_start]="#48b852"
+theme[temp_mid]="#f4a226"
+theme[temp_end]="#e63946"
+
+# CPU graph
+theme[cpu_start]="#4ee2ec"
+theme[cpu_mid]="#48b852"
+theme[cpu_end]="#e63946"
+
+# Memory meters
+theme[free_start]="#16201e"
+theme[free_mid]="#4ee2ec"
+theme[free_end]="#7debf2"
+
+theme[cached_start]="#16201e"
+theme[cached_mid]="#f4a226"
+theme[cached_end]="#ffd166"
+
+theme[available_start]="#16201e"
+theme[available_mid]="#48b852"
+theme[available_end]="#76e080"
+
+theme[used_start]="#4ee2ec"
+theme[used_mid]="#48b852"
+theme[used_end]="#e63946"
+
+# Download / Upload network graph
+theme[download_start]="#4ee2ec"
+theme[download_mid]="#7debf2"
+theme[download_end]="#f4a226"
+
+theme[upload_start]="#48b852"
+theme[upload_mid]="#76e080"
+theme[upload_end]="#e63946"

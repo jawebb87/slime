@@ -1,0 +1,89 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Abyssal Void
+ * ============================================================================ */
+
+* {
+    bg:          #05060bf4;
+    bg-alt:      #0b1020;
+    bg-selected: #00e5ff;
+    fg:          #c8d6e5;
+    fg-selected: #05060b;
+    fg-muted:    #475569;
+    border-col:  #00e5ff;
+    accent:      #ff007f;
+    neon-blue:   #38bdf8;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "VOID // SEARCH...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+    border:           1px;
+    border-color:     @border-col;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color:     inherit;
+}

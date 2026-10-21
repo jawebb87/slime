@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Muppet Babies Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'muppet'
+
+format = """
+[\\[DREAMS//VAPORWAVE\\]](bold fg:piggy_pink) \
+[✨](bold fg:fozzie_peach) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 🧸](bold fg:gonzo_cyan)\
+$line_break\
+$character"""
+
+[palettes.muppet]
+nursery_dark = "#1a1528"
+piggy_pink   = "#ff70a6"
+kermit_mint  = "#80ed99"
+gonzo_cyan   = "#70d6ff"
+fozzie_peach = "#ffd166"
+animal_coral = "#ff4d6d"
+lilac_purple = "#b388ff"
+dream_white  = "#ffffff"
+slate_dim    = "#8b7a9e"
+
+[username]
+show_always = true
+style_user = "bold fg:piggy_pink"
+style_root = "bold fg:animal_coral"
+format = '[$user]($style)[:](bold fg:slate_dim)'
+
+[directory]
+style = "bold fg:gonzo_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:fozzie_peach"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:kermit_mint"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:lilac_purple"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:piggy_pink"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:fozzie_peach"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:kermit_mint"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:piggy_pink"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:fozzie_peach"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:animal_coral"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:piggy_pink)"
+error_symbol = "[❯](bold fg:animal_coral)"

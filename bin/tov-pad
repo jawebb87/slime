@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Interactive theme console; use a theme banner when one is installed.
+set -e
+
+if [ -x "$HOME/.local/bin/tov-fetch" ]; then
+    "$HOME/.local/bin/tov-fetch"
+else
+    printf '\n%s\n\n' 'Molly Tov console'
+fi
+exec "${SHELL:-/bin/zsh}" -i

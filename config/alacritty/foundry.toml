@@ -1,0 +1,40 @@
+# Foundry — Victorian Engine Room
+[window]
+opacity = 0.94
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "IosevkaTermSlab Nerd Font" }
+
+[colors.primary]
+background = "#171b1b"
+foreground = "#dfd4b9"
+
+[colors.cursor]
+cursor = "#f7ecd2"
+text   = "#101414"
+
+[colors.selection]
+background = "#30362f"
+text       = "#ffffff"
+
+[colors.normal]
+black   = "#101414"
+red     = "#c97455"
+green   = "#91ae83"
+yellow  = "#d3b77c"
+blue    = "#7d9ca8"
+magenta = "#b38d78"
+cyan    = "#7fb6ac"
+white   = "#dfd4b9"
+
+[colors.bright]
+black   = "#685b42"
+red     = "#e3906e"
+green   = "#b2c89a"
+yellow  = "#edcf93"
+blue    = "#9cb8c2"
+magenta = "#d1aca0"
+cyan    = "#a4d3c6"
+white   = "#f7ecd2"

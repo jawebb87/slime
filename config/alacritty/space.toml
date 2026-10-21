@@ -1,0 +1,39 @@
+[window]
+opacity = 0.96
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "SpaceMono Nerd Font" }
+
+[colors.primary]
+background = "#f5f6f9"
+foreground = "#1b2028"
+
+[colors.cursor]
+cursor = "#e59500"
+text = "#f5f6f9"
+
+[colors.selection]
+background = "#e1e4ea"
+text = "#1b2028"
+
+[colors.normal]
+black = "#1b2028"
+red = "#d32f2f"
+green = "#0d8a52"
+yellow = "#c25d00"
+blue = "#0088cc"
+magenta = "#6b46c1"
+cyan = "#0088cc"
+white = "#333d4b"
+
+[colors.bright]
+black = "#5a6578"
+red = "#b71c1c"
+green = "#15a362"
+yellow = "#e59500"
+blue = "#006699"
+magenta = "#553c9a"
+cyan = "#0077b3"
+white = "#1b2028"

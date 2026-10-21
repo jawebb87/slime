@@ -1,0 +1,94 @@
+# Starship Prompt Configuration - Baron von Gill Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'gill'
+
+format = """
+[\\[GROTTO//GILL\\]](bold fg:coral_gills) \
+[❯](bold fg:biolum_cyan) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 󰈹](bold fg:biolum_cyan)\
+$line_break\
+$character"""
+
+[palettes.gill]
+cavern_abyss   = "#080e15"
+biolum_cyan    = "#00f5d4"
+coral_gills    = "#fb7185"
+velvet_ruby    = "#e11d48"
+moss_emerald   = "#34d399"
+monocle_gold   = "#fbbf24"
+water_azure    = "#38bdf8"
+slate_stone    = "#475569"
+alabaster      = "#cbd5e1"
+
+[username]
+show_always = true
+style_user = "bold fg:monocle_gold"
+style_root = "bold fg:velvet_ruby"
+format = '[$user]($style)[:](bold fg:slate_stone)'
+
+[directory]
+style = "bold fg:biolum_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:coral_gills"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:moss_emerald"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:monocle_gold"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:monocle_gold"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:coral_gills"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:moss_emerald"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:monocle_gold"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:coral_gills"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:velvet_ruby"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:biolum_cyan)"
+error_symbol = "[❯](bold fg:coral_gills)"

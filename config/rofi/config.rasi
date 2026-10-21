@@ -1,92 +1,117 @@
-/* ============================================================================
- * Rofi Launcher Theme - Standalone: "Chomp the Haxor" / CHOMP_0x
- * ============================================================================ */
+configuration {
+    modi: "drun,run,window";
+    font: "ShureTechMono Nerd Font 11";
+    show-icons: true;
+    display-drun: "  ";
+    display-run: "  ";
+    display-window: "  ";
+    drun-display-format: "{name}";
+}
+
+@theme "/dev/null"
 
 * {
-    bg:          #111415f6;
-    bg-alt:      #0a0c0d;
-    bg-selected: #0d2822;
-    fg:          #e2f5ec;
-    fg-muted:    #6f8a7e;
-    accent:      #39ff14;
-    amber:       #ffb000;
-    border-dark: #16382f;
+    bg-col:  #f8fafcf8;
+    bg-col-light: #e2e8f0;
+    border-col: #000000;
+    selected-col: #0a0c0e;
+    toxic-yellow: #ffffff;
+    fg-col: #0a0c0e;
+    fg-col-bright: #ffffff;
+    grey: #475569;
 
-    background-color: transparent;
-    text-color:       @fg;
-    font:             "IosevkaTerm Nerd Font Bold 11";
+    width: 600;
+    margin: 0;
+    padding: 0;
+}
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
 }
 
 window {
-    width:            580px;
-    background-color: @bg;
-    border:           2px;
-    border-color:     @accent;
-    border-radius:    0px;
-    padding:          14px;
+    height: 380px;
+    border: 0px;
+    border-radius: 0px;
+    background-color: @bg-col;
+    padding: 15px;
 }
 
 mainbox {
-    spacing:  10px;
-    children: [ inputbar, listview ];
+    background-color: transparent;
 }
 
 inputbar {
-    background-color: @bg-alt;
-    border:           1px;
-    border-color:     @accent;
-    border-radius:    0px;
-    padding:          10px 12px;
-    spacing:          10px;
-    children:         [ prompt, entry ];
+    children: [prompt,entry];
+    background-color: @bg-col-light;
+    border: 2px;
+    border-color: @border-col;
+    border-radius: 4px;
+    padding: 2px;
+    margin: 0 0 10px 0;
 }
 
 prompt {
-    text-color: @accent;
+    background-color: @border-col;
+    padding: 8px 12px;
+    text-color: #ffffff;
+    border-radius: 3px;
+    margin: 4px;
 }
 
 entry {
-    placeholder:       "CHOMP_0x // EXECUTE COMMAND...";
-    placeholder-color: @fg-muted;
-    text-color:        @accent;
+    padding: 8px;
+    margin: 4px;
+    text-color: @fg-col;
+    background-color: transparent;
 }
 
 listview {
-    lines:        8;
-    columns:      1;
-    fixed-height: false;
-    spacing:      4px;
-    scrollbar:    false;
+    border: 0px;
+    padding: 6px 0px;
+    margin: 10px 0px 0px 20px;
+    columns: 1;
+    lines: 6;
+    background-color: transparent;
 }
 
 element {
-    padding:       8px 12px;
-    border-radius: 0px;
-    spacing:       10px;
-}
-
-element normal.normal {
+    padding: 8px 12px;
     background-color: transparent;
-    text-color:       @fg;
-}
-
-element alternate.normal {
-    background-color: #141819;
-    text-color:       @fg;
-}
-
-element selected.normal {
-    background-color: @bg-selected;
-    text-color:       @accent;
-    border:           0px 0px 0px 3px;
-    border-color:     @accent;
+    text-color: @fg-col;
+    border-radius: 4px;
 }
 
 element-icon {
     size: 22px;
+    margin: 0 10px 0 0;
 }
 
-element-text {
+element selected {
+    background-color:  @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+button {
+    padding: 8px;
+    background-color: @bg-col-light;
+    text-color: @grey;
     vertical-align: 0.5;
-    text-color:     inherit;
+    horizontal-align: 0.5;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+button selected {
+    background-color: @selected-col;
+    text-color: @fg-col-bright;
+    border: 2px;
+    border-color: @border-col;
 }

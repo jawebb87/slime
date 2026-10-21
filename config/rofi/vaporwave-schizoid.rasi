@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Vaporwave Schizoid (Signal Lost)
+ * ============================================================================ */
+
+* {
+    bg:          #110c27f4;
+    bg-alt:      #21163f;
+    bg-selected: #ff55c8;
+    fg:          #f0ddff;
+    fg-selected: #110c27;
+    fg-muted:    #a99bcc;
+    border-col:  #ff55c8;
+    accent:      #ff719f;
+    gold:        #ffba8c;
+    neon-blue:   #61e5f5;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius: 2px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius: 2px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "DO NOT PLAY // PATCH IN...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 2px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @accent;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @neon-blue;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @accent;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @neon-blue;
+    text-color:       @fg-selected;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

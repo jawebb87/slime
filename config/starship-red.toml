@@ -1,0 +1,107 @@
+# ==============================================================================
+# Starship Prompt Configuration - Doom (Rip & Tear)
+# Prompt Vibe:
+# [DOOM//BFG] ❯ jaws:~ (git:main) 💀
+# ❯❯ 
+# ==============================================================================
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'doom'
+
+format = """
+[\\[DOOM//BFG\\]](bold fg:crucible_red) \
+[❯](bold fg:flame_amber) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$cmd_duration\
+$status\
+[ 💀](bold fg:crucible_red)\
+$line_break\
+$character"""
+
+[palettes.doom]
+abyssal_bg   = "#0e0708"
+hell_iron    = "#220c10"
+charred      = "#4a171e"
+rust         = "#ba6874"
+bone         = "#ffffff"
+crucible_red = "#ff2a3a"
+flame_amber  = "#ffaa00"
+error_green  = "#39ff14"
+
+[username]
+show_always = true
+style_user = "bold fg:bone"
+style_root = "bold fg:crucible_red"
+format = '[$user]($style)[:](bold fg:rust)'
+
+[directory]
+style = "bold fg:crucible_red"
+truncation_length = 3
+truncate_to_repo = true
+format = '[$path]($style) '
+
+[git_branch]
+symbol = " "
+style = "fg:flame_amber"
+format = '[$symbol$branch]($style) '
+
+[git_status]
+style = "bold fg:crucible_red"
+conflicted = "⚔ "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕ "
+untracked = "? "
+stashed = "$ "
+modified = "! "
+staged = "+ "
+renamed = "» "
+deleted = "✘ "
+
+
+[python]
+symbol = " "
+style = "fg:bone"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:flame_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:crucible_red"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:bone"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:flame_amber"
+format = ' [$symbol$context]($style)'
+
+[character]
+success_symbol = "[❯❯](bold fg:crucible_red)"
+error_symbol = "[❯❯](bold fg:error_green)"
+
+[status]
+disabled = false
+format = '[$symbol$status]($style) '
+symbol = "✖ "
+style = "bold fg:error_green"
+
+[cmd_duration]
+min_time = 2_000
+style = "fg:flame_amber"
+format = '[$duration]($style) '

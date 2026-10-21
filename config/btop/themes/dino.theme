@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Dino Might (Radioactive Bruiser & Street Riot)
+# ==============================================================================
+
+theme[main_bg]="#0c0c0e"
+theme[main_fg]="#f4f4f5"
+theme[title]="#76ff03"
+theme[hi_fg]="#ff6d00"
+theme[selected_bg]="#222228"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#a1a1aa"
+theme[graph_text]="#a6ff00"
+theme[meter_bg]="#16161a"
+theme[proc_misc]="#76ff03"
+
+# Box outlines
+theme[cpu_box]="#76ff03"
+theme[mem_box]="#ff6d00"
+theme[net_box]="#00b0ff"
+theme[proc_box]="#ff1744"
+theme[div_line]="#16161a"
+
+# Temperature gradient (Radioactive Green -> Spray Orange -> Siren Red)
+theme[temp_start]="#76ff03"
+theme[temp_mid]="#ff6d00"
+theme[temp_end]="#ff1744"
+
+# CPU graph
+theme[cpu_start]="#00b0ff"
+theme[cpu_mid]="#76ff03"
+theme[cpu_end]="#ff6d00"
+
+# Memory meters
+theme[free_start]="#16161a"
+theme[free_mid]="#00b0ff"
+theme[free_end]="#a1a1aa"
+
+theme[cached_start]="#16161a"
+theme[cached_mid]="#76ff03"
+theme[cached_end]="#a6ff00"
+
+theme[available_start]="#16161a"
+theme[available_mid]="#ff6d00"
+theme[available_end]="#ffab00"
+
+theme[used_start]="#00b0ff"
+theme[used_mid]="#ff6d00"
+theme[used_end]="#ff1744"
+
+# Download / Upload network graph
+theme[download_start]="#00b0ff"
+theme[download_mid]="#76ff03"
+theme[download_end]="#a6ff00"
+
+theme[upload_start]="#ff6d00"
+theme[upload_mid]="#ffab00"
+theme[upload_end]="#ff1744"

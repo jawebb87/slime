@@ -1,0 +1,110 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Darkwing Duck (The Terror That Flaps in the Night)
+ * ============================================================================ */
+
+* {
+    bg:          #120c1ff4;
+    bg-alt:      #1c1330;
+    bg-selected: #00e5ff;
+    fg:          #e2daf0;
+    fg-selected: #120c1f;
+    fg-muted:    #7c6a99;
+    border-col:  #00e5ff;
+    accent:      #ffd700;
+    orange:      #ff6b00;
+    teal:        #1de9b6;
+    purple:      #9d4edd;
+    red:         #ff2a6d;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "ComicShannsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1.5px;
+    border-color:     @accent;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "ComicShannsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "LET'S GET DANGEROUS // SEARCH ST. CANARD...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @red;
+    text-color:       #ffffff;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @teal;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @red;
+    text-color:       #ffffff;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #120c1f;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

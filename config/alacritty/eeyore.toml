@@ -1,0 +1,39 @@
+[window]
+opacity = 1.0
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "JetBrainsMono Nerd Font" }
+
+[colors.primary]
+background = "#f3f6f3"
+foreground = "#34444e"
+
+[colors.cursor]
+cursor = "#326d8b"
+text   = "#f3f6f3"
+
+[colors.selection]
+background = "#d0e3ea"
+text       = "#253540"
+
+[colors.normal]
+black   = "#e7efee"
+red     = "#a34f69"
+green   = "#59784b"
+yellow  = "#947139"
+blue    = "#427698"
+magenta = "#775c83"
+cyan    = "#326d8b"
+white   = "#34444e"
+
+[colors.bright]
+black   = "#697d85"
+red     = "#a34f69"
+green   = "#59784b"
+yellow  = "#866a2e"
+blue    = "#477666"
+magenta = "#866b91"
+cyan    = "#4d796d"
+white   = "#253540"

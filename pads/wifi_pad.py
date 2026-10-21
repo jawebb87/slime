@@ -129,10 +129,12 @@ class WifiManager:
     """Manages wireless interface discovery, scanning, and connection."""
 
     def __init__(self):
+        self.nmcli = shutil.which("nmcli")
         self.wpa_cli = self._find_binary("wpa_cli", ["/sbin/wpa_cli", "/usr/sbin/wpa_cli"])
         self.iw = self._find_binary("iw", ["/sbin/iw", "/usr/sbin/iw"])
         self.iface = self._detect_interface()
-        self._ensure_ctrl_socket()
+        if not self.nmcli:
+            self._ensure_ctrl_socket()
 
     def _find_binary(self, name: str, fallback_paths: list[str]) -> str:
         found = shutil.which(name)
@@ -220,7 +222,29 @@ class WifiManager:
             )
 
     def get_status(self) -> dict:
-        """Fetch connection status from wpa_cli."""
+        """Fetch connection status from NetworkManager (nmcli) or wpa_cli."""
+        if self.nmcli:
+            try:
+                res = subprocess.run(
+                    [self.nmcli, "-t", "-f", "TYPE,STATE,CONNECTION", "dev", "status"],
+                    capture_output=True, text=True, timeout=3
+                )
+                if res.returncode == 0:
+                    for line in res.stdout.splitlines():
+                        parts = line.split(":")
+                        if len(parts) >= 3 and parts[0] == "wifi":
+                            state = parts[1]
+                            conn = parts[2]
+                            return {
+                                "wpa_state": "COMPLETED" if state == "connected" else "DISCONNECTED",
+                                "ssid": conn if state == "connected" else "",
+                                "bssid": "",
+                                "ip_address": "",
+                                "freq": "",
+                            }
+            except Exception:
+                pass
+
         res = self.run_cli(["status"])
         status = {
             "wpa_state": "DISCONNECTED",
@@ -237,8 +261,69 @@ class WifiManager:
         return status
 
     def scan_networks(self) -> list[NetworkInfo]:
-        """Trigger scan and parse scan_results from wpa_cli."""
-        # 1. Trigger scan
+        """Trigger scan and parse scan results via NetworkManager (nmcli) or wpa_cli."""
+        if self.nmcli:
+            try:
+                subprocess.run([self.nmcli, "dev", "wifi", "rescan"], capture_output=True, timeout=3)
+            except Exception:
+                pass
+            try:
+                res = subprocess.run(
+                    [self.nmcli, "-t", "-f", "BSSID,FREQ,SSID,SIGNAL,SECURITY,IN-USE", "dev", "wifi", "list"],
+                    capture_output=True, text=True, timeout=5
+                )
+                if res.returncode == 0:
+                    networks: list[NetworkInfo] = []
+                    seen_ssids = set()
+                    for line in res.stdout.strip().split("\n"):
+                        if not line.strip():
+                            continue
+                        parts = line.replace(r"\:", "__COLON__").split(":")
+                        parts = [p.replace("__COLON__", ":").strip() for p in parts]
+                        if len(parts) >= 6:
+                            bssid = parts[0]
+                            freq_str = parts[1].replace("MHz", "").strip()
+                            ssid = parts[2]
+                            sig_str = parts[3]
+                            sec = parts[4] or "Open"
+                            in_use = parts[5].strip() == "*"
+                            try:
+                                freq = int(freq_str)
+                            except ValueError:
+                                freq = 2412
+                            try:
+                                sig_pct = int(sig_str)
+                            except ValueError:
+                                sig_pct = 50
+                            sig_dbm = int((sig_pct / 2) - 100)
+                            ch, band = freq_to_channel_and_band(freq)
+                            net_sec = parse_security_flags(sec)
+                            net_ssid = ssid if ssid else "<Hidden Network>"
+                            dedup_key = (net_ssid, band)
+                            if dedup_key in seen_ssids and not in_use:
+                                continue
+                            seen_ssids.add(dedup_key)
+                            networks.append(
+                                NetworkInfo(
+                                    bssid=bssid,
+                                    freq=freq,
+                                    channel=ch,
+                                    band=band,
+                                    signal_dbm=sig_dbm,
+                                    signal_pct=sig_pct,
+                                    flags=sec,
+                                    security=net_sec,
+                                    ssid=net_ssid,
+                                    is_connected=in_use,
+                                )
+                            )
+                    networks.sort(key=lambda n: (1 if n.is_connected else 0, n.signal_dbm), reverse=True)
+                    if networks:
+                        return networks
+            except Exception:
+                pass
+
+        # 1. Trigger scan via wpa_cli fallback
         self.run_cli(["scan"], timeout=3)
         # Give hardware ~1.2s to capture beacons
         time.sleep(1.2)
@@ -308,7 +393,21 @@ class WifiManager:
         return networks
 
     def connect(self, net: NetworkInfo, passphrase: str | None = None) -> tuple[bool, str]:
-        """Configure wpa_supplicant and connect to specified network."""
+        """Configure and connect to specified network via NetworkManager (nmcli) or wpa_supplicant."""
+        if self.nmcli:
+            cmd = [self.nmcli, "dev", "wifi", "connect", net.ssid]
+            if passphrase and net.security != "Open":
+                cmd.extend(["password", passphrase])
+            try:
+                res = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
+                if res.returncode == 0:
+                    return True, f"Successfully connected to {net.ssid}"
+                else:
+                    return False, f"Connection failed: {res.stderr.strip() or res.stdout.strip()}"
+            except Exception as e:
+                return False, f"Connection error: {e}"
+
+        # Fallback to wpa_cli
         # 1. Check existing networks in wpa_supplicant
         list_res = self.run_cli(["list_networks"])
         net_id = None
@@ -384,6 +483,15 @@ class WifiManager:
 
     def disconnect(self) -> tuple[bool, str]:
         """Disconnect from currently active wireless network."""
+        if self.nmcli:
+            try:
+                res = subprocess.run([self.nmcli, "dev", "disconnect", self.iface], capture_output=True, text=True, timeout=8)
+                if res.returncode == 0:
+                    return True, "Disconnected from Wi-Fi"
+                return False, f"Disconnect failed: {res.stderr.strip()}"
+            except Exception as e:
+                return False, f"Disconnect error: {e}"
+
         res = self.run_cli(["disconnect"])
         if res.returncode == 0:
             return True, "Disconnected from Wi-Fi"

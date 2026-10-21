@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Grindhouse JAWS (Terror from the Deep)
+# ==============================================================================
+
+theme[main_bg]="#0b151b"
+theme[main_fg]="#ecdfbf"
+theme[title]="#e8bd4e"
+theme[hi_fg]="#ef7160"
+theme[selected_bg]="#354a50"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#a4aaa3"
+theme[graph_text]="#7db4ba"
+theme[meter_bg]="#14252d"
+theme[proc_misc]="#e8bd4e"
+
+# Box outlines
+theme[cpu_box]="#e8bd4e"
+theme[mem_box]="#7db4ba"
+theme[net_box]="#aab987"
+theme[proc_box]="#ef7160"
+theme[div_line]="#14252d"
+
+# Temperature gradient (Moss Emerald -> Bioluminescent Cyan -> Coral Grindhouse JAWSs)
+theme[temp_start]="#aab987"
+theme[temp_mid]="#e8bd4e"
+theme[temp_end]="#ef7160"
+
+# CPU graph
+theme[cpu_start]="#568d9e"
+theme[cpu_mid]="#e8bd4e"
+theme[cpu_end]="#ef7160"
+
+# Memory meters
+theme[free_start]="#14252d"
+theme[free_mid]="#568d9e"
+theme[free_end]="#7db4ba"
+
+theme[cached_start]="#14252d"
+theme[cached_mid]="#839d7c"
+theme[cached_end]="#aab987"
+
+theme[available_start]="#14252d"
+theme[available_mid]="#e8bd4e"
+theme[available_end]="#a7ceca"
+
+theme[used_start]="#568d9e"
+theme[used_mid]="#f5d675"
+theme[used_end]="#ef7160"
+
+# Download / Upload network graph
+theme[download_start]="#568d9e"
+theme[download_mid]="#e8bd4e"
+theme[download_end]="#a7ceca"
+
+theme[upload_start]="#839d7c"
+theme[upload_mid]="#f5d675"
+theme[upload_end]="#ef7160"

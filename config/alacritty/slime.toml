@@ -1,0 +1,39 @@
+[window]
+opacity = 0.88
+padding = { x = 10, y = 10 }
+
+[font]
+size = 6.5
+normal = { family = "OpenDyslexicM Nerd Font Mono" }
+
+[colors.primary]
+background = "#0c140d"
+foreground = "#c6f582"
+
+[colors.cursor]
+cursor = "#64f830"
+text = "#0c140d"
+
+[colors.selection]
+background = "#25452a"
+text = "#f4ffd6"
+
+[colors.normal]
+black = "#132015"
+red = "#ff4343"
+green = "#4ee24e"
+yellow = "#d8eb34"
+blue = "#7cb324"
+magenta = "#b8cc29"
+cyan = "#36e385"
+white = "#c8ecc0"
+
+[colors.bright]
+black = "#2f4433"
+red = "#ff6666"
+green = "#74ff2e"
+yellow = "#f3ff47"
+blue = "#9fe825"
+magenta = "#d6eb3b"
+cyan = "#55ffaa"
+white = "#eeffdc"

@@ -1,0 +1,92 @@
+# Starship Prompt Configuration - 90s Neon Windbreaker Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'windbreaker'
+
+format = """
+[\\[JAZZ//CUP\\]](bold fg:neon_pink) \
+[❯](bold fg:electric_cyan) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ ⚡](bold fg:neon_lime)\
+$line_break\
+$character"""
+
+[palettes.windbreaker]
+deep_indigo   = "#151324"
+neon_pink     = "#ff007f"
+neon_lime     = "#10e862"
+electric_cyan = "#00d2ff"
+cyber_yellow  = "#ffe600"
+royal_purple  = "#7000ff"
+muted_slate   = "#625c7e"
+
+[username]
+show_always = true
+style_user = "bold fg:royal_purple"
+style_root = "bold fg:neon_pink"
+format = '[$user]($style)[:](bold fg:muted_slate)'
+
+[directory]
+style = "bold fg:electric_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bold fg:neon_pink"
+format = ' [\(git:](fg:muted_slate)[$branch]($style)[\)](fg:muted_slate)'
+
+[git_status]
+style = "bold fg:cyber_yellow"
+format = ' [$all_status$ahead_behind]($style)'
+
+[python]
+symbol = " "
+style = "fg:neon_lime"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:cyber_yellow"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:neon_lime"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:electric_cyan"
+format = ' [$symbol$context]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bold fg:cyber_yellow"
+format = ' [⏱ $duration]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:neon_pink"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:neon_pink)[❯](bold fg:electric_cyan) "
+error_symbol = "[❯](bold fg:neon_pink)[❯](bold fg:cyber_yellow) "

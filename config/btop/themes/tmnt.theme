@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Teenage Mutant Ninja Turtles (Heroes in a Half Shell)
+# ==============================================================================
+
+theme[main_bg]="#0e1510"
+theme[main_fg]="#d8ebd8"
+theme[title]="#39ff14"
+theme[hi_fg]="#ffd700"
+theme[selected_bg]="#152218"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#5a7d5f"
+theme[graph_text]="#39ff14"
+theme[meter_bg]="#131d14"
+theme[proc_misc]="#00aaff"
+
+# Box outlines
+theme[cpu_box]="#ff2a4b"
+theme[mem_box]="#9d4edd"
+theme[net_box]="#00aaff"
+theme[proc_box]="#ff8800"
+theme[div_line]="#1e3022"
+
+# Temperature gradient (Mutagen Green -> Pizza Gold -> Sais Red)
+theme[temp_start]="#39ff14"
+theme[temp_mid]="#ffd700"
+theme[temp_end]="#ff2a4b"
+
+# CPU graph
+theme[cpu_start]="#39ff14"
+theme[cpu_mid]="#ffd700"
+theme[cpu_end]="#ff2a4b"
+
+# Memory meters
+theme[free_start]="#131d14"
+theme[free_mid]="#39ff14"
+theme[free_end]="#d8ebd8"
+
+theme[cached_start]="#131d14"
+theme[cached_mid]="#9d4edd"
+theme[cached_end]="#bf7aeb"
+
+theme[available_start]="#131d14"
+theme[available_mid]="#ffd700"
+theme[available_end]="#ffe247"
+
+theme[used_start]="#39ff14"
+theme[used_mid]="#ff8800"
+theme[used_end]="#ff2a4b"
+
+# Download / Upload network graph
+theme[download_start]="#00aaff"
+theme[download_mid]="#38bdf8"
+theme[download_end]="#39ff14"
+
+theme[upload_start]="#ff8800"
+theme[upload_mid]="#ffd700"
+theme[upload_end]="#ff2a4b"

@@ -1,0 +1,89 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Foundry Engine Room
+ * ============================================================================ */
+
+* {
+    bg:          #30362ff8;
+    bg-alt:      #232927;
+    bg-selected: #dfd4b9;
+    fg:          #dfd4b9;
+    fg-selected: #101414;
+    fg-muted:    #8f9382;
+    border-col:  #ac9264;
+    accent:      #d3b77c;
+    shadow-base: #383233;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "IosevkaTermSlab Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    8px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius:    6px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "IosevkaTermSlab Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "Search the engine room...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 6px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+    border:           1px;
+    border-color:     @border-col;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color:     inherit;
+}

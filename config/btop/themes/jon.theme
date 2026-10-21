@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - I'm Sorry Jon (Cosmic Horror Lasagna)
+# ==============================================================================
+
+theme[main_bg]="#0f0c0b"
+theme[main_fg]="#e8dcc4"
+theme[title]="#e0562e"
+theme[hi_fg]="#e5a93c"
+theme[selected_bg]="#181211"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#8a7b6d"
+theme[graph_text]="#5c7f87"
+theme[meter_bg]="#181211"
+theme[proc_misc]="#5c7f87"
+
+# Box outlines
+theme[cpu_box]="#e0562e"
+theme[mem_box]="#e5a93c"
+theme[net_box]="#5c7f87"
+theme[proc_box]="#d13824"
+theme[div_line]="#2c1e1c"
+
+# Temperature gradient (Amber Gold -> Burnt Orange -> Monday Red)
+theme[temp_start]="#e5a93c"
+theme[temp_mid]="#e0562e"
+theme[temp_end]="#d13824"
+
+# CPU graph
+theme[cpu_start]="#5c7f87"
+theme[cpu_mid]="#e0562e"
+theme[cpu_end]="#d13824"
+
+# Memory meters
+theme[free_start]="#181211"
+theme[free_mid]="#5c7f87"
+theme[free_end]="#7aa3ab"
+
+theme[cached_start]="#181211"
+theme[cached_mid]="#e5a93c"
+theme[cached_end]="#ffd066"
+
+theme[available_start]="#181211"
+theme[available_mid]="#e0562e"
+theme[available_end]="#ff7b39"
+
+theme[used_start]="#5c7f87"
+theme[used_mid]="#e0562e"
+theme[used_end]="#d13824"
+
+# Download / Upload network graph
+theme[download_start]="#5c7f87"
+theme[download_mid]="#7aa3ab"
+theme[download_end]="#e5a93c"
+
+theme[upload_start]="#e0562e"
+theme[upload_mid]="#ff7b39"
+theme[upload_end]="#d13824"

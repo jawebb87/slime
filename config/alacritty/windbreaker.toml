@@ -1,0 +1,39 @@
+[window]
+opacity = 0.95
+padding = { x = 10, y = 10 }
+
+[font]
+size = 7.0
+normal = { family = "ComicShannsMono Nerd Font Mono" }
+
+[colors.primary]
+background = "#f4f6fa"
+foreground = "#151324"
+
+[colors.cursor]
+cursor = "#ff007f"
+text = "#ffffff"
+
+[colors.selection]
+background = "#ff007f"
+text = "#ffffff"
+
+[colors.normal]
+black = "#151324"
+red = "#ff2a5f"
+green = "#05b34c"
+yellow = "#bfa100"
+blue = "#0077cc"
+magenta = "#9d00b8"
+cyan = "#009688"
+white = "#3a3552"
+
+[colors.bright]
+black = "#625c7e"
+red = "#ff007f"
+green = "#10e862"
+yellow = "#ffe600"
+blue = "#00d2ff"
+magenta = "#ff1493"
+cyan = "#00f0ff"
+white = "#000000"

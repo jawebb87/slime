@@ -1,0 +1,63 @@
+-- rable: matching terminal palette.
+vim.cmd("hi clear")
+if vim.fn.exists("syntax_on") == 1 then vim.cmd("syntax reset") end
+vim.o.background = "dark"
+vim.g.colors_name = "rable"
+
+local c = {
+    bg = "#0a0812",
+    surface = "#12101b",
+    selection = "#2a1638",
+    fg = "#cbd5e1",
+    brass = "#ff2a85",
+    copper = "#ff2a85",
+    patina = "#22d3ee",
+    green = "#10b981",
+    steel = "#00f0ff",
+    muted = "#5a5261",
+    border = "#12101b",
+    bright = "#ffffff",
+}
+local groups = {
+    Normal = { fg = c.fg, bg = c.bg },
+    NormalFloat = { fg = c.fg, bg = c.surface },
+    FloatBorder = { fg = c.brass, bg = c.surface },
+    CursorLine = { bg = c.surface },
+    CursorLineNr = { fg = c.brass, bold = true },
+    LineNr = { fg = c.muted },
+    SignColumn = { bg = c.bg },
+    WinSeparator = { fg = c.border },
+    StatusLine = { fg = c.brass, bg = c.surface, bold = true },
+    StatusLineNC = { fg = c.muted, bg = c.bg },
+    Pmenu = { fg = c.fg, bg = c.surface },
+    PmenuSel = { fg = c.bg, bg = c.brass },
+    Visual = { bg = c.selection },
+    Search = { fg = c.bg, bg = c.brass },
+    IncSearch = { fg = c.bg, bg = c.copper },
+    MatchParen = { fg = c.patina, bold = true },
+    Directory = { fg = c.steel },
+    Title = { fg = c.brass, bold = true },
+    Comment = { fg = c.muted, italic = true },
+    Constant = { fg = c.copper },
+    String = { fg = c.green },
+    Number = { fg = c.copper },
+    Boolean = { fg = c.copper, bold = true },
+    Identifier = { fg = c.fg },
+    Function = { fg = c.brass },
+    Statement = { fg = c.brass, bold = true },
+    Operator = { fg = c.patina },
+    Keyword = { fg = c.brass, bold = true },
+    PreProc = { fg = c.steel },
+    Type = { fg = c.patina },
+    Special = { fg = c.copper },
+    Delimiter = { fg = c.muted },
+    Todo = { fg = c.bg, bg = c.brass, bold = true },
+    DiagnosticError = { fg = c.copper },
+    DiagnosticWarn = { fg = c.brass },
+    DiagnosticInfo = { fg = c.steel },
+    DiagnosticHint = { fg = c.patina },
+    DiffAdd = { fg = c.green, bg = c.surface },
+    DiffChange = { fg = c.steel, bg = c.surface },
+    DiffDelete = { fg = c.copper, bg = c.surface },
+}
+for group, spec in pairs(groups) do vim.api.nvim_set_hl(0, group, spec) end

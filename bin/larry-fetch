@@ -4,6 +4,7 @@
 # ==============================================================================
 import os
 import platform
+import re
 import subprocess
 import sys
 
@@ -64,70 +65,93 @@ def main():
     shell = os.path.basename(os.getenv("SHELL", "zsh"))
     term = os.getenv("TERM", "kitty")
 
-    chomp_mascot = [
-        r"                   .-------------.         ",
-        r"                 .'               '.       ",
-        r"                /     .--------.    \      ",
-        r"               /     /   EAR    \    \     ",
-        r"              |     |            |    |    ",
-        r"              |      \          / _.-' \   ",
-        r"             /        '--------' [====] \  ",
-        r"   .----.   /       /            [VISOR] \ ",
-        r" .'      '.'       /     .-''''-. '----'  |",
-        r"/          \      |     (  ..    )  __    |",
-        r"|  (TAIL)   \     |      \      /  |[_][_]|",
-        r" \           \     \      '----'  /       /",
-        r"  '.          '.    '.           /       / ",
-        r"    '---.._     '--.  '---------'       /  ",
-        r"           '--..    '--.               /   ",
-        r"                '--.    '-------------'    ",
-        r"                    '--(_____________)     ",
+    ans_paths = [
+        os.path.expanduser("~/.config/fastfetch/chomp_big.ans"),
+        os.path.expanduser("~/.config/fastfetch/chomp.ans"),
     ]
+    ans_path = next((p for p in ans_paths if os.path.exists(p)), None)
+    mascot_lines = []
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
-    chomp_header = [
-        f"{BOLD}{G}  ____ _   _  ___  __  __ ____  {R}",
-        f"{BOLD}{G} / ___| | | |/ _ \\|  \\/  |  _ \\ {R}",
-        f"{BOLD}{G}| |   | |_| | | | | |\\/| | |_) |{R}",
-        f"{BOLD}{G}| |___|  _  | |_| | |  | |  __/ {R}",
-        f"{BOLD}{G} \\____|_| |_|\\___/|_|  |_|_|    {R}",
-        f"{BOLD}{G}  _____ _   _ _____             {R}",
-        f"{BOLD}{G} |_   _| | | | ____|            {R}",
-        f"{BOLD}{G}   | | | |_| |  _|              {R}",
-        f"{BOLD}{G}   | | |  _  | |___             {R}",
-        f"{BOLD}{G}   |_| |_| |_|_____|            {R}",
-        f"{BOLD}{G} _   _    _    __  _____  ____  {R}",
-        f"{BOLD}{G}| | | |  / \\   \\ \\/ / _ \\|  _ \\ {R}",
-        f"{BOLD}{G}| |_| | / _ \\   \\  / | | | |_) |{R}",
-        f"{BOLD}{G}|  _  |/ ___ \\  /  \\ |_| |  _ < {R}",
-        f"{BOLD}{G}|_| |_/_/   \\_\\/_/\\_\\___/|_| \\_\\{R}",
-    ]
+    if ans_path and os.path.exists(ans_path):
+        try:
+            with open(ans_path, "r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    clean = line.replace("\x1b[?25l", "").replace("\x1b[?25h", "").rstrip("\r\n")
+                    if ansi_escape.sub("", clean).strip():
+                        mascot_lines.append(clean)
+        except Exception:
+            pass
+
+    if not mascot_lines:
+        mascot_lines = [
+            r"         _..---.._        ",
+            r"       .'  _   _  '.      ",
+            r"      /   (o) (o)   \     ",
+            r"     |     _..._     |    ",
+            r"      \  .'  ^  '.  /     ",
+            r"     _.' `'-...-'` '._    ",
+            r"   .'                 '.  ",
+            r"  /   /             \   \ ",
+            r" |   |               |   |",
+            r"  \   \  _       _  /   / ",
+            r"   '.  '(_)'   '(_)'  .'  ",
+            r"     '--..._____...--'    ",
+            r"            \ \           ",
+            r"             \ \          ",
+            r"              \ \____     ",
+            r"               '-----'    ",
+        ]
+
+    mascot_width = max(len(ansi_escape.sub("", line)) for line in mascot_lines) if mascot_lines else 140
+
+    div_len = 60
+    div_line = f"{GR}" + "-" * div_len + f"{R}"
 
     info_lines = [
         f"{BOLD}{Y}[STATUS: FULL COUCHLOCK]{R}",
         f"{BOLD}{C}[SYS_BREACH: 0x_CHOMP_v2.0]{R}",
-        f"{GR}------------------------------------------------------------{R}",
+        div_line,
         f"{G}[ HOST ]{R} ❯ {W}{user}@{hostname}{R} {GR}// chassis: matte-black{R}",
         f"{G}[ OS   ]{R} ❯ {W}{os_name}{R} {GR}// AwesomeWM 4.3{R}",
         f"{G}[ KRNL ]{R} ❯ {W}{kernel}{R}",
         f"{G}[ UPTM ]{R} ❯ {W}{uptime}{R}",
         f"{G}[ PACK ]{R} ❯ {W}{packages}{R}",
         f"{G}[ SHEL ]{R} ❯ {W}{shell}{R} {GR}// starship [CHOMP_0x]{R}",
-        f"{G}[ TERM ]{R} ❯ {W}{term}{R} {GR}// IosevkaTerm Nerd Font{R}",
+        f"{G}[ TERM ]{R} ❯ {W}{term}{R} {GR}// BigBlueTermPlus Nerd Font{R}",
         f"{G}[ MEM  ]{R} ❯ {MINT}{memory}{R}",
-        f"{GR}------------------------------------------------------------{R}",
-        f"{G}███{MINT}███{C}███{Y}███{GR}███{W}███{R}",
+        div_line,
+        f"{G}████{MINT}████{C}████{Y}████{GR}████{W}████{R}",
     ]
 
-    print()
-    max_top = max(len(chomp_mascot), len(chomp_header))
-    for i in range(max_top):
-        l = chomp_mascot[i] if i < len(chomp_mascot) else " " * 43
-        r = chomp_header[i] if i < len(chomp_header) else ""
-        print(f" {G}{l}{R}   {r}")
+    try:
+        term_cols = int(os.getenv("COLUMNS", "0")) or os.get_terminal_size().columns
+    except Exception:
+        term_cols = 160
 
     print()
-    for line in info_lines:
-        print(f"   {line}")
+    if term_cols >= mascot_width + 45:
+        # Side-by-side layout with stats vertically centered
+        offset = max(0, (len(mascot_lines) - len(info_lines)) // 2)
+        max_rows = max(len(mascot_lines), len(info_lines) + offset)
+        for i in range(max_rows):
+            if i < len(mascot_lines):
+                line = mascot_lines[i]
+                vis_len = len(ansi_escape.sub("", line))
+                pad = " " * max(0, mascot_width - vis_len)
+                l = f"{line}{pad}"
+            else:
+                l = " " * mascot_width
+            info_idx = i - offset
+            r = info_lines[info_idx] if 0 <= info_idx < len(info_lines) else ""
+            print(f" {l}{R}   {r}")
+    else:
+        # Stacked layout when horizontal space is constrained
+        for line in mascot_lines:
+            print(f" {line}{R}")
+        print()
+        for line in info_lines:
+            print(f"   {line}")
     print()
 
 if __name__ == "__main__":

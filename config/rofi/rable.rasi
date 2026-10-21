@@ -1,0 +1,108 @@
+/* ============================================================================
+ * Rofi Launcher Theme - Miss Rable (Neon Punk Alleyway)
+ * ============================================================================ */
+
+* {
+    bg:          #0a0812f4;
+    bg-alt:      #12101b;
+    bg-selected: #ff2a85;
+    fg:          #cbd5e1;
+    fg-selected: #ffffff;
+    fg-muted:    #5a5261;
+    border-col:  #ff2a85;
+    accent:      #00f0ff;
+    gold:        #ffb000;
+    neon-pink:   #ff2a85;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width:            560px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @border-col;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border:           1px;
+    border-color:     @border-col;
+    border-radius:    8px;
+    padding:          10px 14px;
+    spacing:          10px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:       "ALLEYWAY // MISS RABLE...";
+    placeholder-color: @fg-muted;
+    text-color:        @fg;
+}
+
+listview {
+    columns:      1;
+    lines:        8;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      6px;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent {
+    background-color: @accent;
+    text-color:       #0a0812;
+}
+
+element normal.active {
+    background-color: @bg-alt;
+    text-color:       @accent;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:       @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @accent;
+    text-color:       #0a0812;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #0a0812;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}

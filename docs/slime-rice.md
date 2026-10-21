@@ -48,7 +48,7 @@
 * **Notifications ([ui/notifications.lua](file:///home/jaws/.config/awesome/ui/notifications.lua)):**
   * Shaped with `slime_shapes.dripping_window(10, 9, 2.9)`, translucent murky green body, slime green border for normal notifications, vivid hazard red (`#ff4343`) for critical errors.
 * **Autostart ([config/autostart.lua](file:///home/jaws/.config/awesome/config/autostart.lua)):**
-  * Launches `nm-applet`, `picom -b`, and runs `~/.local/bin/sorted --once` to automatically organize `~/Downloads`.
+  * Launches `picom -b` and runs `~/.local/bin/sorted --once` to automatically organize `~/Downloads`.
 
 ### Picom Compositor ([~/.config/picom/picom.conf](file:///home/jaws/.config/picom/picom.conf))
 * **Backend:** `glx` with hardware acceleration enabled

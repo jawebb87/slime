@@ -1,0 +1,93 @@
+# Starship Prompt Configuration - Crust Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'crust'
+
+format = """
+[\\[CRUST//DUMPSTER\\]](bold fg:weathered_bone) \
+[❯](bold fg:dumpster_amber) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ 󰈸](bold fg:weathered_bone)\
+$line_break\
+$character"""
+
+[palettes.crust]
+asphalt_dark    = "#0f0e0f"
+brick_crimson   = "#991b1b"
+dumpster_moss   = "#65a30d"
+weathered_bone  = "#f4d06f"
+dumpster_amber  = "#d97706"
+puddle_cyan     = "#38bdf8"
+parchment_white = "#f5f5f4"
+alley_dust      = "#a8a29e"
+
+[username]
+show_always = true
+style_user = "bold fg:weathered_bone"
+style_root = "bold fg:brick_crimson"
+format = '[$user]($style)[:](bold fg:alley_dust)'
+
+[directory]
+style = "bold fg:puddle_cyan"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:dumpster_amber"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:dumpster_moss"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:dumpster_amber"
+format = " [󱦟 $duration]($style)"
+
+
+[python]
+symbol = " "
+style = "fg:weathered_bone"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:dumpster_amber"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:dumpster_moss"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:weathered_bone"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:dumpster_amber"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:brick_crimson"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:weathered_bone)"
+error_symbol = "[❯](bold fg:brick_crimson)"
