@@ -4,6 +4,8 @@ Based on `Eeyore Beneath a Watercolor Sky.png`, preserved without modification
 as `wallpaper/eeyore.png`. The wallpaper fills the desktop with its aspect ratio
 preserved; screen proportions may crop the edges.
 
+![Eeyore Watercolor Sky Desktop](screenshots/eeyore.png)
+
 | Role | Color |
 | --- | --- |
 | Cloud background | `#f3f6f3` |

@@ -7,6 +7,8 @@ Built around the original `Moonlit Eldritch Well.png`, preserved unchanged as
 `wallpaper/moonlit-well.png`. Blue-black wet stone, silver moonlight, faded moss,
 and the creature's teal glow carry across the desktop.
 
+![The Well Desktop](screenshots/moonlit-well.png)
+
 | Role | Color |
 | --- | --- |
 | Shaft darkness | `#080f13` |

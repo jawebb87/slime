@@ -5,6 +5,8 @@ Copper details, warm ivory type, patinated green instruments, riveted rails,
 Roman numeral workspaces, and a matching Victorian engine-room wallpaper
 carry the palette across the desktop.
 
+![The Foundry Desktop](screenshots/foundry.png)
+
 ## Mechanical edges
 
 The wibar is a cast assembly with distinct reduction gearboxes joined by a

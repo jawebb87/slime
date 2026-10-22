@@ -4,6 +4,8 @@ A worn mixing-console desktop drawn from the supplied wall-of-amplifiers
 wallpaper: charcoal metal, dusty cream labels, red pilot lights, olive LEDs,
 and aged brass. The original download is preserved as `wallpaper/punk-show.jpg`.
 
+![Punk Show! Desktop](screenshots/punk-show.png)
+
 ![Console renderer with representative widget placement](previews/punk-show-bar.png)
 
 The detached 64-pixel bar has slotted rack screws, a brushed faceplate, scratches,

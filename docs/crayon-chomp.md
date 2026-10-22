@@ -4,6 +4,8 @@ The supplied illustration is preserved in `wallpaper/crayon-chomp.png`.
 Warm paper, pond blue, grass green, ochre, brown, and purple carry into the
 terminal, launcher, editor, notifications, tmux, system monitor, and pads.
 
+![Crayon Chomp Desktop](screenshots/crayon-chomp.png)
+
 ![Crayon bar preview](previews/crayon-chomp-bar.png)
 
 The detached 64-pixel bar has a 10-pixel top gap, 12-pixel side insets, and

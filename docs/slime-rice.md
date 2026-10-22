@@ -1,5 +1,7 @@
 # Slime Rice — Design System & Configuration
 
+![Biohazard Slime Desktop](screenshots/slime.png)
+
 ## 1. Aesthetic Direction
 * **Concept:** Slime / Biohazard / Radioactive Swamp
 * **Style:** All rounded corners, borderless windows (`titlebars_enabled = false`), subtle translucent blur, glowing radioactive neon accents over deep murky moss/black backgrounds.

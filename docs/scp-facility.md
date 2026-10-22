@@ -4,6 +4,8 @@ A security dashboard matched to `SCP Containment Corridor_ Secure, Contain,
 Protect.png`. The original artwork is preserved unchanged in
 `wallpaper/scp-facility.png`.
 
+![SCP Facility Desktop](screenshots/scp-facility.png)
+
 ![Security dashboard preview](previews/scp-facility-bar.png)
 
 The 80-pixel detached console has gunmetal panels, a restricted-access header,

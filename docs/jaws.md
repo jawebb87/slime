@@ -4,6 +4,8 @@ A dark midnight-ocean theme based on the supplied grindhouse poster. The origina
 1024 × 572 artwork is preserved in `wallpaper/jaws.png`; desktop fill may crop its
 edges to match the screen aspect ratio.
 
+![Grindhouse JAWS Desktop](screenshots/jaws.png)
+
 | Role | Color |
 | --- | --- |
 | Ocean background | `#0b151b` |

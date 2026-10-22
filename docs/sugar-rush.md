@@ -4,6 +4,8 @@ A pastel chainsaw desktop inspired by the supplied illustration, preserved
 unchanged in `wallpaper/sugar-rush.png`. Frosted pink, lavender, mint, and plum
 carry across the full workspace. The dark plum text keeps the candy colors readable.
 
+![Sugar Rush Desktop](screenshots/sugar-rush.png)
+
 ![Production candy bar with representative widgets](previews/sugar-rush-bar.png)
 
 The detached 72-pixel bar is a frosted blade with scalloped lavender chain teeth,

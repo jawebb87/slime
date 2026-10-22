@@ -3,6 +3,8 @@
 The supplied Glitched Neon Pyramid at Twilight artwork is preserved unchanged in
 `wallpaper/vaporwave-schizoid.png`.
 
+![Vaporwave Schizoid Desktop](screenshots/vaporwave-schizoid.png)
+
 ![Holographic bar preview](previews/vaporwave-schizoid-bar.png)
 
 A detached 64-pixel glass bar blends deep violet into midnight blue. Fractured

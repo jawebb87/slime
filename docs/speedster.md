@@ -5,6 +5,8 @@ and subtle violet dusk undertones, based on the supplied clubhouse illustration.
 The original artwork is preserved as `wallpaper/speedster.png` and fills the
 desktop with aspect ratio preserved.
 
+![Speedster and Crew Desktop](screenshots/speedster.png)
+
 | Role | Color | Hex Code |
 | :--- | :--- | :--- |
 | Clubhouse Espresso | Background base | `#140d0d` |

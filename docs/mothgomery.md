@@ -8,6 +8,8 @@ The supplied artwork is preserved at `wallpaper/mothgomery.png`. A small vector
 mascot keeps the goggles, monocle, feathered antennae, and patterned wings legible
 at bar height.
 
+![Mothgomery Desktop](screenshots/mothgomery.png)
+
 | Role | Color |
 | --- | --- |
 | Cavern background | `#0d1c21` |
