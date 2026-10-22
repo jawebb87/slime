@@ -630,6 +630,11 @@ awful.screen.connect_for_each_screen(function(s)
                 label = "MOTH", icon = "󰈹 ", accent = "#e0a96d", bg = "#1c140d",
                 image = "mothgomery_head.svg", console = "mothgomery-pad",
             },
+            speedster = {
+                prompt_markup = "<span foreground='#cb6d25' weight='bold'>🏎️ [ SPEEDSTER//CREW ]</span>",
+                label = "SPEEDSTER", icon = "🏎️ ", accent = "#cb6d25", bg = "#241513",
+                console = "speedster-pad",
+            },
         }
 
         local profile = COMPANION_PROFILES[mode] or {}

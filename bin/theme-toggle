@@ -15,7 +15,7 @@ set -eo pipefail
 
 THEMES_DIR="$HOME/.config/awesome/themes"
 MODE_FILE="$HOME/.config/awesome/theme_mode"
-CANONICAL=("origin" "lab" "slime" "cyber" "space" "shred" "chomp" "red" "windbreaker" "clay" "void" "gill" "mothgomery" "rable" "tov" "dino" "crust" "tunes" "mystery" "darkwing" "tmnt" "muppet" "jon" "bake" "foundry" "sketchbook" "jaws" "bamboo-corsair" "eeyore" "halfpipe" "punk-show" "sugar-rush" "crayon-chomp" "satanic-panic" "vaporwave-schizoid" "moonlit-well" "scp-facility")
+CANONICAL=("origin" "lab" "slime" "cyber" "space" "shred" "chomp" "red" "windbreaker" "clay" "void" "gill" "mothgomery" "rable" "tov" "dino" "crust" "tunes" "mystery" "darkwing" "tmnt" "muppet" "jon" "bake" "foundry" "sketchbook" "jaws" "bamboo-corsair" "eeyore" "halfpipe" "punk-show" "sugar-rush" "crayon-chomp" "satanic-panic" "vaporwave-schizoid" "moonlit-well" "scp-facility" "speedster")
 
 # 1. Discover all themes in ~/.config/awesome/themes/
 DISCOVERED=()
@@ -96,6 +96,9 @@ fi
 TARGET="${1:-toggle}"
 
 case "$TARGET" in
+    speedster|speedster-crew|crew|hangout|speed)
+        TARGET="speedster"
+        ;;
     scp-facility|scp|containment|facility)
         TARGET="scp-facility"
         ;;

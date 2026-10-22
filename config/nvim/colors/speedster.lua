@@ -1,0 +1,63 @@
+-- speedster: matching terminal palette.
+vim.cmd("hi clear")
+if vim.fn.exists("syntax_on") == 1 then vim.cmd("syntax reset") end
+vim.o.background = "dark"
+vim.g.colors_name = "speedster"
+
+local c = {
+    bg = "#140d0d",
+    surface = "#241513",
+    selection = "#4f2a17",
+    fg = "#f9cda7",
+    amber = "#cb6d25",
+    fire = "#ff5747",
+    violet = "#a85ee3",
+    moss = "#8c7c38",
+    apricot = "#dd9868",
+    muted = "#8a6d5f",
+    border = "#3a211a",
+    bright = "#ffffff",
+}
+local groups = {
+    Normal = { fg = c.fg, bg = c.bg },
+    NormalFloat = { fg = c.fg, bg = c.surface },
+    FloatBorder = { fg = c.amber, bg = c.surface },
+    CursorLine = { bg = c.surface },
+    CursorLineNr = { fg = c.amber, bold = true },
+    LineNr = { fg = c.muted },
+    SignColumn = { bg = c.bg },
+    WinSeparator = { fg = c.border },
+    StatusLine = { fg = c.amber, bg = c.surface, bold = true },
+    StatusLineNC = { fg = c.muted, bg = c.bg },
+    Pmenu = { fg = c.fg, bg = c.surface },
+    PmenuSel = { fg = c.bg, bg = c.amber },
+    Visual = { bg = c.selection },
+    Search = { fg = c.bg, bg = c.amber },
+    IncSearch = { fg = c.bg, bg = c.fire },
+    MatchParen = { fg = c.violet, bold = true },
+    Directory = { fg = c.apricot },
+    Title = { fg = c.amber, bold = true },
+    Comment = { fg = c.muted, italic = true },
+    Constant = { fg = c.fire },
+    String = { fg = c.moss },
+    Number = { fg = c.fire },
+    Boolean = { fg = c.fire, bold = true },
+    Identifier = { fg = c.fg },
+    Function = { fg = c.amber },
+    Statement = { fg = c.amber, bold = true },
+    Operator = { fg = c.violet },
+    Keyword = { fg = c.amber, bold = true },
+    PreProc = { fg = c.apricot },
+    Type = { fg = c.violet },
+    Special = { fg = c.apricot },
+    Delimiter = { fg = c.muted },
+    Todo = { fg = c.bg, bg = c.amber, bold = true },
+    DiagnosticError = { fg = c.fire },
+    DiagnosticWarn = { fg = c.amber },
+    DiagnosticInfo = { fg = c.apricot },
+    DiagnosticHint = { fg = c.violet },
+    DiffAdd = { fg = c.moss, bg = c.surface },
+    DiffChange = { fg = c.apricot, bg = c.surface },
+    DiffDelete = { fg = c.fire, bg = c.surface },
+}
+for group, spec in pairs(groups) do vim.api.nvim_set_hl(0, group, spec) end

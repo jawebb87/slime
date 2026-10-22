@@ -1,0 +1,92 @@
+# Starship Prompt Configuration - Speedster and Crew Theme
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = 'speedster'
+
+format = """
+[\\[SPEEDSTER//CREW\\]](bold fg:speedster_orange) \
+[🏎️](bold fg:apricot_honey) \
+$username\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$rust\
+$golang\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$status\
+[ ⚡](bold fg:skyline_violet)\
+$line_break\
+$character"""
+
+[palettes.speedster]
+clubhouse_dark   = "#140d0d"
+speedster_orange = "#cb6d25"
+apricot_honey    = "#dd9868"
+skyline_violet   = "#8330b7"
+olive_moss       = "#605526"
+fire_red         = "#d93829"
+vanilla_cream    = "#f9cda7"
+shadow_dim       = "#8a6d5f"
+
+[username]
+show_always = true
+style_user = "bold fg:speedster_orange"
+style_root = "bold fg:fire_red"
+format = '[$user]($style)[:](bold fg:shadow_dim)'
+
+[directory]
+style = "bold fg:apricot_honey"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold fg:skyline_violet"
+format = " [󰊢 $branch]($style)"
+
+[git_status]
+style = "bold fg:speedster_orange"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 2_000
+style = "bold fg:apricot_honey"
+format = " [󱦟 $duration]($style)"
+
+[python]
+symbol = " "
+style = "fg:speedster_orange"
+format = ' [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:skyline_violet"
+format = ' [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:speedster_orange"
+format = ' [$symbol($version)]($style)'
+
+[nodejs]
+symbol = " "
+style = "fg:speedster_orange"
+format = ' [$symbol($version)]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:skyline_violet"
+format = ' [$symbol$context]($style)'
+
+[status]
+disabled = false
+symbol = " ✘"
+style = "bold fg:fire_red"
+format = '[$symbol $status]($style)'
+
+[character]
+success_symbol = "[❯](bold fg:speedster_orange)"
+error_symbol = "[❯](bold fg:fire_red)"

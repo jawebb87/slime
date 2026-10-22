@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# speedster-pad: Interactive Terminal Dropdown for Speedster and Crew
+# ==============================================================================
+set -e
+
+# Run Speedster and Crew ASCII/ANSI banner
+if [ -x "$HOME/.local/bin/speedster-fetch" ]; then
+    "$HOME/.local/bin/speedster-fetch"
+elif [ -x "$HOME/Projects/slime/bin/speedster-fetch" ]; then
+    "$HOME/Projects/slime/bin/speedster-fetch"
+fi
+
+# Keep interactive shell alive
+exec "${SHELL:-/bin/zsh}" -i

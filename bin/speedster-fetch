@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# speedster-fetch: Speedster and Crew Terminal Fetch
+# ==============================================================================
+# "Speedster and the crew chilling in the clubhouse."
+# ==============================================================================
+import os
+import platform
+import re
+import subprocess
+import sys
+
+# High-Readability TrueColor ANSI Escapes based on Speedster and Crew Palette
+ORANGE  = "\033[38;2;203;109;37m"   # Radiant Amber Orange (#cb6d25)
+APRICOT = "\033[38;2;221;152;104m"  # Honey Apricot (#dd9868)
+VIOLET  = "\033[38;2;131;48;183m"   # Twilight Skyline Violet (#8330b7)
+OLIVE   = "\033[38;2;96;85;38m"     # Retro Olive Moss (#605526)
+CREAM   = "\033[38;2;249;205;167m"  # Vanilla Cream (#f9cda7)
+WHITE   = "\033[38;2;255;242;227m"  # Soft White (#fff2e3)
+DIM     = "\033[38;2;138;109;95m"   # Dusty Cocoa Shadow (#8a6d5f)
+DIVIDER = "\033[38;2;58;33;26m"     # Dark Rim (#3a211a)
+R       = "\033[0m"
+BOLD    = "\033[1m"
+
+def get_uptime():
+    try:
+        with open("/proc/uptime", "r") as f:
+            seconds = float(f.readline().split()[0])
+        hrs = int(seconds // 3600)
+        mins = int((seconds % 3600) // 60)
+        return f"{hrs}h {mins}m"
+    except Exception:
+        return "unknown"
+
+def get_memory():
+    try:
+        mem_total, mem_avail = 0, 0
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_avail = int(line.split()[1])
+        used = (mem_total - mem_avail) / 1024 / 1024
+        total = mem_total / 1024 / 1024
+        pct = (used / total) * 100 if total > 0 else 0
+        bars = int(pct / 10)
+        bar_str = "[" + "=" * bars + "-" * (10 - bars) + "]"
+        return f"{used:.1f}G / {total:.1f}G {bar_str}"
+    except Exception:
+        return "unknown"
+
+def get_packages():
+    try:
+        out = subprocess.check_output("pacman -Qq 2>/dev/null | wc -l", shell=True).decode().strip()
+        return f"{out} (pacman)"
+    except Exception:
+        return "N/A"
+
+def main():
+    user = os.getenv("USER", "jaws")
+    hostname = platform.node()
+    os_name = "Arch Linux x86_64"
+    kernel = platform.release()
+    uptime = get_uptime()
+    memory = get_memory()
+    packages = get_packages()
+    shell = os.path.basename(os.getenv("SHELL", "zsh"))
+    term = os.getenv("TERM", "alacritty")
+
+    ans_paths = [
+        os.path.expanduser("~/.config/fastfetch/speedster.ans"),
+        os.path.expanduser("~/.config/fastfetch/speedster_big.ans"),
+    ]
+    ans_path = next((p for p in ans_paths if os.path.exists(p)), None)
+    mascot_lines = []
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+
+    if ans_path and os.path.exists(ans_path):
+        try:
+            with open(ans_path, "r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    clean = line.replace("\x1b[?25l", "").replace("\x1b[?25h", "").rstrip("\r\n")
+                    if ansi_escape.sub("", clean).strip():
+                        mascot_lines.append(clean)
+        except Exception:
+            pass
+
+    if not mascot_lines:
+        mascot_lines = [
+            rf"        {ORANGE}_____{R}        ",
+            rf"     {ORANGE}.-'     '-.{R}     ",
+            rf"   {ORANGE}/   {WHITE}==   =={ORANGE}   \   {R}",
+            rf"  {ORANGE}|    {APRICOT}(o) (o){ORANGE}    |  {R}",
+            rf"  {ORANGE}|     {APRICOT}\___/{ORANGE}     |  {R}",
+            rf"   {ORANGE}\   {VIOLET}SPEED{ORANGE}   /   {R}",
+            rf"    {ORANGE}'-._____.-'    {R}",
+            rf"   {APRICOT}/|{ORANGE}===|===|{APRICOT}|\   {R}",
+            rf"  {DIM}(_){ORANGE}======={DIM}(_)  {R}",
+            rf" {ORANGE}SPEEDSTER & CREW{R}",
+        ]
+
+    mascot_width = max(len(ansi_escape.sub("", line)) for line in mascot_lines) if mascot_lines else 30
+
+    div_len = 50
+    div_line = f"{DIVIDER}" + "─" * div_len + f"{R}"
+
+    info_lines = [
+        f"{BOLD}{ORANGE}{user}:{R}",
+        f"{ORANGE}" + "----------" + f"{R}",
+        f"{ORANGE}[ SQUAD     ]{R} > {CREAM}SPEEDSTER & CREW{R}",
+        f"{ORANGE}[ VENUE     ]{R} > {APRICOT}COZY CLUBHOUSE{R}",
+        f"{ORANGE}[ SKYLINE   ]{R} > {VIOLET}TWILIGHT PURPLE{R}",
+        f"{ORANGE}[ MOOD      ]{R} > {WHITE}WARM & CHILL{R}",
+        div_line,
+        f"{ORANGE}[ OS        ]{R} > {CREAM}{os_name}{R} {DIM}// AwesomeWM 4.3{R}",
+        f"{ORANGE}[ HOST      ]{R} > {CREAM}{hostname}{R}",
+        f"{ORANGE}[ KERNEL    ]{R} > {CREAM}{kernel}{R}",
+        f"{ORANGE}[ UPTIME    ]{R} > {APRICOT}{uptime}{R}",
+        f"{ORANGE}[ PACKAGES  ]{R} > {CREAM}{packages}{R}",
+        f"{ORANGE}[ SHELL     ]{R} > {CREAM}{shell}{R} {DIM}// starship [SPEEDSTER//CREW]{R}",
+        f"{ORANGE}[ TERMINAL  ]{R} > {CREAM}{term}{R} {DIM}// ComicShannsMono Nerd Font{R}",
+        f"{ORANGE}[ MEMORY    ]{R} > {OLIVE}{memory}{R}",
+        div_line,
+        f"{ORANGE}████{APRICOT}████{VIOLET}████{OLIVE}████{CREAM}████{WHITE}████{DIM}████{DIVIDER}████{R}",
+    ]
+
+    try:
+        term_cols = int(os.getenv("COLUMNS", "0")) or os.get_terminal_size().columns
+    except Exception:
+        term_cols = 120
+
+    print()
+    if term_cols >= mascot_width + 45:
+        offset = max(0, (len(mascot_lines) - len(info_lines)) // 2)
+        max_rows = max(len(mascot_lines), len(info_lines) + offset)
+        for i in range(max_rows):
+            left = ""
+            if i < len(mascot_lines):
+                line = mascot_lines[i]
+                vis_len = len(ansi_escape.sub("", line))
+                pad = " " * max(0, mascot_width - vis_len)
+                left = line + pad + "   "
+            else:
+                left = " " * (mascot_width + 3)
+
+            info_idx = i - offset
+            right = ""
+            if 0 <= info_idx < len(info_lines):
+                right = info_lines[info_idx]
+
+            print(f" {left}{right}")
+    else:
+        for line in mascot_lines:
+            print(f" {line}")
+        print()
+        for line in info_lines:
+            print(f" {line}")
+    print()
+
+if __name__ == "__main__":
+    main()

@@ -2310,6 +2310,80 @@ function slime_shapes.render_bake_bar_bg()
     end
 end
 
+-- ==============================================================================
+-- 24. Speedster & Crew (Cozy Cartoon Hangout) Bar Background Renderer
+-- ==============================================================================
+-- Warm mahogany & clubhouse espresso noir canvas (#140d0d to #241513) with
+-- radiant firelight / lantern amber glow, clubhouse warm ember accents,
+-- and a vintage cartoon triple-trim bottom rail (Twilight Violet, Cozy Apricot,
+-- and Speedster Radiant Amber).
+-- ==============================================================================
+function slime_shapes.render_speedster_bar_bg()
+    return function(_, cr, w, h)
+        cr:save()
+        ensure_best_antialias(cr)
+
+        -- 1. Warm clubhouse espresso-to-mahogany gradient
+        local pat = cairo.Pattern.create_linear(0, 0, 0, h)
+        pat:add_color_stop_rgba(0.00, 0.078, 0.051, 0.051, 0.98) -- #140d0d
+        pat:add_color_stop_rgba(0.50, 0.141, 0.082, 0.075, 0.98) -- #241513
+        pat:add_color_stop_rgba(1.00, 0.110, 0.067, 0.059, 0.99) -- #1c110f
+        cr:rectangle(0, 0, w, h)
+        cr:set_source(pat)
+        cr:fill()
+
+        -- 2. Top subtle lantern / campfire warm glow highlight
+        cr:rectangle(0, 0, w, 1)
+        cr:set_source_rgba(0.796, 0.427, 0.145, 0.40) -- #cb6d25
+        cr:fill()
+
+        -- 3. Subtle clubhouse lantern & speedster flame spark accents
+        local function draw_clubhouse_accent(cx, cy)
+            -- Warm hearth ember glow
+            cr:arc(cx, cy, 6, 0, 2 * math.pi)
+            cr:set_line_width(1.2)
+            cr:set_source_rgba(0.08, 0.04, 0.03, 0.75)
+            cr:stroke()
+
+            -- Radiant flame spark
+            cr:arc(cx + 2, cy - 2, 2.0, 0, 2 * math.pi)
+            cr:set_source_rgba(0.796, 0.427, 0.145, 0.85) -- #cb6d25
+            cr:fill()
+
+            -- Secondary cozy apricot spark
+            cr:arc(cx - 3, cy + 1, 1.4, 0, 2 * math.pi)
+            cr:set_source_rgba(0.867, 0.596, 0.408, 0.80) -- #dd9868
+            cr:fill()
+        end
+
+        draw_clubhouse_accent(24, h * 0.5)
+        draw_clubhouse_accent(w - 24, h * 0.5)
+
+        -- 4. Deep shadow boundary
+        cr:rectangle(0, h - 5, w, 1)
+        cr:set_source_rgba(0.03, 0.02, 0.02, 0.95)
+        cr:fill()
+
+        -- 5. Speedster & Crew Triple-Trim Bottom Rail:
+        -- Twilight Skyline Violet (1.2px)
+        cr:rectangle(0, h - 4, w, 1.2)
+        cr:set_source_rgba(0.514, 0.188, 0.718, 0.90) -- #8330b7
+        cr:fill()
+
+        -- Honey Apricot Cream (1.5px)
+        cr:rectangle(0, h - 2.8, w, 1.5)
+        cr:set_source_rgba(0.867, 0.596, 0.408, 0.95) -- #dd9868
+        cr:fill()
+
+        -- Radiant Speedster Amber Orange (1.3px bottom rail edge)
+        cr:rectangle(0, h - 1.3, w, 1.3)
+        cr:set_source_rgba(0.796, 0.427, 0.145, 1.00) -- #cb6d25
+        cr:fill()
+
+        cr:restore()
+    end
+end
+
 return slime_shapes
 
 

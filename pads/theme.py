@@ -598,6 +598,35 @@ JON_THEME = {
 }
 
 
+SPEEDSTER_THEME = {
+    "bg": "#140d0d",             # Clubhouse espresso noir
+    "bg_surface": "#241513",     # Warm chestnut container
+    "bg_card": "#2d1a17",        # Elevated clubhouse card
+    "bg_hover": "#3a211a",       # Hover state
+    "bg_active": "#cb6d25",      # Radiant Speedster glowing amber selection
+    "bg_selected": "#2d1a17",    # Selected card surface
+    "border": "#3a211a",         # Warm shadow border
+    "border_focus": "#cb6d25",   # Radiant Speedster amber focus border
+    "border_today": "#dd9868",   # Honey apricot
+    "fg": "#f9cda7",             # Warm vanilla cream
+    "fg_dim": "#8a6d5f",         # Dusty cocoa shadow
+    "fg_header": "#ffffff",      # Bright white header
+    "key_bg": "#cb6d25",         # Radiant amber key badge
+    "key_fg": "#140d0d",         # Dark badge text
+    "status_running": "#605526", # Retro olive moss
+    "status_stopped": "#d93829", # Hearth fire red
+    "status_paused": "#dd9868",  # Honey apricot
+    "accent_blue": "#cb6d25",    # Speedster orange
+    "accent_aqua": "#dd9868",    # Honey apricot
+    "accent_green": "#605526",   # Retro olive moss
+    "accent_yellow": "#dd9868",  # Honey apricot
+    "accent_orange": "#cb6d25",  # Speedster amber orange
+    "accent_purple": "#8330b7",  # Twilight skyline violet
+    "accent_red": "#d93829",     # Hearth fire red
+    "font": "ComicShannsMono Nerd Font",
+}
+
+
 CLAY_THEME = {
     "bg": "#585153",
     "bg_surface": "#a39990",
@@ -1065,6 +1094,8 @@ def get_theme():
                 return VAPORWAVE_SCHIZOID_THEME
             if mode == "satanic-panic":
                 return SATANIC_PANIC_THEME
+            if mode in ("speedster", "speedster-crew", "crew", "hangout"):
+                return SPEEDSTER_THEME
             if mode == "crayon-chomp":
                 return CRAYON_CHOMP_THEME
             if mode == "sugar-rush":

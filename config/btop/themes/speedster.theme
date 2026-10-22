@@ -1,0 +1,57 @@
+# ==============================================================================
+# btop++ Theme - Speedster and Crew (Cozy Cartoon Hangout)
+# ==============================================================================
+
+theme[main_bg]="#140d0d"
+theme[main_fg]="#f9cda7"
+theme[title]="#cb6d25"
+theme[hi_fg]="#dd9868"
+theme[selected_bg]="#241513"
+theme[selected_fg]="#ffffff"
+theme[inactive_fg]="#8a6d5f"
+theme[graph_text]="#605526"
+theme[meter_bg]="#241513"
+theme[proc_misc]="#605526"
+
+# Box outlines
+theme[cpu_box]="#cb6d25"
+theme[mem_box]="#dd9868"
+theme[net_box]="#8330b7"
+theme[proc_box]="#d93829"
+theme[div_line]="#3a211a"
+
+# Temperature gradient (Honey Apricot -> Amber Orange -> Fire Red)
+theme[temp_start]="#dd9868"
+theme[temp_mid]="#cb6d25"
+theme[temp_end]="#d93829"
+
+# CPU graph
+theme[cpu_start]="#605526"
+theme[cpu_mid]="#cb6d25"
+theme[cpu_end]="#d93829"
+
+# Memory meters
+theme[free_start]="#241513"
+theme[free_mid]="#605526"
+theme[free_end]="#8c7c38"
+
+theme[cached_start]="#241513"
+theme[cached_mid]="#dd9868"
+theme[cached_end]="#f5b062"
+
+theme[available_start]="#241513"
+theme[available_mid]="#cb6d25"
+theme[available_end]="#e88535"
+
+theme[used_start]="#605526"
+theme[used_mid]="#cb6d25"
+theme[used_end]="#d93829"
+
+# Download / Upload network graph
+theme[download_start]="#605526"
+theme[download_mid]="#dd9868"
+theme[download_end]="#cb6d25"
+
+theme[upload_start]="#8330b7"
+theme[upload_mid]="#cb6d25"
+theme[upload_end]="#d93829"
